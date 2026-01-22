@@ -47,12 +47,10 @@ class MovableObject {
 
   moveRight() {
     this.x += this.speed;
-    this.otherDirection = false;
   }
 
   moveLeft() {
     this.x -= this.speed;
-    this.otherDirection = true;
   }
 
   jump() {
