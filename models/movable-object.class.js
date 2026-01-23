@@ -50,7 +50,7 @@ class MovableObject extends DrawableObject {
   }
 
   isDead() {
-    return this.enerqy == 0;
+    return this.energy == 0;
   }
 
   playAnimation(images) {
