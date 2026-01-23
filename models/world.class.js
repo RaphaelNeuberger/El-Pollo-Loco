@@ -22,7 +22,9 @@ class World {
   startScreenImage = new Image();
   introSound = new Audio("audio/game-intro-345507.mp3");
   gameStartSound = new Audio("audio/game-start-6104.mp3");
-  bottleCollectSound = new Audio("audio/fantasy-game-sword-cut-sound-effect-get-more-on-my-patreon-339824.mp3");
+  bottleCollectSound = new Audio(
+    "audio/fantasy-game-sword-cut-sound-effect-get-more-on-my-patreon-339824.mp3",
+  );
   coinCollectSound = new Audio("audio/game-bonus-02-294436.mp3");
   gameMusicLoop = new Audio("audio/game-music-loop-6-144641.mp3");
 
