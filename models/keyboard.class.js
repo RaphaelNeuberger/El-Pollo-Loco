@@ -6,4 +6,5 @@ class Keyboard {
   SPACE;
   D;
   S;
+  ENTER;
 }

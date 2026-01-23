@@ -16,8 +16,15 @@ class World {
   totalBottles = 0;
   gameWon = false;
   gameLost = false;
+  gameStarted = false;
   youWonImage = new Image();
   youLostImage = new Image();
+  startScreenImage = new Image();
+  introSound = new Audio("audio/game-intro-345507.mp3");
+  gameStartSound = new Audio("audio/game-start-6104.mp3");
+  bottleCollectSound = new Audio("audio/fantasy-game-sword-cut-sound-effect-get-more-on-my-patreon-339824.mp3");
+  coinCollectSound = new Audio("audio/game-bonus-02-294436.mp3");
+  gameMusicLoop = new Audio("audio/game-music-loop-6-144641.mp3");
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -27,9 +34,16 @@ class World {
     this.totalBottles = this.level.bottles.length;
     this.youWonImage.src = "img/You won, you lost/You won A.png";
     this.youLostImage.src = "img/You won, you lost/You lost.png";
+    this.startScreenImage.src =
+      "img/9_intro_outro_screens/start/startscreen_1.png";
+    this.introSound.loop = true;
+    this.introSound.volume = 0.3;
+    this.gameMusicLoop.loop = true;
+    this.gameMusicLoop.volume = 0.4;
+    // Sound wird erst bei User-Interaktion (ENTER) abgespielt
     this.draw();
     this.setWorld();
-    this.run();
+    // run() wird erst aufgerufen wenn Spiel gestartet wird
   }
 
   setWorld() {
@@ -40,6 +54,27 @@ class World {
     });
   }
 
+  playIntroSound() {
+    // Versuche Sound abzuspielen (nur wenn User interagiert hat)
+    this.introSound.play().catch(() => {
+      // Ignoriere Fehler wenn Browser Auto-Play blockiert
+      console.log("Audio wird erst nach User-Interaktion abgespielt");
+    });
+  }
+
+  startGame() {
+    this.gameStarted = true;
+    this.introSound.pause();
+    this.introSound.currentTime = 0;
+    this.gameStartSound.play();
+    // Starte Game-Music nach kurzem Delay (damit Start-Sound hörbar ist)
+    setTimeout(() => {
+      this.gameMusicLoop.play();
+    }, 500);
+    this.run();
+    this.startChickenSpawning();
+  }
+
   run() {
     setInterval(() => {
       this.checkCollisions();
@@ -47,6 +82,37 @@ class World {
       this.removeOldBottles();
       this.checkGameStatus();
     }, 200);
+  }
+
+  startChickenSpawning() {
+    // Spawne alle 3 Sekunden ein neues Chicken
+    setInterval(() => {
+      if (!this.gameWon && !this.gameLost) {
+        this.spawnChicken();
+      }
+    }, 3000);
+  }
+
+  spawnChicken() {
+    // Zähle aktuelle Chickens (ohne Endboss)
+    let chickenCount = this.level.enemies.filter(
+      (e) => (e instanceof Chicken || e instanceof ChickenSmall) && !e.isDead,
+    ).length;
+
+    // Maximale Anzahl an Chickens gleichzeitig: 8
+    if (chickenCount < 8) {
+      // 50% Chance für normales oder kleines Chicken
+      let newChicken = Math.random() > 0.5 ? new Chicken() : new ChickenSmall();
+
+      // Spawne Chicken an zufälliger Position vor dem Endboss (x < 2000)
+      newChicken.x = this.character.x + 400 + Math.random() * 800;
+      if (newChicken.x > 2000) {
+        newChicken.x = Math.random() * 1500;
+      }
+
+      newChicken.world = this;
+      this.level.enemies.push(newChicken);
+    }
   }
 
   checkThrowObjects() {
@@ -69,7 +135,7 @@ class World {
       if (this.character.isColliding(enemy)) {
         // Prüfe ob Character auf Chicken springt (von oben)
         if (
-          enemy instanceof Chicken &&
+          (enemy instanceof Chicken || enemy instanceof ChickenSmall) &&
           !enemy.isDead &&
           this.character.speedY < 0 &&
           this.character.y + this.character.height - 20 < enemy.y + 20
@@ -77,7 +143,12 @@ class World {
           // Character springt auf Chicken (Character Füße sind über Chicken Kopf)
           enemy.kill();
           this.character.speedY = 15; // Kleiner Bounce
-        } else if (!(enemy instanceof Chicken && enemy.isDead)) {
+        } else if (
+          !(
+            (enemy instanceof Chicken || enemy instanceof ChickenSmall) &&
+            enemy.isDead
+          )
+        ) {
           // Normale Kollision (Schaden)
           this.character.hit();
           this.healthBar.setPercentage(this.character.energy);
@@ -92,6 +163,7 @@ class World {
         this.collectedCoins++;
         let percentage = (this.collectedCoins / this.totalCoins) * 100;
         this.coinBar.setPercentage(percentage);
+        this.coinCollectSound.play();
       }
     });
 
@@ -102,6 +174,7 @@ class World {
         this.collectedBottles++;
         let percentage = (this.collectedBottles / this.totalBottles) * 100;
         this.bottleBar.setPercentage(percentage);
+        this.bottleCollectSound.play();
       }
     });
 
@@ -120,35 +193,41 @@ class World {
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    this.ctx.translate(this.camera_x, 0);
+    // Start Screen anzeigen wenn Spiel noch nicht gestartet
+    if (!this.gameStarted) {
+      this.drawStartScreen();
+    } else {
+      // Normales Spiel zeichnen
+      this.ctx.translate(this.camera_x, 0);
 
-    this.addObjectsToMap(this.level.backgroundObjects);
+      this.addObjectsToMap(this.level.backgroundObjects);
 
-    this.ctx.translate(-this.camera_x, 0); //back
-    // // space for fix Objects
-    this.addToMap(this.healthBar);
-    this.addToMap(this.coinBar);
-    this.addToMap(this.bottleBar);
-    // Endboss Bar nur anzeigen wenn Endboss im sichtbaren Bereich
-    if (this.isEndbossVisible()) {
-      this.addToMap(this.endbossBar);
-    }
-    this.ctx.translate(this.camera_x, 0); //Forward
+      this.ctx.translate(-this.camera_x, 0); //back
+      // // space for fix Objects
+      this.addToMap(this.healthBar);
+      this.addToMap(this.coinBar);
+      this.addToMap(this.bottleBar);
+      // Endboss Bar nur anzeigen wenn Endboss im sichtbaren Bereich
+      if (this.isEndbossVisible()) {
+        this.addToMap(this.endbossBar);
+      }
+      this.ctx.translate(this.camera_x, 0); //Forward
 
-    this.addToMap(this.character);
-    this.addObjectsToMap(this.level.clouds);
-    this.addObjectsToMap(this.level.enemies);
-    this.addObjectsToMap(this.level.coins);
-    this.addObjectsToMap(this.level.bottles);
-    this.addObjectsToMap(this.throwableObjects);
+      this.addToMap(this.character);
+      this.addObjectsToMap(this.level.clouds);
+      this.addObjectsToMap(this.level.enemies);
+      this.addObjectsToMap(this.level.coins);
+      this.addObjectsToMap(this.level.bottles);
+      this.addObjectsToMap(this.throwableObjects);
 
-    this.ctx.translate(-this.camera_x, 0);
+      this.ctx.translate(-this.camera_x, 0);
 
-    // Zeige Win/Lose Screen
-    if (this.gameWon) {
-      this.drawEndScreen(this.youWonImage);
-    } else if (this.gameLost) {
-      this.drawEndScreen(this.youLostImage);
+      // Zeige Win/Lose Screen
+      if (this.gameWon) {
+        this.drawEndScreen(this.youWonImage);
+      } else if (this.gameLost) {
+        this.drawEndScreen(this.youLostImage);
+      }
     }
 
     let self = this;
@@ -208,11 +287,13 @@ class World {
     let endboss = this.level.enemies.find((e) => e instanceof Endboss);
     if (endboss && endboss.isDead) {
       this.gameWon = true;
+      this.gameMusicLoop.pause();
     }
 
     // Prüfe ob Spieler gestorben ist
     if (this.character.energy <= 0) {
       this.gameLost = true;
+      this.gameMusicLoop.pause();
     }
   }
 
@@ -221,6 +302,27 @@ class World {
     let x = (this.canvas.width - 720) / 2;
     let y = (this.canvas.height - 480) / 2;
     this.ctx.drawImage(image, x, y, 720, 480);
+  }
+
+  drawStartScreen() {
+    // Zeichne Start Screen über gesamten Canvas
+    this.ctx.drawImage(
+      this.startScreenImage,
+      0,
+      0,
+      this.canvas.width,
+      this.canvas.height,
+    );
+
+    // Zeige "Drücke ENTER zum Starten" Text
+    this.ctx.fillStyle = "white";
+    this.ctx.font = "30px Arial";
+    this.ctx.textAlign = "center";
+    this.ctx.fillText(
+      "Drücke ENTER zum Starten",
+      this.canvas.width / 2,
+      this.canvas.height - 50,
+    );
   }
 
   isEndbossVisible() {

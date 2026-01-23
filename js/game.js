@@ -7,6 +7,9 @@ function init() {
   world = new World(canvas, keyboard);
 
   console.log("My Character is", world.character);
+  
+  // Versuche Sound direkt zu starten
+  world.playIntroSound();
 }
 
 document.addEventListener("keydown", (event) => {
@@ -31,6 +34,13 @@ document.addEventListener("keydown", (event) => {
   if (event.keyCode == 83) {
     keyboard.S = true;
   }
+  if (event.keyCode == 13) {
+    keyboard.ENTER = true;
+    // Starte Spiel wenn noch nicht gestartet
+    if (world && !world.gameStarted) {
+      world.startGame();
+    }
+  }
 });
 
 document.addEventListener("keyup", (event) => {
@@ -54,5 +64,8 @@ document.addEventListener("keyup", (event) => {
   }
   if (event.keyCode == 83) {
     keyboard.S = false;
+  }
+  if (event.keyCode == 13) {
+    keyboard.ENTER = false;
   }
 });
