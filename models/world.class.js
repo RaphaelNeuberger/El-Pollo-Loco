@@ -17,6 +17,7 @@ class World {
   gameWon = false;
   gameLost = false;
   gameStarted = false;
+  endbossSoundPlayed = false;
   youWonImage = new Image();
   youLostImage = new Image();
   startScreenImage = new Image();
@@ -27,6 +28,16 @@ class World {
   );
   coinCollectSound = new Audio("audio/game-bonus-02-294436.mp3");
   gameMusicLoop = new Audio("audio/game-music-loop-6-144641.mp3");
+  endbossWarningSound = new Audio("audio/wrong-place-129242.mp3");
+  winnerSound = new Audio("audio/winner-game-sound-404167.mp3");
+  gameOverSound1 = new Audio("audio/game-over-160612.mp3");
+  gameOverSound2 = new Audio("audio/game-over-38511.mp3");
+  jumpKillSound = new Audio("audio/retro-game-shot-152052.mp3");
+  chickenKillSound = new Audio(
+    "audio/muffled-sound-of-falling-game-character-131797.mp3",
+  );
+  smallChickenHitSound = new Audio("audio/game-character-scream-131144.mp3");
+  endbossHitSound = new Audio("audio/rpg-sword-attack-combo-34-388950.mp3");
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -145,6 +156,14 @@ class World {
           // Character springt auf Chicken (Character Füße sind über Chicken Kopf)
           enemy.kill();
           this.character.speedY = 15; // Kleiner Bounce
+          // Spiele unterschiedliche Sounds für Chicken und ChickenSmall
+          if (enemy instanceof ChickenSmall) {
+            this.jumpKillSound.currentTime = 0;
+            this.jumpKillSound.play();
+          } else {
+            this.chickenKillSound.currentTime = 0;
+            this.chickenKillSound.play();
+          }
         } else if (
           !(
             (enemy instanceof Chicken || enemy instanceof ChickenSmall) &&
@@ -154,6 +173,11 @@ class World {
           // Normale Kollision (Schaden)
           this.character.hit();
           this.healthBar.setPercentage(this.character.energy);
+          // Spiele Sound wenn Small Chicken Character berührt
+          if (enemy instanceof ChickenSmall) {
+            this.smallChickenHitSound.currentTime = 0;
+            this.smallChickenHitSound.play();
+          }
         }
       }
     });
@@ -165,6 +189,7 @@ class World {
         this.collectedCoins++;
         let percentage = (this.collectedCoins / this.totalCoins) * 100;
         this.coinBar.setPercentage(percentage);
+        this.coinCollectSound.currentTime = 0;
         this.coinCollectSound.play();
       }
     });
@@ -176,6 +201,7 @@ class World {
         this.collectedBottles++;
         let percentage = (this.collectedBottles / this.totalBottles) * 100;
         this.bottleBar.setPercentage(percentage);
+        this.bottleCollectSound.currentTime = 0;
         this.bottleCollectSound.play();
       }
     });
@@ -187,6 +213,8 @@ class World {
           this.throwableObjects.splice(bottleIndex, 1);
           enemy.hit();
           this.endbossBar.setPercentage(enemy.energy);
+          this.endbossHitSound.currentTime = 0;
+          this.endbossHitSound.play();
         }
       });
     });
@@ -212,6 +240,11 @@ class World {
       // Endboss Bar nur anzeigen wenn Endboss im sichtbaren Bereich
       if (this.isEndbossVisible()) {
         this.addToMap(this.endbossBar);
+        // Spiele Warnsound einmalig ab wenn Endboss zum ersten Mal sichtbar ist
+        if (!this.endbossSoundPlayed) {
+          this.endbossWarningSound.play();
+          this.endbossSoundPlayed = true;
+        }
       }
       this.ctx.translate(this.camera_x, 0); //Forward
 
@@ -287,15 +320,26 @@ class World {
   checkGameStatus() {
     // Prüfe ob Endboss besiegt wurde
     let endboss = this.level.enemies.find((e) => e instanceof Endboss);
-    if (endboss && endboss.isDead) {
+    if (endboss && endboss.isDead && !this.gameWon) {
       this.gameWon = true;
       this.gameMusicLoop.pause();
+      this.winnerSound.play();
     }
 
     // Prüfe ob Spieler gestorben ist
-    if (this.character.energy <= 0) {
+    if (this.character.energy <= 0 && !this.gameLost) {
       this.gameLost = true;
       this.gameMusicLoop.pause();
+      this.gameOverSound1.play();
+      this.gameOverSound2.play();
+    }
+
+    // Prüfe ob keine Flaschen mehr verfügbar sind (weder einsammelbar noch im Inventar)
+    if (this.collectedBottles === 0 && this.level.bottles.length === 0 && !this.gameLost && !this.gameWon) {
+      this.gameLost = true;
+      this.gameMusicLoop.pause();
+      this.gameOverSound1.play();
+      this.gameOverSound2.play();
     }
   }
 
