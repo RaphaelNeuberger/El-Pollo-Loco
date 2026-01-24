@@ -24,7 +24,7 @@ class ChickenSmall extends MovableObject {
 
   animate() {
     setInterval(() => {
-      if (!this.isDead) {
+      if (!this.isDead && this.world && this.world.gameStarted) {
         this.moveLeft();
       }
     }, 1000 / 60);
@@ -32,7 +32,7 @@ class ChickenSmall extends MovableObject {
     setInterval(() => {
       if (this.isDead) {
         this.playAnimation(this.IMAGES_DEAD);
-      } else {
+      } else if (this.world && this.world.gameStarted) {
         this.playAnimation(this.IMAGES_WALKING);
       }
     }, 200);

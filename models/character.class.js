@@ -85,6 +85,11 @@ class Character extends MovableObject {
 
   animate() {
     setInterval(() => {
+      // Keine Bewegung erlauben wenn Spiel gewonnen oder verloren
+      if (this.world.gameWon || this.world.gameLost) {
+        return;
+      }
+
       if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
         this.moveRight();
         this.otherDirection = false;

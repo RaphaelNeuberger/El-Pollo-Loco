@@ -75,6 +75,24 @@ class World {
     });
   }
 
+  setSoundMuted(muted) {
+    // Setze Lautstärke aller Audio-Objekte auf 0 oder zurück
+    const volume = muted ? 0 : 1;
+    this.introSound.volume = muted ? 0 : 0.3;
+    this.gameMusicLoop.volume = muted ? 0 : 0.4;
+    this.gameStartSound.volume = volume;
+    this.bottleCollectSound.volume = volume;
+    this.coinCollectSound.volume = volume;
+    this.endbossWarningSound.volume = volume;
+    this.winnerSound.volume = volume;
+    this.gameOverSound1.volume = volume;
+    this.gameOverSound2.volume = volume;
+    this.jumpKillSound.volume = volume;
+    this.chickenKillSound.volume = volume;
+    this.smallChickenHitSound.volume = volume;
+    this.endbossHitSound.volume = volume;
+  }
+
   startGame() {
     this.gameStarted = true;
     this.introSound.pause();
@@ -170,7 +188,7 @@ class World {
             enemy.isDead
           )
         ) {
-          // Normale Kollision (Schaden)
+          // Normale Kollision (Schaden) - für alle Enemies inkl. Endboss
           this.character.hit();
           this.healthBar.setPercentage(this.character.energy);
           // Spiele Sound wenn Small Chicken Character berührt
@@ -323,6 +341,7 @@ class World {
     if (endboss && endboss.isDead && !this.gameWon) {
       this.gameWon = true;
       this.gameMusicLoop.pause();
+      this.endbossWarningSound.pause();
       this.winnerSound.play();
     }
 
@@ -335,7 +354,12 @@ class World {
     }
 
     // Prüfe ob keine Flaschen mehr verfügbar sind (weder einsammelbar noch im Inventar)
-    if (this.collectedBottles === 0 && this.level.bottles.length === 0 && !this.gameLost && !this.gameWon) {
+    if (
+      this.collectedBottles === 0 &&
+      this.level.bottles.length === 0 &&
+      !this.gameLost &&
+      !this.gameWon
+    ) {
       this.gameLost = true;
       this.gameMusicLoop.pause();
       this.gameOverSound1.play();
@@ -360,15 +384,17 @@ class World {
       this.canvas.height,
     );
 
-    // Zeige "Drücke ENTER zum Starten" Text
-    this.ctx.fillStyle = "white";
-    this.ctx.font = "30px Arial";
-    this.ctx.textAlign = "center";
-    this.ctx.fillText(
-      "Drücke ENTER zum Starten",
-      this.canvas.width / 2,
-      this.canvas.height - 50,
-    );
+    // Zeige "Drücke ENTER zum Starten" Text nur auf Desktop
+    if (window.innerWidth > 915 || window.innerHeight > window.innerWidth) {
+      this.ctx.fillStyle = "white";
+      this.ctx.font = "30px Arial";
+      this.ctx.textAlign = "center";
+      this.ctx.fillText(
+        "Drücke ENTER zum Starten",
+        this.canvas.width / 2,
+        this.canvas.height - 50,
+      );
+    }
   }
 
   isEndbossVisible() {

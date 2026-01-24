@@ -27,16 +27,98 @@
     <script src="models/endboss.class.js"></script>
     <script src="levels/level1.js"></script>
     <script src="js/game.js"></script>
-
-    <style>
-      body {
-        background-image: url();
-      }
-    </style>
   </head>
   <body onload="init()">
     <h1>El pollo loco</h1>
 
-    <canvas id="canvas" width="720" height="480"></canvas>
+    <div id="canvas-container">
+      <canvas id="canvas" width="720" height="480"></canvas>
+      <button id="sound-btn" onclick="toggleSound()" title="Sound An/Aus (M)">
+        <svg
+          id="sound-icon"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="white">
+          <path
+            d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+        </svg>
+      </button>
+      <button
+        id="fullscreen-btn"
+        onclick="toggleFullscreen()"
+        title="Fullscreen (F)">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+          <path
+            d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Start Button -->
+    <button id="mobile-start-btn" onclick="startGameMobile()">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="white">
+        <path d="M8 5v14l11-7z" />
+      </svg>
+      <span>SPIEL STARTEN</span>
+    </button>
+
+    <!-- Mobile Touch Controls -->
+    <div id="mobile-controls">
+      <div class="left-controls">
+        <button id="btn-left" class="mobile-btn">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+          </svg>
+        </button>
+        <button id="btn-right" class="mobile-btn">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+          </svg>
+        </button>
+      </div>
+      <div class="right-controls">
+        <button id="btn-jump" class="mobile-btn">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+            <path d="M7 14l5-5 5 5z" />
+          </svg>
+        </button>
+        <button id="btn-throw" class="mobile-btn">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+            <circle cx="12" cy="12" r="8" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="controls-info">
+      <h3>Steuerung:</h3>
+      <div class="controls-grid">
+        <div class="control-item">
+          <span class="key">←</span>
+          <span class="description">Nach links bewegen</span>
+        </div>
+        <div class="control-item">
+          <span class="key">→</span>
+          <span class="description">Nach rechts bewegen</span>
+        </div>
+        <div class="control-item">
+          <span class="key">LEERTASTE</span>
+          <span class="description">Springen</span>
+        </div>
+        <div class="control-item">
+          <span class="key">S</span>
+          <span class="description">Flasche werfen</span>
+        </div>
+        <div class="control-item">
+          <span class="key">ENTER</span>
+          <span class="description">Spiel starten</span>
+        </div>
+        <div class="control-item">
+          <span class="key">F</span>
+          <span class="description">Vollbild</span>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
