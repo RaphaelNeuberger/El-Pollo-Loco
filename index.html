@@ -10,7 +10,7 @@
       sizes="16x16"
       href="img/8_coin/coin_1.png" />
 
-    <title>Document</title>
+    <title>El pollo loco</title>
     <script src="models/drawable-object.class.js"></script>
     <script src="models/movable-object.class.js"></script>
     <script src="models/character.class.js"></script>
@@ -35,7 +35,14 @@
   </head>
   <body onload="init()">
     <h1>El pollo loco</h1>
-
+    <!-- Rotate Device Warning -->
+    <div id="rotate-warning">
+      <svg width="100" height="100" viewBox="0 0 24 24" fill="white">
+        <path
+          d="M16.48 2.52c3.27 1.55 5.61 4.72 5.97 8.48h1.5C23.44 4.84 18.29 0 12 0l-.66.03 3.81 3.81 1.33-1.32zm-6.25-.77c-.59-.59-1.54-.59-2.12 0L1.75 8.11c-.59.59-.59 1.54 0 2.12l12.02 12.02c.59.59 1.54.59 2.12 0l6.36-6.36c.59-.59.59-1.54 0-2.12L10.23 1.75zm4.6 19.44L2.81 9.17l6.36-6.36 12.02 12.02-6.36 6.36zm-7.31.29C4.25 19.94 1.91 16.76 1.55 13H.05C.56 19.16 5.71 24 12 24l.66-.03-3.81-3.81-1.33 1.32z" />
+      </svg>
+      <p>Bitte drehen Sie Ihr Gerät ins Querformat</p>
+    </div>
     <div id="canvas-container">
       <canvas id="canvas" width="720" height="480"></canvas>
       <button id="sound-btn" onclick="toggleSound()" title="Sound An/Aus (M)">
@@ -71,24 +78,24 @@
     <!-- Mobile Touch Controls -->
     <div id="mobile-controls">
       <div class="left-controls">
-        <button id="btn-left" class="mobile-btn">
+        <button id="btn-left" class="mobile-btn" title="Nach links bewegen">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
             <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
           </svg>
         </button>
-        <button id="btn-right" class="mobile-btn">
+        <button id="btn-right" class="mobile-btn" title="Nach rechts bewegen">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
             <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
           </svg>
         </button>
       </div>
       <div class="right-controls">
-        <button id="btn-jump" class="mobile-btn">
+        <button id="btn-jump" class="mobile-btn" title="Springen">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
             <path d="M7 14l5-5 5 5z" />
           </svg>
         </button>
-        <button id="btn-throw" class="mobile-btn">
+        <button id="btn-throw" class="mobile-btn" title="Flasche werfen">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
             <circle cx="12" cy="12" r="8" />
           </svg>
@@ -123,6 +130,36 @@
           <span class="key">F</span>
           <span class="description">Vollbild</span>
         </div>
+      </div>
+    </div>
+
+    <!-- Impressum -->
+    <div class="impressum">
+      <a
+        href="#"
+        onclick="
+          showImpressum();
+          return false;
+        "
+        >Impressum</a
+      >
+    </div>
+
+    <!-- Impressum Modal -->
+    <div id="impressum-modal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeImpressum()">&times;</span>
+        <h2>Impressum</h2>
+        <p><strong>Angaben gemäß § 5 TMG:</strong></p>
+        <p>
+          Rapaael Neuberger<br />
+          Oberndorferstr. 22<br />
+          84032 Landshut
+        </p>
+        <p>
+          <strong>Kontakt:</strong><br />
+          E-Mail: info@raphael-neuberger.com
+        </p>
       </div>
     </div>
   </body>

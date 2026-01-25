@@ -93,13 +93,13 @@ class Endboss extends MovableObject {
 
     let distanceToCharacter = this.x - this.world.character.x;
 
-    // Wenn Charakter in der Nähe ist (innerhalb von 500px)
+    // If character is nearby (within 500px)
     if (Math.abs(distanceToCharacter) < 500 && distanceToCharacter > 0) {
-      // Bewege Endboss zum Charakter
+      // Move endboss towards character
       this.x -= this.speed;
       this.otherDirection = false;
 
-      // Attack wenn sehr nah (innerhalb 150px)
+      // Attack when very close (within 150px)
       if (distanceToCharacter < 150) {
         this.startAttack();
       }

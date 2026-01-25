@@ -2,15 +2,16 @@ let level1;
 function initLevel() {
   level1 = new Level(
     [
-      new Chicken(),
-      new Chicken(),
-      new ChickenSmall(),
-      new Chicken(),
-      new ChickenSmall(),
-      new ChickenSmall(),
-      new Chicken(),
-      new ChickenSmall(),
-      new Chicken(),
+      // 3 normal chickens evenly distributed up to endboss
+      new Chicken(800),
+      new Chicken(1400),
+      new Chicken(2000),
+
+      // 3 small chickens evenly distributed up to endboss
+      new ChickenSmall(1100),
+      new ChickenSmall(1700),
+      new ChickenSmall(2300),
+
       new Endboss(),
     ],
 
@@ -60,27 +61,27 @@ function initLevel() {
         720 * 3,
       ),
     ],
-    // Coins - verteilt in Clustern über das Level (10 Coins = 100%)
+    // Coins - distributed in clusters across the level (10 coins = 100%)
     [
-      // Cluster 1: Am Anfang (3 Coins)
+      // Cluster 1: At the start (3 coins)
       new Coin(300),
       new Coin(360),
       new Coin(420),
 
-      // Cluster 2: Mitte-Links (3 Coins)
+      // Cluster 2: Middle-left (3 coins)
       new Coin(800),
       new Coin(880),
       new Coin(960),
 
-      // Cluster 3: Mitte-Rechts (2 Coins)
+      // Cluster 3: Middle-right (2 coins)
       new Coin(1400),
       new Coin(1500),
 
-      // Cluster 4: Ende (2 Coins)
+      // Cluster 4: End (2 coins)
       new Coin(1900),
       new Coin(2000),
     ],
-    // Bottles - gleichmäßig einzeln verteilt (10 Bottles = 100%)
+    // Bottles - evenly distributed individually (10 bottles = 100%)
     [
       new Bottle(400),
       new Bottle(650),

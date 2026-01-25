@@ -2,7 +2,7 @@ class Coin extends MovableObject {
   y = 100;
   height = 80;
   width = 80;
-  speed = 0; // Coins bewegen sich nicht horizontal
+  speed = 0; // Coins don't move horizontally
 
   constructor(x) {
     super().loadImage("img/8_coin/coin_1.png");
@@ -11,7 +11,7 @@ class Coin extends MovableObject {
   }
 
   animate() {
-    // Münze schwebt auf und ab
+    // Coin floats up and down
     let direction = 1;
     setInterval(() => {
       this.y += direction * 2;

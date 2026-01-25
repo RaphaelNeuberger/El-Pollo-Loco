@@ -95,6 +95,10 @@ class Character extends MovableObject {
         this.otherDirection = false;
         // this.walking_sound.play();
         this.lastInputTime = Date.now();
+        // Aktiviere Chicken-Bewegung beim ersten Character-Move
+        if (!this.world.chickensCanMove) {
+          this.world.chickensCanMove = true;
+        }
       }
 
       if (this.world.keyboard.LEFT && this.x > 0) {
@@ -102,6 +106,10 @@ class Character extends MovableObject {
         this.otherDirection = true;
         // this.walking_sound.play();
         this.lastInputTime = Date.now();
+        // Aktiviere Chicken-Bewegung beim ersten Character-Move
+        if (!this.world.chickensCanMove) {
+          this.world.chickensCanMove = true;
+        }
       }
 
       if (this.world.keyboard.SPACE && !this.isAboveGround()) {

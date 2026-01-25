@@ -17,6 +17,8 @@ class World {
   gameWon = false;
   gameLost = false;
   gameStarted = false;
+  chickensCanMove = false;
+  isPaused = false;
   endbossSoundPlayed = false;
   youWonImage = new Image();
   youLostImage = new Image();
@@ -53,30 +55,30 @@ class World {
     this.introSound.volume = 0.3;
     this.gameMusicLoop.loop = true;
     this.gameMusicLoop.volume = 0.4;
-    // Sound wird erst bei User-Interaktion (ENTER) abgespielt
+    // Sound will only play after user interaction (ENTER)
     this.draw();
     this.setWorld();
-    // run() wird erst aufgerufen wenn Spiel gestartet wird
+    // run() will only be called when game starts
   }
 
   setWorld() {
     this.character.world = this;
-    // Setze world-Referenz für alle Enemies
+    // Set world reference for all enemies
     this.level.enemies.forEach((enemy) => {
       enemy.world = this;
     });
   }
 
   playIntroSound() {
-    // Versuche Sound abzuspielen (nur wenn User interagiert hat)
+    // Try to play sound (only if user has interacted)
     this.introSound.play().catch(() => {
-      // Ignoriere Fehler wenn Browser Auto-Play blockiert
-      console.log("Audio wird erst nach User-Interaktion abgespielt");
+      // Ignore error if browser blocks auto-play
+      console.log("Audio will only play after user interaction");
     });
   }
 
   setSoundMuted(muted) {
-    // Setze Lautstärke aller Audio-Objekte auf 0 oder zurück
+    // Set volume of all audio objects to 0 or back
     const volume = muted ? 0 : 1;
     this.introSound.volume = muted ? 0 : 0.3;
     this.gameMusicLoop.volume = muted ? 0 : 0.4;
@@ -98,10 +100,11 @@ class World {
     this.introSound.pause();
     this.introSound.currentTime = 0;
     this.gameStartSound.play();
-    // Starte Game-Music nach kurzem Delay (damit Start-Sound hörbar ist)
+    // Start game music after short delay (so start sound is audible)
     setTimeout(() => {
       this.gameMusicLoop.play();
     }, 500);
+    // Chickens stay still until character moves
     this.run();
     this.startChickenSpawning();
   }
@@ -117,25 +120,29 @@ class World {
 
   startChickenSpawning() {
     // Spawne alle 3 Sekunden ein neues Chicken
-    setInterval(() => {
-      if (!this.gameWon && !this.gameLost) {
+    this.chickenSpawnInterval = setInterval(() => {
+      if (!this.gameWon && !this.gameLost && this.gameStarted) {
         this.spawnChicken();
+        // Entferne tote Chickens aus Array (Performance)
+        this.level.enemies = this.level.enemies.filter(
+          (e) => !e.isDead || e instanceof Endboss,
+        );
       }
     }, 3000);
   }
 
   spawnChicken() {
-    // Zähle aktuelle Chickens (ohne Endboss)
+    // Count current chickens (without endboss)
     let chickenCount = this.level.enemies.filter(
       (e) => (e instanceof Chicken || e instanceof ChickenSmall) && !e.isDead,
     ).length;
 
-    // Maximale Anzahl an Chickens gleichzeitig: 8
+    // Maximum number of chickens at the same time: 8
     if (chickenCount < 8) {
-      // 50% Chance für normales oder kleines Chicken
+      // 50% chance for normal or small chicken
       let newChicken = Math.random() > 0.5 ? new Chicken() : new ChickenSmall();
 
-      // Spawne Chicken an zufälliger Position vor dem Endboss (x < 2000)
+      // Spawn chicken at random position before endboss (x < 2000)
       newChicken.x = this.character.x + 400 + Math.random() * 800;
       if (newChicken.x > 2000) {
         newChicken.x = Math.random() * 1500;
@@ -156,25 +163,24 @@ class World {
       this.collectedBottles--;
       let percentage = (this.collectedBottles / this.totalBottles) * 100;
       this.bottleBar.setPercentage(percentage);
-      this.keyboard.S = false; // Verhindere Mehrfachwurf
+      this.keyboard.S = false; // Prevent multiple throws
     }
   }
 
   checkCollisions() {
-    // Feindkollisionen mit Jump-Kill Mechanik
+    // Enemy collisions with jump-kill mechanic
     this.level.enemies.forEach((enemy) => {
       if (this.character.isColliding(enemy)) {
-        // Prüfe ob Character auf Chicken springt (von oben)
+        // Check if character jumps on chicken (from above)
         if (
           (enemy instanceof Chicken || enemy instanceof ChickenSmall) &&
           !enemy.isDead &&
-          this.character.speedY < 0 &&
-          this.character.y + this.character.height - 20 < enemy.y + 20
+          this.character.speedY < 0
         ) {
-          // Character springt auf Chicken (Character Füße sind über Chicken Kopf)
+          // Character jumps on chicken - kill it whenever character is falling
           enemy.kill();
-          this.character.speedY = 15; // Kleiner Bounce
-          // Spiele unterschiedliche Sounds für Chicken und ChickenSmall
+          this.character.speedY = 18; // Stronger bounce
+          // Play different sounds for chicken and small chicken
           if (enemy instanceof ChickenSmall) {
             this.jumpKillSound.currentTime = 0;
             this.jumpKillSound.play();
@@ -188,10 +194,10 @@ class World {
             enemy.isDead
           )
         ) {
-          // Normale Kollision (Schaden) - für alle Enemies inkl. Endboss
+          // Normal collision (damage) - for all enemies including endboss
           this.character.hit();
           this.healthBar.setPercentage(this.character.energy);
-          // Spiele Sound wenn Small Chicken Character berührt
+          // Play sound when small chicken touches character
           if (enemy instanceof ChickenSmall) {
             this.smallChickenHitSound.currentTime = 0;
             this.smallChickenHitSound.play();
@@ -200,7 +206,7 @@ class World {
       }
     });
 
-    // Münz-Kollisionen
+    // Coin collisions
     this.level.coins.forEach((coin, index) => {
       if (this.character.isColliding(coin)) {
         this.level.coins.splice(index, 1);
@@ -244,6 +250,9 @@ class World {
     // Start Screen anzeigen wenn Spiel noch nicht gestartet
     if (!this.gameStarted) {
       this.drawStartScreen();
+    } else if (this.isPaused) {
+      // Pause Screen anzeigen
+      this.drawPauseScreen();
     } else {
       // Normales Spiel zeichnen
       this.ctx.translate(this.camera_x, 0);
@@ -336,7 +345,7 @@ class World {
   }
 
   checkGameStatus() {
-    // Prüfe ob Endboss besiegt wurde
+    // Check if endboss was defeated
     let endboss = this.level.enemies.find((e) => e instanceof Endboss);
     if (endboss && endboss.isDead && !this.gameWon) {
       this.gameWon = true;
@@ -345,7 +354,7 @@ class World {
       this.winnerSound.play();
     }
 
-    // Prüfe ob Spieler gestorben ist
+    // Check if player has died
     if (this.character.energy <= 0 && !this.gameLost) {
       this.gameLost = true;
       this.gameMusicLoop.pause();
@@ -353,7 +362,7 @@ class World {
       this.gameOverSound2.play();
     }
 
-    // Prüfe ob keine Flaschen mehr verfügbar sind (weder einsammelbar noch im Inventar)
+    // Check if no bottles are available (neither collectable nor in inventory)
     if (
       this.collectedBottles === 0 &&
       this.level.bottles.length === 0 &&
@@ -372,10 +381,27 @@ class World {
     let x = (this.canvas.width - 720) / 2;
     let y = (this.canvas.height - 480) / 2;
     this.ctx.drawImage(image, x, y, 720, 480);
+
+    // Zeichne Restart-Button
+    this.ctx.fillStyle = "rgba(255, 165, 0, 0.9)";
+    this.ctx.fillRect(
+      this.canvas.width / 2 - 100,
+      this.canvas.height - 100,
+      200,
+      50,
+    );
+    this.ctx.fillStyle = "white";
+    this.ctx.font = "bold 24px Arial";
+    this.ctx.textAlign = "center";
+    this.ctx.fillText(
+      "NEUSTART",
+      this.canvas.width / 2,
+      this.canvas.height - 70,
+    );
   }
 
   drawStartScreen() {
-    // Zeichne Start Screen über gesamten Canvas
+    // Draw start screen over entire canvas
     this.ctx.drawImage(
       this.startScreenImage,
       0,
@@ -384,8 +410,10 @@ class World {
       this.canvas.height,
     );
 
-    // Zeige "Drücke ENTER zum Starten" Text nur auf Desktop
-    if (window.innerWidth > 915 || window.innerHeight > window.innerWidth) {
+    // Show "Press ENTER to start" text only on desktop (not on touch devices)
+    const isTouchDevice =
+      "ontouchstart" in window || navigator.maxTouchPoints > 0;
+    if (!isTouchDevice) {
       this.ctx.fillStyle = "white";
       this.ctx.font = "30px Arial";
       this.ctx.textAlign = "center";
@@ -397,12 +425,52 @@ class World {
     }
   }
 
+  drawPauseScreen() {
+    // Dark overlay
+    this.ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+    // "PAUSED" text
+    this.ctx.fillStyle = "white";
+    this.ctx.font = "bold 60px Arial";
+    this.ctx.textAlign = "center";
+    this.ctx.fillText(
+      "PAUSIERT",
+      this.canvas.width / 2,
+      this.canvas.height / 2 - 20,
+    );
+
+    // "Press ESC or P to continue" text
+    this.ctx.font = "24px Arial";
+    this.ctx.fillText(
+      "Drücke ESC oder P zum Fortfahren",
+      this.canvas.width / 2,
+      this.canvas.height / 2 + 40,
+    );
+  }
+
+  togglePause() {
+    if (!this.gameStarted || this.gameWon || this.gameLost) return;
+
+    this.isPaused = !this.isPaused;
+
+    if (this.isPaused) {
+      // Pausiere Musik
+      this.gameMusicLoop.pause();
+    } else {
+      // Setze Musik fort
+      if (!this.soundMuted) {
+        this.gameMusicLoop.play();
+      }
+    }
+  }
+
   isEndbossVisible() {
-    // Finde den Endboss im Level
+    // Find the endboss in the level
     let endboss = this.level.enemies.find((e) => e instanceof Endboss);
     if (endboss) {
-      // Prüfe ob Endboss im sichtbaren Bereich ist (Kamera-Position)
-      // Sichtbarer Bereich: -camera_x bis -camera_x + canvas.width
+      // Check if endboss is in visible area (camera position)
+      // Visible area: -camera_x to -camera_x + canvas.width
       let endbossRightEdge = endboss.x + endboss.width;
       let endbossLeftEdge = endboss.x;
       let cameraLeftEdge = -this.camera_x;

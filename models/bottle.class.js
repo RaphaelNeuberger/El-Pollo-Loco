@@ -2,7 +2,7 @@ class Bottle extends MovableObject {
   y = 80;
   height = 60;
   width = 50;
-  speed = 0; // Bottles bewegen sich nicht horizontal
+  speed = 0; // Bottles don't move horizontally
 
   constructor(x) {
     super().loadImage(
@@ -13,7 +13,7 @@ class Bottle extends MovableObject {
   }
 
   animate() {
-    // Flasche schwebt auf und ab (langsamer als Münze)
+    // Bottle floats up and down (slower than coin)
     let direction = 1;
     setInterval(() => {
       this.y += direction * 1.5;

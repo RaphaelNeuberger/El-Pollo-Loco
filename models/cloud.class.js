@@ -21,13 +21,13 @@ class Cloud extends MovableObject {
     setInterval(() => {
       this.moveLeft();
 
-      // Wenn Bild vollständig links verschwindet, zum nächsten Bild wechseln
+      // If image completely disappears to the left, switch to next image
       if (this.x < -this.width) {
         this.imageIndex = (this.imageIndex + 1) % this.CLOUD_IMAGES.length;
-        this.x = 720; // Rechts wieder auftauchen (800 + etwas Puffer)
+        this.x = 720; // Reappear on the right (800 + some buffer)
       }
 
-      // Aktuelles Bild anzeigen
+      // Display current image
       let path = this.CLOUD_IMAGES[this.imageIndex];
       this.img = this.imageCache[path];
     }, 1000 / 60);
