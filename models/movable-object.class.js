@@ -24,14 +24,16 @@ class MovableObject extends DrawableObject {
     }
   }
 
-  // Character.isColliding(chicken)
   isColliding(mo) {
-    return (
-      this.x + this.width - 10 > mo.x &&
-      this.y + this.height - 10 > mo.y &&
-      this.x + 10 < mo.x + mo.width &&
-      this.y + 10 < mo.y + mo.height
-    );
+    return this.isCollidingHorizontally(mo) && this.isCollidingVertically(mo);
+  }
+
+  isCollidingHorizontally(mo) {
+    return this.x + this.width - 10 > mo.x && this.x + 10 < mo.x + mo.width;
+  }
+
+  isCollidingVertically(mo) {
+    return this.y + this.height - 10 > mo.y && this.y + 10 < mo.y + mo.height;
   }
 
   hit() {

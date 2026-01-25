@@ -73,73 +73,115 @@ class Character extends MovableObject {
 
   constructor() {
     super().loadImage("img/2_character_pepe/2_walk/W-21.png");
+    this.loadAllImages();
+    this.applyGravity();
+    this.animate();
+  }
+
+  loadAllImages() {
     this.loadImages(this.IMAGES_IDLE);
     this.loadImages(this.IMAGES_LONG_IDLE);
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_JUMPING);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
-    this.applyGravity();
-    this.animate();
   }
 
   animate() {
-    setInterval(() => {
-      // Keine Bewegung erlauben wenn Spiel gewonnen oder verloren
-      if (this.world.gameWon || this.world.gameLost) {
-        return;
-      }
+    setInterval(() => this.handleMovement(), 1000 / 60);
+    setInterval(() => this.updateAnimation(), 200);
+  }
 
-      if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-        this.moveRight();
-        this.otherDirection = false;
-        // this.walking_sound.play();
-        this.lastInputTime = Date.now();
-        // Aktiviere Chicken-Bewegung beim ersten Character-Move
-        if (!this.world.chickensCanMove) {
-          this.world.chickensCanMove = true;
-        }
-      }
+  handleMovement() {
+    if (this.world.gameWon || this.world.gameLost) return;
+    this.processMovementInput();
+    this.updateCamera();
+  }
 
-      if (this.world.keyboard.LEFT && this.x > 0) {
-        this.moveLeft();
-        this.otherDirection = true;
-        // this.walking_sound.play();
-        this.lastInputTime = Date.now();
-        // Aktiviere Chicken-Bewegung beim ersten Character-Move
-        if (!this.world.chickensCanMove) {
-          this.world.chickensCanMove = true;
-        }
-      }
+  processMovementInput() {
+    this.handleRightMovement();
+    this.handleLeftMovement();
+    this.handleJump();
+  }
 
-      if (this.world.keyboard.SPACE && !this.isAboveGround()) {
-        this.jump();
-        this.lastInputTime = Date.now();
-      }
+  updateCamera() {
+    this.world.camera_x = -this.x + 100;
+  }
 
-      this.world.camera_x = -this.x + 100;
-    }, 1000 / 60);
+  handleRightMovement() {
+    if (this.canMoveRight()) {
+      this.moveRightAndUpdate();
+    }
+  }
 
-    setInterval(() => {
-      if (this.isDead()) {
-        this.playAnimation(this.IMAGES_DEAD);
-      } else if (this.isHurt()) {
-        this.playAnimation(this.IMAGES_HURT);
-      } else if (this.isAboveGround()) {
-        this.playAnimation(this.IMAGES_JUMPING);
-      } else {
-        if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-          this.playAnimation(this.IMAGES_WALKING);
-        } else {
-          let timeSinceLastInput = (Date.now() - this.lastInputTime) / 1000;
-          if (timeSinceLastInput > 5) {
-            this.playAnimation(this.IMAGES_LONG_IDLE);
-          } else {
-            this.playAnimation(this.IMAGES_IDLE);
-          }
-        }
-      }
-    }, 50);
+  canMoveRight() {
+    return this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x;
+  }
+
+  moveRightAndUpdate() {
+    this.moveRight();
+    this.otherDirection = false;
+    this.lastInputTime = Date.now();
+    this.activateChickens();
+  }
+
+  handleLeftMovement() {
+    if (this.canMoveLeft()) {
+      this.moveLeftAndUpdate();
+    }
+  }
+
+  canMoveLeft() {
+    return this.world.keyboard.LEFT && this.x > 0;
+  }
+
+  moveLeftAndUpdate() {
+    this.moveLeft();
+    this.otherDirection = true;
+    this.lastInputTime = Date.now();
+    this.activateChickens();
+  }
+
+  activateChickens() {
+    if (!this.world.chickensCanMove) {
+      this.world.chickensCanMove = true;
+    }
+  }
+
+  handleJump() {
+    if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+      this.jump();
+      this.lastInputTime = Date.now();
+    }
+  }
+
+  updateAnimation() {
+    if (this.isDead()) {
+      this.playAnimation(this.IMAGES_DEAD);
+    } else if (this.isHurt()) {
+      this.playAnimation(this.IMAGES_HURT);
+    } else if (this.isAboveGround()) {
+      this.playAnimation(this.IMAGES_JUMPING);
+    } else {
+      this.playIdleOrWalkAnimation();
+    }
+  }
+
+  playIdleOrWalkAnimation() {
+    if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+      this.playAnimation(this.IMAGES_WALKING);
+    } else {
+      this.selectIdleAnimation();
+    }
+  }
+
+  selectIdleAnimation() {
+    let timeSinceLastInput = (Date.now() - this.lastInputTime) / 1000;
+    if (timeSinceLastInput > 5) {
+      this.playAnimation(this.IMAGES_LONG_IDLE);
+    } else {
+      this.playAnimation(this.IMAGES_IDLE);
+    }
   }
 
   jump() {

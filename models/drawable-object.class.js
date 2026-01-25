@@ -18,16 +18,7 @@ class DrawableObject {
     ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
   }
 
-  drawFrame(ctx) {
-    // Collision boxes hidden for final game
-    // if (this instanceof Character || this instanceof Chicken || this instanceof ChickenSmall) {
-    //   ctx.beginPath();
-    //   ctx.lineWidth = 5;
-    //   ctx.strokeStyle = "blue";
-    //   ctx.rect(this.x, this.y, this.width, this.height);
-    //   ctx.stroke();
-    // }
-  }
+  drawFrame(ctx) {}
 
   loadImages(arr) {
     arr.forEach((path) => {

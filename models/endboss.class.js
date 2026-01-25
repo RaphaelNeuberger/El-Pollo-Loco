@@ -56,53 +56,71 @@ class Endboss extends MovableObject {
 
   constructor() {
     super().loadImage(this.IMAGES_WALKING[0]);
+    this.loadAllImages();
+    this.x = 2500;
+    this.animate();
+  }
+
+  loadAllImages() {
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_ALERT);
     this.loadImages(this.IMAGES_ATTACK);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
-
-    this.x = 2500;
-    this.animate();
   }
 
   animate() {
-    // Bewegungs-Interval
-    setInterval(() => {
-      if (!this.isDead && this.world) {
-        this.moveTowardsCharacter();
-      }
-    }, 1000 / 60);
+    setInterval(() => this.handleMovement(), 1000 / 60);
+    setInterval(() => this.updateAnimation(), 150);
+  }
 
-    // Animations-Interval
-    setInterval(() => {
-      if (this.isDead) {
-        this.playAnimation(this.IMAGES_DEAD);
-      } else if (this.isHurt) {
-        this.playAnimation(this.IMAGES_HURT);
-      } else if (this.isAttacking) {
-        this.playAnimation(this.IMAGES_ATTACK);
-      } else {
-        this.playAnimation(this.IMAGES_WALKING);
-      }
-    }, 150);
+  handleMovement() {
+    if (!this.isDead && this.world) {
+      this.moveTowardsCharacter();
+    }
+  }
+
+  updateAnimation() {
+    if (this.isDead) {
+      this.playAnimation(this.IMAGES_DEAD);
+    } else if (this.isHurt) {
+      this.playAnimation(this.IMAGES_HURT);
+    } else if (this.isAttacking) {
+      this.playAnimation(this.IMAGES_ATTACK);
+    } else {
+      this.playAnimation(this.IMAGES_WALKING);
+    }
   }
 
   moveTowardsCharacter() {
-    if (!this.world || !this.world.character) return;
+    if (!this.hasValidWorld()) return;
+    let distance = this.getDistanceToCharacter();
+    this.processMovement(distance);
+  }
 
-    let distanceToCharacter = this.x - this.world.character.x;
+  hasValidWorld() {
+    return this.world && this.world.character;
+  }
 
-    // If character is nearby (within 500px)
-    if (Math.abs(distanceToCharacter) < 500 && distanceToCharacter > 0) {
-      // Move endboss towards character
-      this.x -= this.speed;
-      this.otherDirection = false;
+  processMovement(distance) {
+    if (this.isCharacterNearby(distance)) {
+      this.moveAndCheckAttack(distance);
+    }
+  }
 
-      // Attack when very close (within 150px)
-      if (distanceToCharacter < 150) {
-        this.startAttack();
-      }
+  getDistanceToCharacter() {
+    return this.x - this.world.character.x;
+  }
+
+  isCharacterNearby(distance) {
+    return Math.abs(distance) < 500 && distance > 0;
+  }
+
+  moveAndCheckAttack(distance) {
+    this.x -= this.speed;
+    this.otherDirection = false;
+    if (distance < 150) {
+      this.startAttack();
     }
   }
 
@@ -118,15 +136,23 @@ class Endboss extends MovableObject {
   hit() {
     this.energy -= 20;
     if (this.energy <= 0) {
-      this.energy = 0;
-      this.isDead = true;
-      this.isAttacking = false;
-      this.isHurt = false;
+      this.die();
     } else {
-      this.isHurt = true;
-      setTimeout(() => {
-        this.isHurt = false;
-      }, 500);
+      this.showHurt();
     }
+  }
+
+  die() {
+    this.energy = 0;
+    this.isDead = true;
+    this.isAttacking = false;
+    this.isHurt = false;
+  }
+
+  showHurt() {
+    this.isHurt = true;
+    setTimeout(() => {
+      this.isHurt = false;
+    }, 500);
   }
 }

@@ -20,16 +20,20 @@ class Cloud extends MovableObject {
   animate() {
     setInterval(() => {
       this.moveLeft();
-
-      // If image completely disappears to the left, switch to next image
-      if (this.x < -this.width) {
-        this.imageIndex = (this.imageIndex + 1) % this.CLOUD_IMAGES.length;
-        this.x = 720; // Reappear on the right (800 + some buffer)
-      }
-
-      // Display current image
-      let path = this.CLOUD_IMAGES[this.imageIndex];
-      this.img = this.imageCache[path];
+      this.wrapCloudIfNeeded();
+      this.updateCloudImage();
     }, 1000 / 60);
+  }
+
+  wrapCloudIfNeeded() {
+    if (this.x < -this.width) {
+      this.imageIndex = (this.imageIndex + 1) % this.CLOUD_IMAGES.length;
+      this.x = 720;
+    }
+  }
+
+  updateCloudImage() {
+    let path = this.CLOUD_IMAGES[this.imageIndex];
+    this.img = this.imageCache[path];
   }
 }

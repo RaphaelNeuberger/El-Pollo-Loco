@@ -13,46 +13,60 @@ class Chicken extends MovableObject {
 
   constructor() {
     super().loadImage("img/3_enemies_chicken/chicken_normal/1_walk/1_w.png");
-    this.loadImages(this.IMAGES_WALKING);
-    this.loadImages(this.IMAGES_DEAD);
-
-    this.x = 200 + Math.random() * 500;
-    this.speed = 0.15 + Math.random() + 0.25;
-
+    this.loadAllImages();
+    this.setRandomPosition();
     this.animate();
   }
 
-  animate() {
-    setInterval(() => {
-      if (
-        !this.isDead &&
-        this.world &&
-        this.world.gameStarted &&
-        this.world.chickensCanMove
-      ) {
-        this.moveLeft();
-      }
-    }, 1000 / 60);
+  loadAllImages() {
+    this.loadImages(this.IMAGES_WALKING);
+    this.loadImages(this.IMAGES_DEAD);
+  }
 
-    setInterval(() => {
-      if (this.isDead) {
-        this.playAnimation(this.IMAGES_DEAD);
-      } else if (this.world && this.world.gameStarted) {
-        this.playAnimation(this.IMAGES_WALKING);
-      }
-    }, 200);
+  setRandomPosition() {
+    this.x = 200 + Math.random() * 500;
+    this.speed = 0.15 + Math.random() + 0.25;
+  }
+
+  animate() {
+    setInterval(() => this.handleMovement(), 1000 / 60);
+    setInterval(() => this.updateAnimation(), 200);
+  }
+
+  handleMovement() {
+    if (this.canMove()) {
+      this.moveLeft();
+    }
+  }
+
+  canMove() {
+    return (
+      !this.isDead &&
+      this.world &&
+      this.world.gameStarted &&
+      this.world.chickensCanMove
+    );
+  }
+
+  updateAnimation() {
+    if (this.isDead) {
+      this.playAnimation(this.IMAGES_DEAD);
+    } else if (this.world && this.world.gameStarted) {
+      this.playAnimation(this.IMAGES_WALKING);
+    }
   }
 
   kill() {
     this.isDead = true;
-    // Entferne nach 1 Sekunde aus dem Level
-    setTimeout(() => {
-      if (this.world) {
-        let index = this.world.level.enemies.indexOf(this);
-        if (index > -1) {
-          this.world.level.enemies.splice(index, 1);
-        }
+    setTimeout(() => this.removeFromLevel(), 1000);
+  }
+
+  removeFromLevel() {
+    if (this.world) {
+      let index = this.world.level.enemies.indexOf(this);
+      if (index > -1) {
+        this.world.level.enemies.splice(index, 1);
       }
-    }, 1000);
+    }
   }
 }
