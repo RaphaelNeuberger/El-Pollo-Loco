@@ -1,73 +1,73 @@
 # El Pollo Loco - JSDoc Documentation
 
-## 🎮 Über das Spiel
+## 🎮 About the Game
 
-**El Pollo Loco** ist ein Jump & Run Spiel, entwickelt mit Vanilla JavaScript und HTML5 Canvas. Der Spieler steuert Pepe, der gegen Hühner und einen Endboss kämpft.
+**El Pollo Loco** is a Jump & Run game developed with Vanilla JavaScript and HTML5 Canvas. The player controls Pepe, who fights against chickens and an end boss.
 
-## 📚 Code-Dokumentation
+## 📚 Code Documentation
 
-Dieses Projekt verwendet **JSDoc** zur Code-Dokumentation. Alle Klassen, Methoden und wichtigen Properties sind dokumentiert.
+This project uses **JSDoc** for code documentation. All classes, methods, and important properties are documented.
 
-### Hauptklassen
+### Main Classes
 
-- **DrawableObject** - Basisklasse für alle renderbaren Objekte
-- **MovableObject** - Erweitert DrawableObject mit Physik und Kollision
-- **Character** - Der spielbare Charakter (Pepe)
-- **World** - Game Engine und Rendering-Pipeline
-- **Level** - Level-Konfiguration mit Gegnern und Sammelobjekten
+- **DrawableObject** - Base class for all renderable objects
+- **MovableObject** - Extends DrawableObject with physics and collision detection
+- **Character** - The playable character (Pepe)
+- **World** - Game engine and rendering pipeline
+- **Level** - Level configuration with enemies and collectibles
 
-### Gegner
+### Enemies
 
-- **Chicken** - Normale Hühner
-- **ChickenSmall** - Kleine Hühner
-- **Endboss** - Boss-Gegner mit KI
+- **Chicken** - Normal chickens
+- **ChickenSmall** - Small chickens
+- **Endboss** - Boss enemy with AI
 
-### Sammelobjekte
+### Collectibles
 
-- **Coin** - Münzen zum Einsammeln
-- **Bottle** - Flaschen (Munition für Würfe)
+- **Coin** - Coins to collect
+- **Bottle** - Bottles (ammunition for throwing)
 
-### UI-Komponenten
+### UI Components
 
-- **StatusBar** - Basisklasse für alle Statusanzeigen
-- **HealthBar** - Gesundheitsanzeige
-- **CoinBar** - Münzen-Counter
-- **BottleBar** - Flaschen-Counter
-- **EndbossBar** - Endboss-Gesundheit
+- **StatusBar** - Base class for all status bars
+- **HealthBar** - Health display
+- **CoinBar** - Coin counter
+- **BottleBar** - Bottle counter
+- **EndbossBar** - Endboss health display
 
-## 🛠️ JSDoc HTML generieren
+## 🛠️ Generate JSDoc HTML
 
-Um die HTML-Dokumentation zu erstellen:
+To create the HTML documentation:
 
 ```bash
-# JSDoc installieren (falls noch nicht vorhanden)
+# Install JSDoc (if not already installed)
 npm install -g jsdoc
 
-# Optional: Schönes Template installieren
+# Optional: Install nice template
 npm install docdash
 
-# Dokumentation generieren
+# Generate documentation
 jsdoc -c jsdoc.json
 
-# Oder einfach:
+# Or simply:
 jsdoc models js levels -d docs -r
 ```
 
-Die generierte Dokumentation findest du dann im `docs/` Ordner.
+The generated documentation can be found in the `docs/` folder.
 
-## 📖 Online ansehen
+## 📖 View Online
 
-Öffne `docs/index.html` in deinem Browser, um die generierte Dokumentation anzusehen.
+Open `docs/index.html` in your browser to view the generated documentation.
 
-## 🎯 Code-Qualität
+## 🎯 Code Quality
 
-- ✅ Alle Funktionen ≤14 Zeilen
-- ✅ Alle Kommentare auf Englisch
-- ✅ JSDoc für alle Klassen und öffentliche Methoden
-- ✅ Clean Code Prinzipien
-- ✅ OOP mit Vererbung (3 Ebenen)
+- ✅ All functions ≤14 lines
+- ✅ All comments in English
+- ✅ JSDoc for all classes and public methods
+- ✅ Clean Code principles
+- ✅ OOP with inheritance (3 levels)
 
-## 🏗️ Architektur
+## 🏗️ Architecture
 
 ```
 DrawableObject (Rendering)
@@ -80,15 +80,15 @@ DrawableObject (Rendering)
       └─ HealthBar, CoinBar, BottleBar, EndbossBar
 ```
 
-## 📝 JSDoc Tags verwendet
+## 📝 JSDoc Tags Used
 
-- `@class` - Klassendeklaration
-- `@extends` - Vererbung
-- `@type` - Property-Typen
-- `@param` - Funktionsparameter
-- `@returns` - Rückgabewerte
+- `@class` - Class declaration
+- `@extends` - Inheritance
+- `@type` - Property types
+- `@param` - Function parameters
+- `@returns` - Return values
 
-## 💡 Beispiel
+## 💡 Example
 
 ```javascript
 /**
@@ -96,7 +96,7 @@ DrawableObject (Rendering)
  * @extends MovableObject
  */
 class Character extends MovableObject {
-  /** @type {number} Character height in pixels */
+  /** @type {number} */
   height = 250;
 
   /**

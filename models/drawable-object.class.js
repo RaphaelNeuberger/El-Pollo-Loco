@@ -4,19 +4,19 @@
  * @class
  */
 class DrawableObject {
-  /** @type {HTMLImageElement} Current image to display */
+  /** @type {HTMLImageElement} */
   img;
-  /** @type {Object.<string, HTMLImageElement>} Cache for preloaded images */
+  /** @type {Object.<string, HTMLImageElement>} */
   imageCache = {};
-  /** @type {number} Index for animation frames */
+  /** @type {number} */
   currentImage = 0;
-  /** @type {number} X-position on canvas */
+  /** @type {number} */
   x = 120;
-  /** @type {number} Y-position on canvas */
+  /** @type {number} */
   y = 280;
-  /** @type {number} Height of the object */
+  /** @type {number} */
   height = 150;
-  /** @type {number} Width of the object */
+  /** @type {number} */
   width = 100;
 
   /**
