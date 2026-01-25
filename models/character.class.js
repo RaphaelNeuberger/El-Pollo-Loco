@@ -1,8 +1,17 @@
+/**
+ * Main playable character (Pepe).
+ * Handles player input, movement, animations, and camera control.
+ * @extends MovableObject
+ */
 class Character extends MovableObject {
+  /** @type {number} Character height in pixels */
   height = 250;
+  /** @type {number} Initial Y-position */
   y = 80;
+  /** @type {number} Movement speed */
   speed = 10;
 
+  /** @type {string[]} Idle animation frames */
   IMAGES_IDLE = [
     "img/2_character_pepe/1_idle/idle/I-1.png",
     "img/2_character_pepe/1_idle/idle/I-2.png",

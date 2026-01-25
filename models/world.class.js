@@ -1,30 +1,62 @@
+/**
+ * Main game engine that manages all game objects and rendering.
+ * Handles game loop, collisions, audio, and game states.
+ * @class
+ */
 class World {
+  /** @type {Character} The playable character */
   character = new Character();
+  /** @type {Level} Current game level */
   level = level1;
+  /** @type {HTMLCanvasElement} Canvas element */
   canvas;
+  /** @type {CanvasRenderingContext2D} Canvas rendering context */
   ctx;
+  /** @type {Keyboard} Keyboard input handler */
   keyboard;
+  /** @type {number} Camera X-offset for scrolling */
   camera_x = 0;
+  /** @type {HealthBar} Character health display */
   healthBar = new HealthBar();
+  /** @type {CoinBar} Collected coins display */
   coinBar = new CoinBar();
+  /** @type {BottleBar} Collected bottles display */
   bottleBar = new BottleBar();
+  /** @type {EndbossBar} Endboss health display */
   endbossBar = new EndbossBar();
+  /** @type {ThrowableObject[]} Array of thrown bottles */
   throwableObjects = [];
+  /** @type {number} Number of coins collected */
   collectedCoins = 0;
+  /** @type {number} Number of bottles collected */
   collectedBottles = 0;
+  /** @type {number} Total coins in level */
   totalCoins = 0;
+  /** @type {number} Total bottles in level */
   totalBottles = 0;
+  /** @type {boolean} Win condition flag */
   gameWon = false;
+  /** @type {boolean} Lose condition flag */
   gameLost = false;
+  /** @type {boolean} Game started flag */
   gameStarted = false;
+  /** @type {boolean} Chickens movement enabled */
   chickensCanMove = false;
+  /** @type {boolean} Game paused state */
   isPaused = false;
+  /** @type {boolean} Endboss warning played */
   endbossSoundPlayed = false;
+  /** @type {Image} Win screen image */
   youWonImage = new Image();
+  /** @type {Image} Game over image */
   youLostImage = new Image();
+  /** @type {Image} Start screen image */
   startScreenImage = new Image();
+  /** @type {Audio} Intro music */
   introSound = new Audio("audio/game-intro-345507.mp3");
+  /** @type {Audio} Game start sound */
   gameStartSound = new Audio("audio/game-start-6104.mp3");
+  /** @type {Audio} Bottle collect sound */
   bottleCollectSound = new Audio(
     "audio/fantasy-game-sword-cut-sound-effect-get-more-on-my-patreon-339824.mp3",
   );
