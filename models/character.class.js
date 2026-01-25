@@ -37,7 +37,6 @@ class Character extends MovableObject {
     "img/2_character_pepe/2_walk/W-25.png",
     "img/2_character_pepe/2_walk/W-26.png",
   ];
-  world;
 
   IMAGES_JUMPING = [
     "img/2_character_pepe/3_jump/J-31.png",
@@ -68,7 +67,7 @@ class Character extends MovableObject {
   ];
 
   world;
-  // walking_sound = new Audio("audio/running.mp3"); // Audio-Datei nicht vorhanden
+  // walking_sound = new Audio("audio/running.mp3"); // Audio file not available
   lastInputTime = 0;
 
   constructor() {
