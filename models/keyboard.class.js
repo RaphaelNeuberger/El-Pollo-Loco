@@ -1,3 +1,7 @@
+/**
+ * Represents keyboard input states for game controls.
+ * @class
+ */
 class Keyboard {
   LEFT;
   RIGHT;

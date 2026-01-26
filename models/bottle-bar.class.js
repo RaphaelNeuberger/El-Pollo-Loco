@@ -1,3 +1,8 @@
+/**
+ * Represents a bottle collection status bar.
+ * @class
+ * @extends StatusBar
+ */
 class BottleBar extends StatusBar {
   IMAGES = [
     "img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/0.png",
@@ -8,6 +13,9 @@ class BottleBar extends StatusBar {
     "img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/100.png",
   ];
 
+  /**
+   * Creates a bottle bar instance and initializes it at 0%.
+   */
   constructor() {
     super();
     this.x = 40;

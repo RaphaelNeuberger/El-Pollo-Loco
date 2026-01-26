@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: models/throwable-object.class.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,127 +17,108 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: models/throwable-object.class.js</h1>
 
     
 
 
 
     
-
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
     <section>
-        <article><h1>El Pollo Loco - JSDoc Documentation</h1>
-<h2>🎮 About the Game</h2>
-<p><strong>El Pollo Loco</strong> is a Jump &amp; Run game developed with Vanilla JavaScript and HTML5 Canvas. The player controls Pepe, who fights against chickens and an end boss.</p>
-<h2>📚 Code Documentation</h2>
-<p>This project uses <strong>JSDoc</strong> for code documentation. All classes, methods, and important properties are documented.</p>
-<h3>Main Classes</h3>
-<ul>
-<li><strong>DrawableObject</strong> - Base class for all renderable objects</li>
-<li><strong>MovableObject</strong> - Extends DrawableObject with physics and collision detection</li>
-<li><strong>Character</strong> - The playable character (Pepe)</li>
-<li><strong>World</strong> - Game engine and rendering pipeline</li>
-<li><strong>Level</strong> - Level configuration with enemies and collectibles</li>
-</ul>
-<h3>Enemies</h3>
-<ul>
-<li><strong>Chicken</strong> - Normal chickens</li>
-<li><strong>ChickenSmall</strong> - Small chickens</li>
-<li><strong>Endboss</strong> - Boss enemy with AI</li>
-</ul>
-<h3>Collectibles</h3>
-<ul>
-<li><strong>Coin</strong> - Coins to collect</li>
-<li><strong>Bottle</strong> - Bottles (ammunition for throwing)</li>
-</ul>
-<h3>UI Components</h3>
-<ul>
-<li><strong>StatusBar</strong> - Base class for all status bars</li>
-<li><strong>HealthBar</strong> - Health display</li>
-<li><strong>CoinBar</strong> - Coin counter</li>
-<li><strong>BottleBar</strong> - Bottle counter</li>
-<li><strong>EndbossBar</strong> - Endboss health display</li>
-</ul>
-<h2>🛠️ Generate JSDoc HTML</h2>
-<p>To create the HTML documentation:</p>
-<pre class="prettyprint source lang-bash"><code># Install JSDoc (if not already installed)
-npm install -g jsdoc
-
-# Optional: Install nice template
-npm install docdash
-
-# Generate documentation
-jsdoc -c jsdoc.json
-
-# Or simply:
-jsdoc models js levels -d docs -r
-</code></pre>
-<p>The generated documentation can be found in the <code>docs/</code> folder.</p>
-<h2>📖 View Online</h2>
-<p>Open <code>docs/index.html</code> in your browser to view the generated documentation.</p>
-<h2>🎯 Code Quality</h2>
-<ul>
-<li>✅ All functions ≤14 lines</li>
-<li>✅ All comments in English</li>
-<li>✅ JSDoc for all classes and public methods</li>
-<li>✅ Clean Code principles</li>
-<li>✅ OOP with inheritance (3 levels)</li>
-</ul>
-<h2>🏗️ Architecture</h2>
-<pre class="prettyprint source"><code>DrawableObject (Rendering)
-  ├─ MovableObject (Physik)
-  │   ├─ Character
-  │   ├─ Enemies (Chicken, ChickenSmall, Endboss)
-  │   ├─ Collectables (Coin, Bottle)
-  │   └─ ThrowableObject
-  └─ StatusBar (UI)
-      └─ HealthBar, CoinBar, BottleBar, EndbossBar
-</code></pre>
-<h2>📝 JSDoc Tags Used</h2>
-<ul>
-<li><code>@class</code> - Class declaration</li>
-<li><code>@extends</code> - Inheritance</li>
-<li><code>@type</code> - Property types</li>
-<li><code>@param</code> - Function parameters</li>
-<li><code>@returns</code> - Return values</li>
-</ul>
-<h2>💡 Example</h2>
-<pre class="prettyprint source lang-javascript"><code>/**
- * Main playable character (Pepe).
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Represents a throwable bottle object that can be thrown by the character.
+ * @class
  * @extends MovableObject
  */
-class Character extends MovableObject {
-  /** @type {number} */
-  height = 250;
+class ThrowableObject extends MovableObject {
+  IMAGES_ROTATION = [
+    "img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png",
+    "img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png",
+    "img/6_salsa_bottle/bottle_rotation/3_bottle_rotation.png",
+    "img/6_salsa_bottle/bottle_rotation/4_bottle_rotation.png",
+  ];
+
+  IMAGES_SPLASH = [
+    "img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png",
+    "img/6_salsa_bottle/bottle_rotation/bottle_splash/2_bottle_splash.png",
+    "img/6_salsa_bottle/bottle_rotation/bottle_splash/3_bottle_splash.png",
+    "img/6_salsa_bottle/bottle_rotation/bottle_splash/4_bottle_splash.png",
+    "img/6_salsa_bottle/bottle_rotation/bottle_splash/5_bottle_splash.png",
+    "img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png",
+  ];
+
+  isSplashing = false;
 
   /**
-   * Moves character to the right.
+   * Creates a throwable object at specified position.
+   * @param {number} x - The x coordinate.
+   * @param {number} y - The y coordinate.
+   * @param {boolean} direction - The throw direction.
    */
-  moveRight() {
-    this.x += this.speed;
+  constructor(x, y, direction) {
+    super().loadImage(
+      "img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png",
+    );
+    this.loadImages(this.IMAGES_ROTATION);
+    this.loadImages(this.IMAGES_SPLASH);
+    this.x = x;
+    this.y = y;
+    this.height = 60;
+    this.width = 50;
+    this.otherDirection = direction;
+    this.creationTime = Date.now();
+    this.trow();
+    this.animate();
+  }
+
+  /**
+   * Initiates the throwing motion with gravity and direction.
+   */
+  trow() {
+    this.speedY = 30;
+    this.applyGravity();
+    this.throwInDirection();
+  }
+
+  /**
+   * Moves the bottle horizontally based on throw direction.
+   */
+  throwInDirection() {
+    setInterval(() => {
+      if (this.otherDirection) {
+        this.x -= 10;
+      } else {
+        this.x += 10;
+      }
+    }, 25);
+  }
+
+  /**
+   * Updates the animation between rotation and splash states.
+   */
+  animate() {
+    setInterval(() => {
+      if (this.isSplashing) {
+        this.playAnimation(this.IMAGES_SPLASH);
+      } else {
+        this.playAnimation(this.IMAGES_ROTATION);
+      }
+    }, 100);
+  }
+
+  /**
+   * Triggers the splash animation and stops movement.
+   */
+  splash() {
+    this.isSplashing = true;
+    this.speedY = 0;
+    this.speedX = 0;
   }
 }
-</code></pre></article>
+</code></pre>
+        </article>
     </section>
-
-
 
 
 

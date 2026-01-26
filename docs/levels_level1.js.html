@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: levels/level1.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,127 +17,155 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: levels/level1.js</h1>
 
     
 
 
 
     
-
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
     <section>
-        <article><h1>El Pollo Loco - JSDoc Documentation</h1>
-<h2>🎮 About the Game</h2>
-<p><strong>El Pollo Loco</strong> is a Jump &amp; Run game developed with Vanilla JavaScript and HTML5 Canvas. The player controls Pepe, who fights against chickens and an end boss.</p>
-<h2>📚 Code Documentation</h2>
-<p>This project uses <strong>JSDoc</strong> for code documentation. All classes, methods, and important properties are documented.</p>
-<h3>Main Classes</h3>
-<ul>
-<li><strong>DrawableObject</strong> - Base class for all renderable objects</li>
-<li><strong>MovableObject</strong> - Extends DrawableObject with physics and collision detection</li>
-<li><strong>Character</strong> - The playable character (Pepe)</li>
-<li><strong>World</strong> - Game engine and rendering pipeline</li>
-<li><strong>Level</strong> - Level configuration with enemies and collectibles</li>
-</ul>
-<h3>Enemies</h3>
-<ul>
-<li><strong>Chicken</strong> - Normal chickens</li>
-<li><strong>ChickenSmall</strong> - Small chickens</li>
-<li><strong>Endboss</strong> - Boss enemy with AI</li>
-</ul>
-<h3>Collectibles</h3>
-<ul>
-<li><strong>Coin</strong> - Coins to collect</li>
-<li><strong>Bottle</strong> - Bottles (ammunition for throwing)</li>
-</ul>
-<h3>UI Components</h3>
-<ul>
-<li><strong>StatusBar</strong> - Base class for all status bars</li>
-<li><strong>HealthBar</strong> - Health display</li>
-<li><strong>CoinBar</strong> - Coin counter</li>
-<li><strong>BottleBar</strong> - Bottle counter</li>
-<li><strong>EndbossBar</strong> - Endboss health display</li>
-</ul>
-<h2>🛠️ Generate JSDoc HTML</h2>
-<p>To create the HTML documentation:</p>
-<pre class="prettyprint source lang-bash"><code># Install JSDoc (if not already installed)
-npm install -g jsdoc
+        <article>
+            <pre class="prettyprint source linenums"><code>let level1;
 
-# Optional: Install nice template
-npm install docdash
-
-# Generate documentation
-jsdoc -c jsdoc.json
-
-# Or simply:
-jsdoc models js levels -d docs -r
-</code></pre>
-<p>The generated documentation can be found in the <code>docs/</code> folder.</p>
-<h2>📖 View Online</h2>
-<p>Open <code>docs/index.html</code> in your browser to view the generated documentation.</p>
-<h2>🎯 Code Quality</h2>
-<ul>
-<li>✅ All functions ≤14 lines</li>
-<li>✅ All comments in English</li>
-<li>✅ JSDoc for all classes and public methods</li>
-<li>✅ Clean Code principles</li>
-<li>✅ OOP with inheritance (3 levels)</li>
-</ul>
-<h2>🏗️ Architecture</h2>
-<pre class="prettyprint source"><code>DrawableObject (Rendering)
-  ├─ MovableObject (Physik)
-  │   ├─ Character
-  │   ├─ Enemies (Chicken, ChickenSmall, Endboss)
-  │   ├─ Collectables (Coin, Bottle)
-  │   └─ ThrowableObject
-  └─ StatusBar (UI)
-      └─ HealthBar, CoinBar, BottleBar, EndbossBar
-</code></pre>
-<h2>📝 JSDoc Tags Used</h2>
-<ul>
-<li><code>@class</code> - Class declaration</li>
-<li><code>@extends</code> - Inheritance</li>
-<li><code>@type</code> - Property types</li>
-<li><code>@param</code> - Function parameters</li>
-<li><code>@returns</code> - Return values</li>
-</ul>
-<h2>💡 Example</h2>
-<pre class="prettyprint source lang-javascript"><code>/**
- * Main playable character (Pepe).
- * @extends MovableObject
+/**
+ * Initializes level 1 with all game objects including enemies, clouds, backgrounds, coins, and bottles.
  */
-class Character extends MovableObject {
-  /** @type {number} */
-  height = 250;
-
-  /**
-   * Moves character to the right.
-   */
-  moveRight() {
-    this.x += this.speed;
-  }
+function initLevel() {
+  level1 = new Level(
+    createEnemies(),
+    createClouds(),
+    createBackgrounds(),
+    createCoins(),
+    createBottles(),
+  );
 }
-</code></pre></article>
+
+/**
+ * Creates and returns an array of enemy objects for the level.
+ * @returns {Array} Array containing chicken enemies and the endboss
+ */
+function createEnemies() {
+  return [
+    new Chicken(800),
+    new Chicken(1400),
+    new Chicken(2000),
+    new ChickenSmall(1100),
+    new ChickenSmall(1700),
+    new ChickenSmall(2300),
+    new Endboss(),
+  ];
+}
+
+/**
+ * Creates and returns an array of cloud objects for the level.
+ * @returns {Array} Array containing cloud objects
+ */
+function createClouds() {
+  return [new Cloud()];
+}
+
+/**
+ * Creates and returns an array of background objects covering multiple layers and positions.
+ * @returns {Array} Array containing all background layer objects
+ */
+function createBackgrounds() {
+  return [
+    ...createBackgroundLayer(-720),
+    ...createBackgroundLayer(0),
+    ...createBackgroundLayer(720),
+    ...createBackgroundLayer(720 * 2),
+    ...createBackgroundLayer(720 * 3),
+  ];
+}
+
+/**
+ * Creates a single background layer with multiple image layers at the specified x position.
+ * @param {number} x - The horizontal position of the background layer
+ * @returns {Array} Array containing background objects for air, third, second, and first layers
+ */
+function createBackgroundLayer(x) {
+  return [
+    new BackgroundObject("img/5_background/layers/air.png", x),
+    new BackgroundObject(getThirdLayerImage(x), x),
+    new BackgroundObject(getSecondLayerImage(x), x),
+    new BackgroundObject(getFirstLayerImage(x), x),
+  ];
+}
+
+/**
+ * Returns the appropriate third layer background image based on x position.
+ * @param {number} x - The horizontal position
+ * @returns {string} Path to the third layer image
+ */
+function getThirdLayerImage(x) {
+  return x === 0 || x === 720 * 2
+    ? "img/5_background/layers/3_third_layer/1.png"
+    : "img/5_background/layers/3_third_layer/2.png";
+}
+
+/**
+ * Returns the appropriate second layer background image based on x position.
+ * @param {number} x - The horizontal position
+ * @returns {string} Path to the second layer image
+ */
+function getSecondLayerImage(x) {
+  return x === 0 || x === 720 * 2
+    ? "img/5_background/layers/2_second_layer/1.png"
+    : "img/5_background/layers/2_second_layer/2.png";
+}
+
+/**
+ * Returns the appropriate first layer background image based on x position.
+ * @param {number} x - The horizontal position
+ * @returns {string} Path to the first layer image
+ */
+function getFirstLayerImage(x) {
+  return x === 0 || x === 720 * 2
+    ? "img/5_background/layers/1_first_layer/1.png"
+    : "img/5_background/layers/1_first_layer/2.png";
+}
+
+/**
+ * Creates and returns an array of coin objects positioned throughout the level.
+ * @returns {Array} Array containing coin objects
+ */
+function createCoins() {
+  return [
+    new Coin(300),
+    new Coin(360),
+    new Coin(420),
+    new Coin(800),
+    new Coin(880),
+    new Coin(960),
+    new Coin(1400),
+    new Coin(1500),
+    new Coin(1900),
+    new Coin(2000),
+  ];
+}
+
+/**
+ * Creates and returns an array of bottle objects positioned throughout the level.
+ * @returns {Array} Array containing bottle objects
+ */
+function createBottles() {
+  return [
+    new Bottle(400),
+    new Bottle(650),
+    new Bottle(900),
+    new Bottle(1100),
+    new Bottle(1300),
+    new Bottle(1500),
+    new Bottle(1650),
+    new Bottle(1800),
+    new Bottle(1950),
+    new Bottle(2100),
+  ];
+}
+</code></pre>
+        </article>
     </section>
-
-
 
 
 

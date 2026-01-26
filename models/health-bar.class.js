@@ -1,3 +1,8 @@
+/**
+ * Represents a health status bar that displays the character's health.
+ * @class
+ * @extends StatusBar
+ */
 class HealthBar extends StatusBar {
   IMAGES = [
     "img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png",
@@ -8,6 +13,9 @@ class HealthBar extends StatusBar {
     "img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png",
   ];
 
+  /**
+   * Creates a health bar instance and initializes it at 100%.
+   */
   constructor() {
     super();
     this.loadImages(this.IMAGES);

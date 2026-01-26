@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Character</title>
+    <title>JSDoc: Class: Endboss</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Character</h1>
+    <h1 class="page-title">Class: Endboss</h1>
 
     
 
@@ -28,10 +28,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>Character<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>Endboss<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description"><p>Main playable character (Pepe).
-Handles player input, movement, animations, and camera control.</p></div>
+            <div class="class-description"><p>Represents the final boss enemy in the game.</p></div>
         
     
 </header>
@@ -46,7 +45,7 @@ Handles player input, movement, animations, and camera control.</p></div>
     
 
     
-    <h4 class="name" id="Character"><span class="type-signature"></span>new Character<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Endboss"><span class="type-signature"></span>new Endboss<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -54,8 +53,7 @@ Handles player input, movement, animations, and camera control.</p></div>
 
 
 <div class="description">
-    <p>Creates a new Character instance.
-Loads initial image, preloads animations, applies gravity, and starts animation loop.</p>
+    <p>Creates an instance of Endboss and initializes its position and animations.</p>
 </div>
 
 
@@ -99,7 +97,7 @@ Loads initial image, preloads animations, applies gravity, and starts animation 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line6">line 6</a>
+        <a href="models_endboss.class.js.html">models/endboss.class.js</a>, <a href="models_endboss.class.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -157,74 +155,6 @@ Loads initial image, preloads animations, applies gravity, and starts animation 
 
     
         <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="IMAGES_IDLE"><span class="type-signature"></span>IMAGES_IDLE<span class="type-signature"> :Array.&lt;string></span></h4>
-
-
-
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Array.&lt;string></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line15">line 15</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
 
         
             
@@ -502,7 +432,7 @@ Loads initial image, preloads animations, applies gravity, and starts animation 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line8">line 8</a>
+        <a href="models_drawable-object.class.js.html">models/drawable-object.class.js</a>, <a href="models_drawable-object.class.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -867,7 +797,7 @@ Loads initial image, preloads animations, applies gravity, and starts animation 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line12">line 12</a>
+        <a href="models_movable-object.class.js.html">models/movable-object.class.js</a>, <a href="models_movable-object.class.js.html#line8">line 8</a>
     </li></ul></dd>
     
 
@@ -1159,7 +1089,7 @@ Loads initial image, preloads animations, applies gravity, and starts animation 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line10">line 10</a>
+        <a href="models_drawable-object.class.js.html">models/drawable-object.class.js</a>, <a href="models_drawable-object.class.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -1187,95 +1117,6 @@ Loads initial image, preloads animations, applies gravity, and starts animation 
     
 
     
-    <h4 class="name" id="activateChickens"><span class="type-signature"></span>activateChickens<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Activates chicken movement when character moves.
-Chickens start moving after first character movement.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line205">line 205</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
     <h4 class="name" id="animate"><span class="type-signature"></span>animate<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
@@ -1284,8 +1125,7 @@ Chickens start moving after first character movement.</p>
 
 
 <div class="description">
-    <p>Starts character animation loops.
-Movement updates at 60 FPS, animation frames at 5 FPS.</p>
+    <p>Starts the animation intervals for movement and visual updates.</p>
 </div>
 
 
@@ -1329,7 +1169,7 @@ Movement updates at 60 FPS, animation frames at 5 FPS.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line110">line 110</a>
+        <a href="models_endboss.class.js.html">models/endboss.class.js</a>, <a href="models_endboss.class.js.html#line86">line 86</a>
     </li></ul></dd>
     
 
@@ -1459,7 +1299,7 @@ Updates vertical position and speed every frame.</p>
     
 
     
-    <h4 class="name" id="canMoveLeft"><span class="type-signature"></span>canMoveLeft<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id="die"><span class="type-signature"></span>die<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -1467,7 +1307,7 @@ Updates vertical position and speed every frame.</p>
 
 
 <div class="description">
-    <p>Checks if character can move left.</p>
+    <p>Handles the death of the endboss.</p>
 </div>
 
 
@@ -1511,7 +1351,7 @@ Updates vertical position and speed every frame.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line186">line 186</a>
+        <a href="models_endboss.class.js.html">models/endboss.class.js</a>, <a href="models_endboss.class.js.html#line198">line 198</a>
     </li></ul></dd>
     
 
@@ -1536,138 +1376,6 @@ Updates vertical position and speed every frame.</p>
 
 
 
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>True if LEFT key pressed and not at left boundary</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="canMoveRight"><span class="type-signature"></span>canMoveRight<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Checks if character can move right.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line157">line 157</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>True if RIGHT key pressed and not at level end</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">boolean</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
@@ -1963,7 +1671,7 @@ Updates vertical position and speed every frame.</p>
     
 
     
-    <h4 class="name" id="handleJump"><span class="type-signature"></span>handleJump<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getDistanceToCharacter"><span class="type-signature"></span>getDistanceToCharacter<span class="signature">()</span><span class="type-signature"> &rarr; {number}</span></h4>
     
 
     
@@ -1971,8 +1679,7 @@ Updates vertical position and speed every frame.</p>
 
 
 <div class="description">
-    <p>Handles jump input.
-Makes character jump if SPACE pressed and on ground.</p>
+    <p>Calculates the distance to the character.</p>
 </div>
 
 
@@ -2016,7 +1723,7 @@ Makes character jump if SPACE pressed and on ground.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line215">line 215</a>
+        <a href="models_endboss.class.js.html">models/endboss.class.js</a>, <a href="models_endboss.class.js.html#line146">line 146</a>
     </li></ul></dd>
     
 
@@ -2041,95 +1748,28 @@ Makes character jump if SPACE pressed and on ground.</p>
 
 
 
-
-
-
-
+<h5>Returns:</h5>
 
         
-            
-
-    
-
-    
-    <h4 class="name" id="handleLeftMovement"><span class="type-signature"></span>handleLeftMovement<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Handles left movement input.
-Moves character left if conditions are met.</p>
+<div class="param-desc">
+    <p>The horizontal distance to the character.</p>
 </div>
 
 
 
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
 
 
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line176">line 176</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
+    </dd>
 </dl>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
 
 
 
@@ -2149,8 +1789,7 @@ Moves character left if conditions are met.</p>
 
 
 <div class="description">
-    <p>Handles character movement each frame.
-Processes input and updates camera position.</p>
+    <p>Handles the endboss movement logic each frame.</p>
 </div>
 
 
@@ -2194,7 +1833,7 @@ Processes input and updates camera position.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line119">line 119</a>
+        <a href="models_endboss.class.js.html">models/endboss.class.js</a>, <a href="models_endboss.class.js.html#line94">line 94</a>
     </li></ul></dd>
     
 
@@ -2230,7 +1869,7 @@ Processes input and updates camera position.</p>
     
 
     
-    <h4 class="name" id="handleRightMovement"><span class="type-signature"></span>handleRightMovement<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="hasValidWorld"><span class="type-signature"></span>hasValidWorld<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
 
     
@@ -2238,8 +1877,7 @@ Processes input and updates camera position.</p>
 
 
 <div class="description">
-    <p>Handles right movement input.
-Moves character right if conditions are met.</p>
+    <p>Checks if the world and character references are valid.</p>
 </div>
 
 
@@ -2283,7 +1921,7 @@ Moves character right if conditions are met.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line147">line 147</a>
+        <a href="models_endboss.class.js.html">models/endboss.class.js</a>, <a href="models_endboss.class.js.html#line128">line 128</a>
     </li></ul></dd>
     
 
@@ -2308,6 +1946,28 @@ Moves character right if conditions are met.</p>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>True if world and character exist.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -2327,8 +1987,7 @@ Moves character right if conditions are met.</p>
 
 
 <div class="description">
-    <p>Reduces object's health when hit.
-Sets energy to 0 if depleted, otherwise records hit time.</p>
+    <p>Reduces endboss energy when hit and triggers death or hurt state.</p>
 </div>
 
 
@@ -2377,7 +2036,7 @@ Sets energy to 0 if depleted, otherwise records hit time.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_movable-object.class.js.html">models/movable-object.class.js</a>, <a href="models_movable-object.class.js.html#line77">line 77</a>
+        <a href="models_endboss.class.js.html">models/endboss.class.js</a>, <a href="models_endboss.class.js.html#line186">line 186</a>
     </li></ul></dd>
     
 
@@ -2500,6 +2159,165 @@ Sets energy to 0 if depleted, otherwise records hit time.</p>
         
 <div class="param-desc">
     <p>True if object is in the air</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="isCharacterNearby"><span class="type-signature"></span>isCharacterNearby<span class="signature">(distance)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Checks if the character is within attack range.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>distance</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The distance to the character.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_endboss.class.js.html">models/endboss.class.js</a>, <a href="models_endboss.class.js.html#line155">line 155</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>True if character is nearby.</p>
 </div>
 
 
@@ -3258,8 +3076,7 @@ Sets energy to 0 if depleted, otherwise records hit time.</p>
 
 
 <div class="description">
-    <p>Makes character jump by setting vertical speed.
-Sets speedY to 30 for upward movement.</p>
+    <p>Makes object jump with initial upward velocity.</p>
 </div>
 
 
@@ -3308,7 +3125,7 @@ Sets speedY to 30 for upward movement.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line267">line 267</a>
+        <a href="models_movable-object.class.js.html">models/movable-object.class.js</a>, <a href="models_movable-object.class.js.html#line132">line 132</a>
     </li></ul></dd>
     
 
@@ -3352,8 +3169,7 @@ Sets speedY to 30 for upward movement.</p>
 
 
 <div class="description">
-    <p>Preloads all character animation images.
-Loads idle, walking, jumping, hurt, and death animations.</p>
+    <p>Loads all image sets for the endboss animations.</p>
 </div>
 
 
@@ -3397,7 +3213,7 @@ Loads idle, walking, jumping, hurt, and death animations.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line97">line 97</a>
+        <a href="models_endboss.class.js.html">models/endboss.class.js</a>, <a href="models_endboss.class.js.html#line75">line 75</a>
     </li></ul></dd>
     
 
@@ -3718,6 +3534,143 @@ Used for sprite animations.</p>
     
 
     
+    <h4 class="name" id="moveAndCheckAttack"><span class="type-signature"></span>moveAndCheckAttack<span class="signature">(distance)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Moves towards character and initiates attack if close enough.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>distance</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The distance to the character.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_endboss.class.js.html">models/endboss.class.js</a>, <a href="models_endboss.class.js.html#line163">line 163</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="moveLeft"><span class="type-signature"></span>moveLeft<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
@@ -3776,95 +3729,6 @@ Used for sprite animations.</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="models_movable-object.class.js.html">models/movable-object.class.js</a>, <a href="models_movable-object.class.js.html#line125">line 125</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="moveLeftAndUpdate"><span class="type-signature"></span>moveLeftAndUpdate<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Moves character left and updates state.
-Sets direction to left, updates input time, and activates chickens.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line194">line 194</a>
     </li></ul></dd>
     
 
@@ -3993,7 +3857,7 @@ Sets direction to left, updates input time, and activates chickens.</p>
     
 
     
-    <h4 class="name" id="moveRightAndUpdate"><span class="type-signature"></span>moveRightAndUpdate<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="moveTowardsCharacter"><span class="type-signature"></span>moveTowardsCharacter<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -4001,8 +3865,7 @@ Sets direction to left, updates input time, and activates chickens.</p>
 
 
 <div class="description">
-    <p>Moves character right and updates state.
-Resets direction, updates input time, and activates chickens.</p>
+    <p>Moves the endboss towards the character if conditions are met.</p>
 </div>
 
 
@@ -4046,7 +3909,7 @@ Resets direction, updates input time, and activates chickens.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line165">line 165</a>
+        <a href="models_endboss.class.js.html">models/endboss.class.js</a>, <a href="models_endboss.class.js.html#line118">line 118</a>
     </li></ul></dd>
     
 
@@ -4224,7 +4087,7 @@ Resets direction, updates input time, and activates chickens.</p>
     
 
     
-    <h4 class="name" id="playIdleOrWalkAnimation"><span class="type-signature"></span>playIdleOrWalkAnimation<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="processMovement"><span class="type-signature"></span>processMovement<span class="signature">(distance)</span><span class="type-signature"></span></h4>
     
 
     
@@ -4232,8 +4095,7 @@ Resets direction, updates input time, and activates chickens.</p>
 
 
 <div class="description">
-    <p>Plays either walking or idle animation.
-Checks keyboard input to determine which animation to play.</p>
+    <p>Processes movement based on distance to character.</p>
 </div>
 
 
@@ -4242,6 +4104,55 @@ Checks keyboard input to determine which animation to play.</p>
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>distance</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The distance to the character.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -4277,7 +4188,7 @@ Checks keyboard input to determine which animation to play.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line242">line 242</a>
+        <a href="models_endboss.class.js.html">models/endboss.class.js</a>, <a href="models_endboss.class.js.html#line136">line 136</a>
     </li></ul></dd>
     
 
@@ -4313,7 +4224,7 @@ Checks keyboard input to determine which animation to play.</p>
     
 
     
-    <h4 class="name" id="processMovementInput"><span class="type-signature"></span>processMovementInput<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="showHurt"><span class="type-signature"></span>showHurt<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -4321,8 +4232,7 @@ Checks keyboard input to determine which animation to play.</p>
 
 
 <div class="description">
-    <p>Processes keyboard input for movement.
-Handles right, left, and jump actions.</p>
+    <p>Temporarily sets the endboss to hurt state.</p>
 </div>
 
 
@@ -4366,7 +4276,7 @@ Handles right, left, and jump actions.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line129">line 129</a>
+        <a href="models_endboss.class.js.html">models/endboss.class.js</a>, <a href="models_endboss.class.js.html#line208">line 208</a>
     </li></ul></dd>
     
 
@@ -4402,7 +4312,7 @@ Handles right, left, and jump actions.</p>
     
 
     
-    <h4 class="name" id="selectIdleAnimation"><span class="type-signature"></span>selectIdleAnimation<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="startAttack"><span class="type-signature"></span>startAttack<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -4410,8 +4320,7 @@ Handles right, left, and jump actions.</p>
 
 
 <div class="description">
-    <p>Selects appropriate idle animation.
-Plays long idle after 5 seconds of inactivity.</p>
+    <p>Initiates an attack sequence for the endboss.</p>
 </div>
 
 
@@ -4455,7 +4364,7 @@ Plays long idle after 5 seconds of inactivity.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line254">line 254</a>
+        <a href="models_endboss.class.js.html">models/endboss.class.js</a>, <a href="models_endboss.class.js.html#line174">line 174</a>
     </li></ul></dd>
     
 
@@ -4499,8 +4408,7 @@ Plays long idle after 5 seconds of inactivity.</p>
 
 
 <div class="description">
-    <p>Updates character animation based on state.
-Priority: dead &gt; hurt &gt; jumping &gt; walking/idle.</p>
+    <p>Updates the current animation based on the endboss state.</p>
 </div>
 
 
@@ -4544,96 +4452,7 @@ Priority: dead &gt; hurt &gt; jumping &gt; walking/idle.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line226">line 226</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="updateCamera"><span class="type-signature"></span>updateCamera<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Updates camera position to follow character.
-Keeps character centered with 100px offset.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line139">line 139</a>
+        <a href="models_endboss.class.js.html">models/endboss.class.js</a>, <a href="models_endboss.class.js.html#line103">line 103</a>
     </li></ul></dd>
     
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Character</title>
+    <title>JSDoc: Class: ChickenSmall</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Character</h1>
+    <h1 class="page-title">Class: ChickenSmall</h1>
 
     
 
@@ -28,10 +28,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>Character<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>ChickenSmall<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description"><p>Main playable character (Pepe).
-Handles player input, movement, animations, and camera control.</p></div>
+            <div class="class-description"><p>Represents a small chicken enemy in the game.</p></div>
         
     
 </header>
@@ -46,7 +45,7 @@ Handles player input, movement, animations, and camera control.</p></div>
     
 
     
-    <h4 class="name" id="Character"><span class="type-signature"></span>new Character<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="ChickenSmall"><span class="type-signature"></span>new ChickenSmall<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -54,8 +53,7 @@ Handles player input, movement, animations, and camera control.</p></div>
 
 
 <div class="description">
-    <p>Creates a new Character instance.
-Loads initial image, preloads animations, applies gravity, and starts animation loop.</p>
+    <p>Creates an instance of ChickenSmall and initializes its position and animations.</p>
 </div>
 
 
@@ -99,7 +97,7 @@ Loads initial image, preloads animations, applies gravity, and starts animation 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line6">line 6</a>
+        <a href="models_chicken-small.class.js.html">models/chicken-small.class.js</a>, <a href="models_chicken-small.class.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -157,74 +155,6 @@ Loads initial image, preloads animations, applies gravity, and starts animation 
 
     
         <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="IMAGES_IDLE"><span class="type-signature"></span>IMAGES_IDLE<span class="type-signature"> :Array.&lt;string></span></h4>
-
-
-
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Array.&lt;string></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line15">line 15</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
 
         
             
@@ -502,7 +432,7 @@ Loads initial image, preloads animations, applies gravity, and starts animation 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line8">line 8</a>
+        <a href="models_drawable-object.class.js.html">models/drawable-object.class.js</a>, <a href="models_drawable-object.class.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -867,7 +797,7 @@ Loads initial image, preloads animations, applies gravity, and starts animation 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line12">line 12</a>
+        <a href="models_movable-object.class.js.html">models/movable-object.class.js</a>, <a href="models_movable-object.class.js.html#line8">line 8</a>
     </li></ul></dd>
     
 
@@ -1159,7 +1089,7 @@ Loads initial image, preloads animations, applies gravity, and starts animation 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line10">line 10</a>
+        <a href="models_drawable-object.class.js.html">models/drawable-object.class.js</a>, <a href="models_drawable-object.class.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -1187,95 +1117,6 @@ Loads initial image, preloads animations, applies gravity, and starts animation 
     
 
     
-    <h4 class="name" id="activateChickens"><span class="type-signature"></span>activateChickens<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Activates chicken movement when character moves.
-Chickens start moving after first character movement.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line205">line 205</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
     <h4 class="name" id="animate"><span class="type-signature"></span>animate<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
@@ -1284,8 +1125,7 @@ Chickens start moving after first character movement.</p>
 
 
 <div class="description">
-    <p>Starts character animation loops.
-Movement updates at 60 FPS, animation frames at 5 FPS.</p>
+    <p>Starts the animation intervals for movement and visual updates.</p>
 </div>
 
 
@@ -1329,7 +1169,7 @@ Movement updates at 60 FPS, animation frames at 5 FPS.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line110">line 110</a>
+        <a href="models_chicken-small.class.js.html">models/chicken-small.class.js</a>, <a href="models_chicken-small.class.js.html#line48">line 48</a>
     </li></ul></dd>
     
 
@@ -1459,7 +1299,7 @@ Updates vertical position and speed every frame.</p>
     
 
     
-    <h4 class="name" id="canMoveLeft"><span class="type-signature"></span>canMoveLeft<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id="canMove"><span class="type-signature"></span>canMove<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
 
     
@@ -1467,7 +1307,7 @@ Updates vertical position and speed every frame.</p>
 
 
 <div class="description">
-    <p>Checks if character can move left.</p>
+    <p>Checks if the small chicken can move based on game state.</p>
 </div>
 
 
@@ -1511,7 +1351,7 @@ Updates vertical position and speed every frame.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line186">line 186</a>
+        <a href="models_chicken-small.class.js.html">models/chicken-small.class.js</a>, <a href="models_chicken-small.class.js.html#line66">line 66</a>
     </li></ul></dd>
     
 
@@ -1540,117 +1380,7 @@ Updates vertical position and speed every frame.</p>
 
         
 <div class="param-desc">
-    <p>True if LEFT key pressed and not at left boundary</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="canMoveRight"><span class="type-signature"></span>canMoveRight<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Checks if character can move right.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line157">line 157</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>True if RIGHT key pressed and not at level end</p>
+    <p>True if small chicken can move.</p>
 </div>
 
 
@@ -1963,184 +1693,6 @@ Updates vertical position and speed every frame.</p>
     
 
     
-    <h4 class="name" id="handleJump"><span class="type-signature"></span>handleJump<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Handles jump input.
-Makes character jump if SPACE pressed and on ground.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line215">line 215</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="handleLeftMovement"><span class="type-signature"></span>handleLeftMovement<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Handles left movement input.
-Moves character left if conditions are met.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line176">line 176</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
     <h4 class="name" id="handleMovement"><span class="type-signature"></span>handleMovement<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
@@ -2149,8 +1701,7 @@ Moves character left if conditions are met.</p>
 
 
 <div class="description">
-    <p>Handles character movement each frame.
-Processes input and updates camera position.</p>
+    <p>Handles the small chicken movement logic each frame.</p>
 </div>
 
 
@@ -2194,96 +1745,7 @@ Processes input and updates camera position.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line119">line 119</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="handleRightMovement"><span class="type-signature"></span>handleRightMovement<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Handles right movement input.
-Moves character right if conditions are met.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line147">line 147</a>
+        <a href="models_chicken-small.class.js.html">models/chicken-small.class.js</a>, <a href="models_chicken-small.class.js.html#line56">line 56</a>
     </li></ul></dd>
     
 
@@ -3258,8 +2720,7 @@ Sets energy to 0 if depleted, otherwise records hit time.</p>
 
 
 <div class="description">
-    <p>Makes character jump by setting vertical speed.
-Sets speedY to 30 for upward movement.</p>
+    <p>Makes object jump with initial upward velocity.</p>
 </div>
 
 
@@ -3308,7 +2769,7 @@ Sets speedY to 30 for upward movement.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line267">line 267</a>
+        <a href="models_movable-object.class.js.html">models/movable-object.class.js</a>, <a href="models_movable-object.class.js.html#line132">line 132</a>
     </li></ul></dd>
     
 
@@ -3344,7 +2805,7 @@ Sets speedY to 30 for upward movement.</p>
     
 
     
-    <h4 class="name" id="loadAllImages"><span class="type-signature"></span>loadAllImages<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="kill"><span class="type-signature"></span>kill<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -3352,8 +2813,7 @@ Sets speedY to 30 for upward movement.</p>
 
 
 <div class="description">
-    <p>Preloads all character animation images.
-Loads idle, walking, jumping, hurt, and death animations.</p>
+    <p>Marks the small chicken as dead and schedules removal from level.</p>
 </div>
 
 
@@ -3397,7 +2857,95 @@ Loads idle, walking, jumping, hurt, and death animations.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line97">line 97</a>
+        <a href="models_chicken-small.class.js.html">models/chicken-small.class.js</a>, <a href="models_chicken-small.class.js.html#line89">line 89</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="loadAllImages"><span class="type-signature"></span>loadAllImages<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Loads all image sets for small chicken animations.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_chicken-small.class.js.html">models/chicken-small.class.js</a>, <a href="models_chicken-small.class.js.html#line32">line 32</a>
     </li></ul></dd>
     
 
@@ -3811,95 +3359,6 @@ Used for sprite animations.</p>
     
 
     
-    <h4 class="name" id="moveLeftAndUpdate"><span class="type-signature"></span>moveLeftAndUpdate<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Moves character left and updates state.
-Sets direction to left, updates input time, and activates chickens.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line194">line 194</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
     <h4 class="name" id="moveRight"><span class="type-signature"></span>moveRight<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
@@ -3958,95 +3417,6 @@ Sets direction to left, updates input time, and activates chickens.</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="models_movable-object.class.js.html">models/movable-object.class.js</a>, <a href="models_movable-object.class.js.html#line118">line 118</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="moveRightAndUpdate"><span class="type-signature"></span>moveRightAndUpdate<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Moves character right and updates state.
-Resets direction, updates input time, and activates chickens.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line165">line 165</a>
     </li></ul></dd>
     
 
@@ -4224,7 +3594,7 @@ Resets direction, updates input time, and activates chickens.</p>
     
 
     
-    <h4 class="name" id="playIdleOrWalkAnimation"><span class="type-signature"></span>playIdleOrWalkAnimation<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="removeFromLevel"><span class="type-signature"></span>removeFromLevel<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -4232,8 +3602,7 @@ Resets direction, updates input time, and activates chickens.</p>
 
 
 <div class="description">
-    <p>Plays either walking or idle animation.
-Checks keyboard input to determine which animation to play.</p>
+    <p>Removes the small chicken from the level's enemy array.</p>
 </div>
 
 
@@ -4277,7 +3646,7 @@ Checks keyboard input to determine which animation to play.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line242">line 242</a>
+        <a href="models_chicken-small.class.js.html">models/chicken-small.class.js</a>, <a href="models_chicken-small.class.js.html#line97">line 97</a>
     </li></ul></dd>
     
 
@@ -4313,7 +3682,7 @@ Checks keyboard input to determine which animation to play.</p>
     
 
     
-    <h4 class="name" id="processMovementInput"><span class="type-signature"></span>processMovementInput<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="setRandomPosition"><span class="type-signature"></span>setRandomPosition<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -4321,8 +3690,7 @@ Checks keyboard input to determine which animation to play.</p>
 
 
 <div class="description">
-    <p>Processes keyboard input for movement.
-Handles right, left, and jump actions.</p>
+    <p>Sets a random starting position and speed for the small chicken.</p>
 </div>
 
 
@@ -4366,96 +3734,7 @@ Handles right, left, and jump actions.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line129">line 129</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="selectIdleAnimation"><span class="type-signature"></span>selectIdleAnimation<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Selects appropriate idle animation.
-Plays long idle after 5 seconds of inactivity.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line254">line 254</a>
+        <a href="models_chicken-small.class.js.html">models/chicken-small.class.js</a>, <a href="models_chicken-small.class.js.html#line40">line 40</a>
     </li></ul></dd>
     
 
@@ -4499,8 +3778,7 @@ Plays long idle after 5 seconds of inactivity.</p>
 
 
 <div class="description">
-    <p>Updates character animation based on state.
-Priority: dead &gt; hurt &gt; jumping &gt; walking/idle.</p>
+    <p>Updates the current animation based on small chicken state.</p>
 </div>
 
 
@@ -4544,96 +3822,7 @@ Priority: dead &gt; hurt &gt; jumping &gt; walking/idle.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line226">line 226</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="updateCamera"><span class="type-signature"></span>updateCamera<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Updates camera position to follow character.
-Keeps character centered with 100px offset.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_character.class.js.html">models/character.class.js</a>, <a href="models_character.class.js.html#line139">line 139</a>
+        <a href="models_chicken-small.class.js.html">models/chicken-small.class.js</a>, <a href="models_chicken-small.class.js.html#line78">line 78</a>
     </li></ul></dd>
     
 

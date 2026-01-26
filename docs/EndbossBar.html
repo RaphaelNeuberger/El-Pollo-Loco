@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: DrawableObject</title>
+    <title>JSDoc: Class: EndbossBar</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: DrawableObject</h1>
+    <h1 class="page-title">Class: EndbossBar</h1>
 
     
 
@@ -28,10 +28,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>DrawableObject<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>EndbossBar<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description"><p>Base class for all drawable game objects.
-Handles image loading, caching, and rendering on canvas.</p></div>
+            <div class="class-description"><p>Represents the endboss health status bar.</p></div>
         
     
 </header>
@@ -46,12 +45,16 @@ Handles image loading, caching, and rendering on canvas.</p></div>
     
 
     
-    <h4 class="name" id="DrawableObject"><span class="type-signature"></span>new DrawableObject<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="EndbossBar"><span class="type-signature"></span>new EndbossBar<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
 
 
+
+<div class="description">
+    <p>Creates an endboss bar instance positioned at top right and initializes it at 100%.</p>
+</div>
 
 
 
@@ -94,7 +97,7 @@ Handles image loading, caching, and rendering on canvas.</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_drawable-object.class.js.html">models/drawable-object.class.js</a>, <a href="models_drawable-object.class.js.html#line6">line 6</a>
+        <a href="models_endboss-bar.class.js.html">models/endboss-bar.class.js</a>, <a href="models_endboss-bar.class.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -126,6 +129,17 @@ Handles image loading, caching, and rendering on canvas.</p></div>
 
     
     </div>
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li><a href="StatusBar.html">StatusBar</a></li>
+    </ul>
+
 
     
 
@@ -173,6 +187,11 @@ Handles image loading, caching, and rendering on canvas.</p></div>
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="StatusBar.html#currentImage">StatusBar#currentImage</a>
+    </li></ul></dd>
     
 
     
@@ -242,6 +261,11 @@ Handles image loading, caching, and rendering on canvas.</p></div>
     
 
     
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="StatusBar.html#height">StatusBar#height</a>
+    </li></ul></dd>
+    
 
     
 
@@ -309,6 +333,11 @@ Handles image loading, caching, and rendering on canvas.</p></div>
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="StatusBar.html#imageCache">StatusBar#imageCache</a>
+    </li></ul></dd>
     
 
     
@@ -378,6 +407,11 @@ Handles image loading, caching, and rendering on canvas.</p></div>
     
 
     
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="StatusBar.html#img">StatusBar#img</a>
+    </li></ul></dd>
+    
 
     
 
@@ -445,6 +479,11 @@ Handles image loading, caching, and rendering on canvas.</p></div>
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="StatusBar.html#width">StatusBar#width</a>
+    </li></ul></dd>
     
 
     
@@ -514,6 +553,11 @@ Handles image loading, caching, and rendering on canvas.</p></div>
     
 
     
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="StatusBar.html#x">StatusBar#x</a>
+    </li></ul></dd>
+    
 
     
 
@@ -581,6 +625,11 @@ Handles image loading, caching, and rendering on canvas.</p></div>
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="StatusBar.html#y">StatusBar#y</a>
+    </li></ul></dd>
     
 
     
@@ -710,6 +759,11 @@ Handles image loading, caching, and rendering on canvas.</p></div>
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="StatusBar.html#draw">StatusBar#draw</a>
+    </li></ul></dd>
     
 
     
@@ -848,6 +902,11 @@ Handles image loading, caching, and rendering on canvas.</p></div>
     
 
     
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="StatusBar.html#drawFrame">StatusBar#drawFrame</a>
+    </li></ul></dd>
+    
 
     
 
@@ -984,6 +1043,11 @@ Handles image loading, caching, and rendering on canvas.</p></div>
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="StatusBar.html#loadImage">StatusBar#loadImage</a>
+    </li></ul></dd>
     
 
     
@@ -1123,6 +1187,11 @@ Used for sprite animations.</p>
     
 
     
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="StatusBar.html#loadImages">StatusBar#loadImages</a>
+    </li></ul></dd>
+    
 
     
 
@@ -1144,6 +1213,356 @@ Used for sprite animations.</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="models_drawable-object.class.js.html">models/drawable-object.class.js</a>, <a href="models_drawable-object.class.js.html#line50">line 50</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="resolveImageIndex"><span class="type-signature"></span>resolveImageIndex<span class="signature">()</span><span class="type-signature"> &rarr; {number}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Resolves the image index based on current percentage value.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="StatusBar.html#resolveImageIndex">StatusBar#resolveImageIndex</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_status-bar.class.js.html">models/status-bar.class.js</a>, <a href="models_status-bar.class.js.html#line48">line 48</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Index of the image to display (0-5)</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="setPercentage"><span class="type-signature"></span>setPercentage<span class="signature">(percentage)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Sets the percentage value and updates the displayed image.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>percentage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The percentage value to display (0-100)</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="StatusBar.html#setPercentage">StatusBar#setPercentage</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_status-bar.class.js.html">models/status-bar.class.js</a>, <a href="models_status-bar.class.js.html#line26">line 26</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="updateImage"><span class="type-signature"></span>updateImage<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Updates the displayed image based on current percentage.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="StatusBar.html#updateImage">StatusBar#updateImage</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_status-bar.class.js.html">models/status-bar.class.js</a>, <a href="models_status-bar.class.js.html#line34">line 34</a>
     </li></ul></dd>
     
 

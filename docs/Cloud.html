@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: MovableObject</title>
+    <title>JSDoc: Class: Cloud</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: MovableObject</h1>
+    <h1 class="page-title">Class: Cloud</h1>
 
     
 
@@ -28,10 +28,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>MovableObject<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>Cloud<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description"><p>Extended class for movable game objects with physics.
-Adds gravity, collision detection, health system, and movement.</p></div>
+            <div class="class-description"><p>Represents a moving cloud in the background.</p></div>
         
     
 </header>
@@ -46,12 +45,16 @@ Adds gravity, collision detection, health system, and movement.</p></div>
     
 
     
-    <h4 class="name" id="MovableObject"><span class="type-signature"></span>new MovableObject<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Cloud"><span class="type-signature"></span>new Cloud<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
 
 
+
+<div class="description">
+    <p>Creates a cloud instance at a random position.</p>
+</div>
 
 
 
@@ -94,7 +97,7 @@ Adds gravity, collision detection, health system, and movement.</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_movable-object.class.js.html">models/movable-object.class.js</a>, <a href="models_movable-object.class.js.html#line6">line 6</a>
+        <a href="models_cloud.class.js.html">models/cloud.class.js</a>, <a href="models_cloud.class.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -134,7 +137,7 @@ Adds gravity, collision detection, health system, and movement.</p></div>
 
 
     <ul>
-        <li><a href="DrawableObject.html">DrawableObject</a></li>
+        <li><a href="MovableObject.html">MovableObject</a></li>
     </ul>
 
 
@@ -184,6 +187,11 @@ Adds gravity, collision detection, health system, and movement.</p></div>
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#acceleration">MovableObject#acceleration</a>
+    </li></ul></dd>
     
 
     
@@ -251,12 +259,12 @@ Adds gravity, collision detection, health system, and movement.</p></div>
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="DrawableObject.html#currentImage">DrawableObject#currentImage</a>
-    </li></ul></dd>
-    
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#currentImage">MovableObject#currentImage</a>
+    </li></ul></dd>
     
 
     
@@ -326,6 +334,11 @@ Adds gravity, collision detection, health system, and movement.</p></div>
     
 
     
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#energy">MovableObject#energy</a>
+    </li></ul></dd>
+    
 
     
 
@@ -392,12 +405,12 @@ Adds gravity, collision detection, health system, and movement.</p></div>
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="DrawableObject.html#height">DrawableObject#height</a>
-    </li></ul></dd>
-    
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#height">MovableObject#height</a>
+    </li></ul></dd>
     
 
     
@@ -465,12 +478,12 @@ Adds gravity, collision detection, health system, and movement.</p></div>
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="DrawableObject.html#imageCache">DrawableObject#imageCache</a>
-    </li></ul></dd>
-    
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#imageCache">MovableObject#imageCache</a>
+    </li></ul></dd>
     
 
     
@@ -542,7 +555,7 @@ Adds gravity, collision detection, health system, and movement.</p></div>
     
     <dt class="tag-overrides">Overrides:</dt>
     <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="DrawableObject.html#img">DrawableObject#img</a>
+        <a href="MovableObject.html#img">MovableObject#img</a>
     </li></ul></dd>
     
 
@@ -613,6 +626,11 @@ Adds gravity, collision detection, health system, and movement.</p></div>
     
 
     
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#lastHit">MovableObject#lastHit</a>
+    </li></ul></dd>
+    
 
     
 
@@ -680,6 +698,11 @@ Adds gravity, collision detection, health system, and movement.</p></div>
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#otherDirection">MovableObject#otherDirection</a>
+    </li></ul></dd>
     
 
     
@@ -749,6 +772,11 @@ Adds gravity, collision detection, health system, and movement.</p></div>
     
 
     
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#speed">MovableObject#speed</a>
+    </li></ul></dd>
+    
 
     
 
@@ -817,6 +845,11 @@ Adds gravity, collision detection, health system, and movement.</p></div>
     
 
     
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#speedY">MovableObject#speedY</a>
+    </li></ul></dd>
+    
 
     
 
@@ -883,12 +916,12 @@ Adds gravity, collision detection, health system, and movement.</p></div>
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="DrawableObject.html#width">DrawableObject#width</a>
-    </li></ul></dd>
-    
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#width">MovableObject#width</a>
+    </li></ul></dd>
     
 
     
@@ -960,7 +993,7 @@ Adds gravity, collision detection, health system, and movement.</p></div>
     
     <dt class="tag-overrides">Overrides:</dt>
     <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="DrawableObject.html#x">DrawableObject#x</a>
+        <a href="MovableObject.html#x">MovableObject#x</a>
     </li></ul></dd>
     
 
@@ -1033,7 +1066,7 @@ Adds gravity, collision detection, health system, and movement.</p></div>
     
     <dt class="tag-overrides">Overrides:</dt>
     <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="DrawableObject.html#y">DrawableObject#y</a>
+        <a href="MovableObject.html#y">MovableObject#y</a>
     </li></ul></dd>
     
 
@@ -1084,6 +1117,94 @@ Adds gravity, collision detection, health system, and movement.</p></div>
     
 
     
+    <h4 class="name" id="animate"><span class="type-signature"></span>animate<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Animates the cloud movement and image updates.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_cloud.class.js.html">models/cloud.class.js</a>, <a href="models_cloud.class.js.html#line31">line 31</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="applyGravity"><span class="type-signature"></span>applyGravity<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
@@ -1116,6 +1237,11 @@ Updates vertical position and speed every frame.</p>
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#applyGravity">MovableObject#applyGravity</a>
+    </li></ul></dd>
     
 
     
@@ -1252,12 +1378,12 @@ Updates vertical position and speed every frame.</p>
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="DrawableObject.html#draw">DrawableObject#draw</a>
-    </li></ul></dd>
-    
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#draw">MovableObject#draw</a>
+    </li></ul></dd>
     
 
     
@@ -1394,12 +1520,12 @@ Updates vertical position and speed every frame.</p>
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="DrawableObject.html#drawFrame">DrawableObject#drawFrame</a>
-    </li></ul></dd>
-    
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#drawFrame">MovableObject#drawFrame</a>
+    </li></ul></dd>
     
 
     
@@ -1490,6 +1616,11 @@ Sets energy to 0 if depleted, otherwise records hit time.</p>
     
 
     
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#hit">MovableObject#hit</a>
+    </li></ul></dd>
+    
 
     
 
@@ -1577,6 +1708,11 @@ Sets energy to 0 if depleted, otherwise records hit time.</p>
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#isAboveGround">MovableObject#isAboveGround</a>
+    </li></ul></dd>
     
 
     
@@ -1737,6 +1873,11 @@ Sets energy to 0 if depleted, otherwise records hit time.</p>
     
 
     
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#isColliding">MovableObject#isColliding</a>
+    </li></ul></dd>
+    
 
     
 
@@ -1895,6 +2036,11 @@ Sets energy to 0 if depleted, otherwise records hit time.</p>
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#isCollidingHorizontally">MovableObject#isCollidingHorizontally</a>
+    </li></ul></dd>
     
 
     
@@ -2055,6 +2201,11 @@ Sets energy to 0 if depleted, otherwise records hit time.</p>
     
 
     
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#isCollidingVertically">MovableObject#isCollidingVertically</a>
+    </li></ul></dd>
+    
 
     
 
@@ -2164,6 +2315,11 @@ Sets energy to 0 if depleted, otherwise records hit time.</p>
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#isDead">MovableObject#isDead</a>
+    </li></ul></dd>
     
 
     
@@ -2275,6 +2431,11 @@ Sets energy to 0 if depleted, otherwise records hit time.</p>
     
 
     
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#isHurt">MovableObject#isHurt</a>
+    </li></ul></dd>
+    
 
     
 
@@ -2384,6 +2545,11 @@ Sets energy to 0 if depleted, otherwise records hit time.</p>
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#jump">MovableObject#jump</a>
+    </li></ul></dd>
     
 
     
@@ -2520,12 +2686,12 @@ Sets energy to 0 if depleted, otherwise records hit time.</p>
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="DrawableObject.html#loadImage">DrawableObject#loadImage</a>
-    </li></ul></dd>
-    
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#loadImage">MovableObject#loadImage</a>
+    </li></ul></dd>
     
 
     
@@ -2663,12 +2829,12 @@ Used for sprite animations.</p>
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="DrawableObject.html#loadImages">DrawableObject#loadImages</a>
-    </li></ul></dd>
-    
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#loadImages">MovableObject#loadImages</a>
+    </li></ul></dd>
     
 
     
@@ -2758,6 +2924,11 @@ Used for sprite animations.</p>
     
 
     
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#moveLeft">MovableObject#moveLeft</a>
+    </li></ul></dd>
+    
 
     
 
@@ -2845,6 +3016,11 @@ Used for sprite animations.</p>
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#moveRight">MovableObject#moveRight</a>
+    </li></ul></dd>
     
 
     
@@ -2983,6 +3159,11 @@ Used for sprite animations.</p>
     
 
     
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="MovableObject.html#playAnimation">MovableObject#playAnimation</a>
+    </li></ul></dd>
+    
 
     
 
@@ -3004,6 +3185,182 @@ Used for sprite animations.</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="models_movable-object.class.js.html">models/movable-object.class.js</a>, <a href="models_movable-object.class.js.html#line108">line 108</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="updateCloudImage"><span class="type-signature"></span>updateCloudImage<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Updates the cloud image from the image cache.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_cloud.class.js.html">models/cloud.class.js</a>, <a href="models_cloud.class.js.html#line52">line 52</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="wrapCloudIfNeeded"><span class="type-signature"></span>wrapCloudIfNeeded<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Wraps the cloud to the right side when it moves off screen.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_cloud.class.js.html">models/cloud.class.js</a>, <a href="models_cloud.class.js.html#line42">line 42</a>
     </li></ul></dd>
     
 

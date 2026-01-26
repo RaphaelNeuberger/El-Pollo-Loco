@@ -1,3 +1,8 @@
+/**
+ * Represents a throwable bottle object that can be thrown by the character.
+ * @class
+ * @extends MovableObject
+ */
 class ThrowableObject extends MovableObject {
   IMAGES_ROTATION = [
     "img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png",
@@ -17,6 +22,12 @@ class ThrowableObject extends MovableObject {
 
   isSplashing = false;
 
+  /**
+   * Creates a throwable object at specified position.
+   * @param {number} x - The x coordinate.
+   * @param {number} y - The y coordinate.
+   * @param {boolean} direction - The throw direction.
+   */
   constructor(x, y, direction) {
     super().loadImage(
       "img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png",
@@ -33,12 +44,18 @@ class ThrowableObject extends MovableObject {
     this.animate();
   }
 
+  /**
+   * Initiates the throwing motion with gravity and direction.
+   */
   trow() {
     this.speedY = 30;
     this.applyGravity();
     this.throwInDirection();
   }
 
+  /**
+   * Moves the bottle horizontally based on throw direction.
+   */
   throwInDirection() {
     setInterval(() => {
       if (this.otherDirection) {
@@ -49,6 +66,9 @@ class ThrowableObject extends MovableObject {
     }, 25);
   }
 
+  /**
+   * Updates the animation between rotation and splash states.
+   */
   animate() {
     setInterval(() => {
       if (this.isSplashing) {
@@ -59,6 +79,9 @@ class ThrowableObject extends MovableObject {
     }, 100);
   }
 
+  /**
+   * Triggers the splash animation and stops movement.
+   */
   splash() {
     this.isSplashing = true;
     this.speedY = 0;

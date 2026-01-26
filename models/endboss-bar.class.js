@@ -1,3 +1,8 @@
+/**
+ * Represents the endboss health status bar.
+ * @class
+ * @extends StatusBar
+ */
 class EndbossBar extends StatusBar {
   IMAGES = [
     "img/7_statusbars/2_statusbar_endboss/green/green0.png",
@@ -8,6 +13,9 @@ class EndbossBar extends StatusBar {
     "img/7_statusbars/2_statusbar_endboss/green/green100.png",
   ];
 
+  /**
+   * Creates an endboss bar instance positioned at top right and initializes it at 100%.
+   */
   constructor() {
     super();
     this.x = 500; // Positioned at top right

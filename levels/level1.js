@@ -1,5 +1,8 @@
 let level1;
 
+/**
+ * Initializes level 1 with all game objects including enemies, clouds, backgrounds, coins, and bottles.
+ */
 function initLevel() {
   level1 = new Level(
     createEnemies(),
@@ -10,6 +13,10 @@ function initLevel() {
   );
 }
 
+/**
+ * Creates and returns an array of enemy objects for the level.
+ * @returns {Array} Array containing chicken enemies and the endboss
+ */
 function createEnemies() {
   return [
     new Chicken(800),
@@ -22,10 +29,18 @@ function createEnemies() {
   ];
 }
 
+/**
+ * Creates and returns an array of cloud objects for the level.
+ * @returns {Array} Array containing cloud objects
+ */
 function createClouds() {
   return [new Cloud()];
 }
 
+/**
+ * Creates and returns an array of background objects covering multiple layers and positions.
+ * @returns {Array} Array containing all background layer objects
+ */
 function createBackgrounds() {
   return [
     ...createBackgroundLayer(-720),
@@ -36,6 +51,11 @@ function createBackgrounds() {
   ];
 }
 
+/**
+ * Creates a single background layer with multiple image layers at the specified x position.
+ * @param {number} x - The horizontal position of the background layer
+ * @returns {Array} Array containing background objects for air, third, second, and first layers
+ */
 function createBackgroundLayer(x) {
   return [
     new BackgroundObject("img/5_background/layers/air.png", x),
@@ -45,24 +65,43 @@ function createBackgroundLayer(x) {
   ];
 }
 
+/**
+ * Returns the appropriate third layer background image based on x position.
+ * @param {number} x - The horizontal position
+ * @returns {string} Path to the third layer image
+ */
 function getThirdLayerImage(x) {
   return x === 0 || x === 720 * 2
     ? "img/5_background/layers/3_third_layer/1.png"
     : "img/5_background/layers/3_third_layer/2.png";
 }
 
+/**
+ * Returns the appropriate second layer background image based on x position.
+ * @param {number} x - The horizontal position
+ * @returns {string} Path to the second layer image
+ */
 function getSecondLayerImage(x) {
   return x === 0 || x === 720 * 2
     ? "img/5_background/layers/2_second_layer/1.png"
     : "img/5_background/layers/2_second_layer/2.png";
 }
 
+/**
+ * Returns the appropriate first layer background image based on x position.
+ * @param {number} x - The horizontal position
+ * @returns {string} Path to the first layer image
+ */
 function getFirstLayerImage(x) {
   return x === 0 || x === 720 * 2
     ? "img/5_background/layers/1_first_layer/1.png"
     : "img/5_background/layers/1_first_layer/2.png";
 }
 
+/**
+ * Creates and returns an array of coin objects positioned throughout the level.
+ * @returns {Array} Array containing coin objects
+ */
 function createCoins() {
   return [
     new Coin(300),
@@ -78,6 +117,10 @@ function createCoins() {
   ];
 }
 
+/**
+ * Creates and returns an array of bottle objects positioned throughout the level.
+ * @returns {Array} Array containing bottle objects
+ */
 function createBottles() {
   return [
     new Bottle(400),
