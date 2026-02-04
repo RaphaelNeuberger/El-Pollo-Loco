@@ -39,54 +39,30 @@ class MovableObject extends DrawableObject {
       // Throwable Object should always fall
       return true;
     } else {
-      return this.y < 180;
+      return this.y < 170;
     }
   }
 
   /**
-   * Checks collision with another movable object.
+   * Checks collision with another movable object using offsets.
    * @param {MovableObject} mo - The other object to check collision with
    * @returns {boolean} True if objects are colliding
    */
   isColliding(mo) {
-    if (mo instanceof Endboss) {
-      return this.isCollidingWithEndboss(mo);
-    }
-    return this.isCollidingHorizontally(mo) && this.isCollidingVertically(mo);
-  }
-
-  /**
-   * Checks collision with endboss using custom offsets.
-   * @param {Endboss} endboss - The endboss to check collision with
-   * @returns {boolean} True if colliding with endboss
-   */
-  isCollidingWithEndboss(endboss) {
-    const offset = endboss.offset;
-    const buffer = endboss.collisionBuffer || 0;
     return (
-      this.x + this.width - buffer > endboss.x + offset.left &&
-      this.x + buffer < endboss.x + endboss.width - offset.right &&
-      this.y + this.height - buffer > endboss.y + offset.top &&
-      this.y + buffer < endboss.y + endboss.height - offset.bottom
+      this.x +
+        this.offset.left +
+        (this.width - this.offset.left - this.offset.right) >
+        mo.x + mo.offset.left &&
+      this.x + this.offset.left <
+        mo.x + mo.offset.left + (mo.width - mo.offset.left - mo.offset.right) &&
+      this.y +
+        this.offset.top +
+        (this.height - this.offset.top - this.offset.bottom) >
+        mo.y + mo.offset.top &&
+      this.y + this.offset.top <
+        mo.y + mo.offset.top + (mo.height - mo.offset.top - mo.offset.bottom)
     );
-  }
-
-  /**
-   * Checks horizontal collision (X-axis) with 5px buffer.
-   * @param {MovableObject} mo - The other object
-   * @returns {boolean} True if overlapping on X-axis
-   */
-  isCollidingHorizontally(mo) {
-    return this.x + this.width - 5 > mo.x && this.x + 5 < mo.x + mo.width;
-  }
-
-  /**
-   * Checks vertical collision (Y-axis) with 5px buffer.
-   * @param {MovableObject} mo - The other object
-   * @returns {boolean} True if overlapping on Y-axis
-   */
-  isCollidingVertically(mo) {
-    return this.y + this.height - 5 > mo.y && this.y + 5 < mo.y + mo.height;
   }
 
   /**

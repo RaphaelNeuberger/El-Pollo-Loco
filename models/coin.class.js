@@ -8,6 +8,8 @@ class Coin extends MovableObject {
   height = 80;
   width = 80;
   speed = 0; // Coins don't move horizontally
+  /** @type {Object} */
+  offset = { top: 25, bottom: 25, left: 25, right: 25 };
 
   /**
    * Creates a coin instance at specified x position.

@@ -22,6 +22,8 @@ class ThrowableObject extends MovableObject {
 
   isSplashing = false;
   hasHit = false;
+  /** @type {Object} */
+  offset = { top: 10, bottom: 10, left: 10, right: 10 };
 
   /**
    * Creates a throwable object at specified position.

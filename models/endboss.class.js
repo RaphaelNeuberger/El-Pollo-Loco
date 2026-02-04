@@ -6,7 +6,7 @@
 class Endboss extends MovableObject {
   height = 400;
   width = 250;
-  y = 55;
+  y = 20;
   energy = 200;
   isHurt = false;
   _isDead = false;
@@ -14,7 +14,6 @@ class Endboss extends MovableObject {
   world;
   speed = 3;
   offset = { top: 80, bottom: 20, left: 40, right: 40 };
-  collisionBuffer = 30;
 
   IMAGES_WALKING = [
     "img/4_enemie_boss_chicken/2_alert/G5.png",

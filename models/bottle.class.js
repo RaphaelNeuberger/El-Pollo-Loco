@@ -8,6 +8,8 @@ class Bottle extends MovableObject {
   height = 60;
   width = 50;
   speed = 0; // Bottles don't move horizontally
+  /** @type {Object} */
+  offset = { top: 10, bottom: 5, left: 15, right: 15 };
 
   /**
    * Creates a bottle instance at specified x position.

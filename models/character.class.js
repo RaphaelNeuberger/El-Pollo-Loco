@@ -7,9 +7,11 @@ class Character extends MovableObject {
   /** @type {number} */
   height = 250;
   /** @type {number} */
-  y = 80;
+  y = 170;
   /** @type {number} */
   speed = 10;
+  /** @type {Object} */
+  offset = { top: 100, bottom: 10, left: 20, right: 20 };
 
   /** @type {string[]} */
   IMAGES_IDLE = [
