@@ -516,9 +516,13 @@ function createNewWorld() {
  * @returns {boolean} True if inside restart button area
  */
 function isInsideRestartButton(canvas, x, y) {
-  const btnX = canvas.width / 2 - 100;
-  const btnY = canvas.height - 100;
-  return x >= btnX && x <= btnX + 200 && y >= btnY && y <= btnY + 50;
+  const btnX = 150;
+  const btnY = 320;
+  const btnWidth = 150;
+  const btnHeight = 60;
+  return (
+    x >= btnX && x <= btnX + btnWidth && y >= btnY && y <= btnY + btnHeight
+  );
 }
 
 /**
@@ -529,9 +533,13 @@ function isInsideRestartButton(canvas, x, y) {
  * @returns {boolean} True if inside main menu button area
  */
 function isInsideMainMenuButton(canvas, x, y) {
-  const btnX = canvas.width / 2 - 100;
-  const btnY = canvas.height - 170;
-  return x >= btnX && x <= btnX + 200 && y >= btnY && y <= btnY + 50;
+  const btnX = 420;
+  const btnY = 320;
+  const btnWidth = 150;
+  const btnHeight = 60;
+  return (
+    x >= btnX && x <= btnX + btnWidth && y >= btnY && y <= btnY + btnHeight
+  );
 }
 
 /**

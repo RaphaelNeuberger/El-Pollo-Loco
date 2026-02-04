@@ -9,10 +9,12 @@ class Endboss extends MovableObject {
   y = 55;
   energy = 200;
   isHurt = false;
-  isDead = false;
+  _isDead = false;
   isAttacking = false;
   world;
   speed = 3;
+  offset = { top: 80, bottom: 20, left: 40, right: 40 };
+  collisionBuffer = 30;
 
   IMAGES_WALKING = [
     "img/4_enemie_boss_chicken/2_alert/G5.png",
@@ -106,7 +108,7 @@ class Endboss extends MovableObject {
    * Handles the endboss movement logic each frame.
    */
   handleMovement() {
-    if (!this.isDead && this.world) {
+    if (!this._isDead && this.world) {
       this.moveTowardsCharacter();
     }
   }
@@ -115,7 +117,7 @@ class Endboss extends MovableObject {
    * Updates the current animation based on the endboss state.
    */
   updateAnimation() {
-    if (this.isDead) {
+    if (this._isDead) {
       this.playAnimation(this.IMAGES_DEAD);
     } else if (this.isHurt) {
       this.playAnimation(this.IMAGES_HURT);
@@ -208,11 +210,19 @@ class Endboss extends MovableObject {
   }
 
   /**
+   * Checks if endboss is dead.
+   * @returns {boolean} True if dead.
+   */
+  isDead() {
+    return this._isDead;
+  }
+
+  /**
    * Handles the death of the endboss.
    */
   die() {
     this.energy = 0;
-    this.isDead = true;
+    this._isDead = true;
     this.isAttacking = false;
     this.isHurt = false;
   }

@@ -229,6 +229,7 @@ class Character extends MovableObject {
   handleJump() {
     if (this.world.keyboard.SPACE && !this.isAboveGround()) {
       this.jump();
+      this.currentImage = 0;
       this.lastInputTime = Date.now();
     }
   }

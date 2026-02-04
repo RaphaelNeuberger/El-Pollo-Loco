@@ -715,3 +715,17 @@ h1 {
 .modal-content p {
   line-height: 1.6;
 }
+
+/* Mobile: Hide fullscreen button on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  #fullscreen-btn {
+    display: none !important;
+  }
+}
+
+/* Alternative: Hide on small screens */
+@media (max-width: 768px) {
+  #fullscreen-btn {
+    display: none !important;
+  }
+}

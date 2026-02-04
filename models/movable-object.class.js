@@ -49,25 +49,44 @@ class MovableObject extends DrawableObject {
    * @returns {boolean} True if objects are colliding
    */
   isColliding(mo) {
+    if (mo instanceof Endboss) {
+      return this.isCollidingWithEndboss(mo);
+    }
     return this.isCollidingHorizontally(mo) && this.isCollidingVertically(mo);
   }
 
   /**
-   * Checks horizontal collision (X-axis) with 10px buffer.
+   * Checks collision with endboss using custom offsets.
+   * @param {Endboss} endboss - The endboss to check collision with
+   * @returns {boolean} True if colliding with endboss
+   */
+  isCollidingWithEndboss(endboss) {
+    const offset = endboss.offset;
+    const buffer = endboss.collisionBuffer || 0;
+    return (
+      this.x + this.width - buffer > endboss.x + offset.left &&
+      this.x + buffer < endboss.x + endboss.width - offset.right &&
+      this.y + this.height - buffer > endboss.y + offset.top &&
+      this.y + buffer < endboss.y + endboss.height - offset.bottom
+    );
+  }
+
+  /**
+   * Checks horizontal collision (X-axis) with 5px buffer.
    * @param {MovableObject} mo - The other object
    * @returns {boolean} True if overlapping on X-axis
    */
   isCollidingHorizontally(mo) {
-    return this.x + this.width - 10 > mo.x && this.x + 10 < mo.x + mo.width;
+    return this.x + this.width - 5 > mo.x && this.x + 5 < mo.x + mo.width;
   }
 
   /**
-   * Checks vertical collision (Y-axis) with 10px buffer.
+   * Checks vertical collision (Y-axis) with 5px buffer.
    * @param {MovableObject} mo - The other object
    * @returns {boolean} True if overlapping on Y-axis
    */
   isCollidingVertically(mo) {
-    return this.y + this.height - 10 > mo.y && this.y + 10 < mo.y + mo.height;
+    return this.y + this.height - 5 > mo.y && this.y + 5 < mo.y + mo.height;
   }
 
   /**
@@ -75,12 +94,11 @@ class MovableObject extends DrawableObject {
    * Sets energy to 0 if depleted, otherwise records hit time.
    */
   hit() {
-    this.energy -= 5;
+    this.energy -= 17;
     if (this.energy <= 0) {
       this.energy = 0;
-    } else {
-      this.lastHit = new Date().getTime();
     }
+    this.lastHit = new Date().getTime();
   }
 
   /**

@@ -4,10 +4,10 @@
  * @extends MovableObject
  */
 class ChickenSmall extends MovableObject {
-  y = 370;
+  y = 365;
   height = 40;
   width = 50;
-  isDead = false;
+  _isDead = false;
   IMAGES_WALKING = [
     "img/3_enemies_chicken/chicken_small/1_walk/1_w.png",
     "img/3_enemies_chicken/chicken_small/1_walk/2_w.png",
@@ -71,7 +71,7 @@ class ChickenSmall extends MovableObject {
    * @returns {boolean} True if small chicken can move.
    */
   canMove() {
-    return !this.isDead && this.isGameActive();
+    return !this.isDead() && this.isGameActive();
   }
 
   /**
@@ -86,7 +86,7 @@ class ChickenSmall extends MovableObject {
    * Updates the current animation based on small chicken state.
    */
   updateAnimation() {
-    if (this.isDead) {
+    if (this._isDead) {
       this.playAnimation(this.IMAGES_DEAD);
     } else if (this.world && this.world.gameStarted) {
       this.playAnimation(this.IMAGES_WALKING);
@@ -94,10 +94,18 @@ class ChickenSmall extends MovableObject {
   }
 
   /**
+   * Checks if chicken is dead.
+   * @returns {boolean} True if dead.
+   */
+  isDead() {
+    return this._isDead;
+  }
+
+  /**
    * Marks the small chicken as dead and schedules removal from level.
    */
-  kill() {
-    this.isDead = true;
+  die() {
+    this._isDead = true;
     setTimeout(() => this.removeFromLevel(), 1000);
   }
 

@@ -1,6 +1,6 @@
 /**
  * Main game engine that manages all game objects and rendering.
- * Handles game loop, collisions, audio, and game states.
+ * Delegates responsibilities to specialized modules.
  * @class
  */
 class World {
@@ -34,6 +34,14 @@ class World {
   totalCoins = 0;
   /** @type {number} */
   totalBottles = 0;
+  /** @type {number} */
+  coinsCollectedCount = 0;
+  /** @type {number} */
+  bottlesCollectedCount = 0;
+  /** @type {number} */
+  enemiesKilledCount = 0;
+  /** @type {number} */
+  totalEnemies = 0;
   /** @type {boolean} */
   gameWon = false;
   /** @type {boolean} */
@@ -45,13 +53,36 @@ class World {
   /** @type {boolean} */
   isPaused = false;
   /** @type {boolean} */
+  gameIsOver = false;
+  /** @type {boolean} */
+  soundMuted = false;
+  /** @type {boolean} */
   endbossSoundPlayed = false;
+  /** @type {boolean} */
+  endbossDefeated = false;
   /** @type {Image} */
   youWonImage = new Image();
   /** @type {Image} */
   youLostImage = new Image();
   /** @type {Image} */
   startScreenImage = new Image();
+  /** @type {Image} */
+  restartButtonImg = new Image();
+  /** @type {Image} */
+  mainMenuButtonImg = new Image();
+  youWonImg = new Image();
+  youLostImg = new Image();
+  /** @type {number} */
+  restartButtonX = 150;
+  restartButtonY = 320;
+  restartButtonWidth = 150;
+  restartButtonHeight = 60;
+  mainMenuButtonX = 420;
+  mainMenuButtonY = 320;
+  mainMenuButtonWidth = 150;
+  mainMenuButtonHeight = 60;
+  /** @type {number} */
+  lastThrowTime = 0;
   /** @type {Audio} */
   introSound = new Audio("audio/game-intro-345507.mp3");
   /** @type {Audio} */
@@ -78,8 +109,22 @@ class World {
   chickenKillSound = new Audio(
     "audio/muffled-sound-of-falling-game-character-131797.mp3",
   );
+  /** @type {Audio} */
   smallChickenHitSound = new Audio("audio/game-character-scream-131144.mp3");
+  /** @type {Audio} */
   endbossHitSound = new Audio("audio/rpg-sword-attack-combo-34-388950.mp3");
+  /** @type {number} */
+  chickenSpawnInterval;
+  /** @type {number} */
+  animationFrameId;
+  /** @type {number} */
+  gameLoopIntervalId;
+  /** @type {WorldAudio} */
+  audio;
+  /** @type {WorldCollision} */
+  collision;
+  /** @type {WorldRenderer} */
+  renderer;
 
   /**
    * Creates a new World instance and initializes the game.
@@ -90,60 +135,51 @@ class World {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
+    this.audio = new WorldAudio(this);
+    this.collision = new WorldCollision(this);
+    this.renderer = new WorldRenderer(this);
     this.initializeCounts();
     this.loadEndScreenImages();
-    this.setupAudioSettings();
+    this.audio.setupAudioSettings();
+    this.initializeHealthBar();
     this.draw();
     this.setWorld();
   }
 
   /**
-   * Initializes coin and bottle counts from the level.
+   * Initializes coin, bottle, and enemy counts.
    */
   initializeCounts() {
     this.totalCoins = this.level.coins.length;
     this.totalBottles = this.level.bottles.length;
+    this.totalEnemies = this.level.enemies.length;
   }
 
   /**
-   * Loads the end screen images for win, lose, and start screens.
+   * Synchronizes health bar with character energy.
+   */
+  initializeHealthBar() {
+    this.healthBar.setPercentage(this.character.energy);
+  }
+
+  /**
+   * Loads end screen images for win/lose.
    */
   loadEndScreenImages() {
-    this.youWonImage.src = "img/You won, you lost/You won A.png";
-    this.youLostImage.src = "img/You won, you lost/You lost.png";
-    this.startScreenImage.src =
+    this.youWonImage.src = "img/You%20won,%20you%20lost/You%20won%20A.png";
+    this.youLostImage.src = "img/You%20won,%20you%20lost/You%20lost.png";
+    this.restartButtonImg.src =
+      "img/9_intro_outro_screens/start/startscreen_2.png";
+    this.mainMenuButtonImg.src =
       "img/9_intro_outro_screens/start/startscreen_1.png";
   }
 
   /**
-   * Configures audio settings like loop and volume for game sounds.
-   */
-  setupAudioSettings() {
-    this.introSound.loop = true;
-    this.introSound.volume = 0.3;
-    this.gameMusicLoop.loop = true;
-    this.gameMusicLoop.volume = 0.4;
-  }
-
-  /**
-   * Sets the world reference for the character and all enemies.
+   * Sets the world reference in character and enemies.
    */
   setWorld() {
     this.character.world = this;
-    // Set world reference for all enemies
-    this.level.enemies.forEach((enemy) => {
-      enemy.world = this;
-    });
-  }
-
-  /**
-   * Plays the intro sound if browser allows auto-play.
-   */
-  playIntroSound() {
-    // Try to play sound (only if user has interacted)
-    this.introSound.play().catch(() => {
-      // Ignore error if browser blocks auto-play
-    });
+    this.level.enemies.forEach((enemy) => (enemy.world = this));
   }
 
   /**
@@ -151,206 +187,107 @@ class World {
    * @param {boolean} muted - Whether to mute the sounds.
    */
   setSoundMuted(muted) {
-    this.setMainSoundVolumes(muted);
-    this.setEffectSoundVolumes(muted);
+    this.soundMuted = muted;
+    this.audio.setSoundMuted(muted);
   }
 
   /**
-   * Sets the volume for main background music.
-   * @param {boolean} muted - Whether to mute the sounds.
+   * Plays the intro sound if browser allows auto-play.
    */
-  setMainSoundVolumes(muted) {
-    this.introSound.volume = muted ? 0 : 0.3;
-    this.gameMusicLoop.volume = muted ? 0 : 0.4;
+  playIntroSound() {
+    this.audio.playIntroSound();
   }
 
   /**
-   * Sets the volume for sound effects.
-   * @param {boolean} muted - Whether to mute the sounds.
-   */
-  setEffectSoundVolumes(muted) {
-    const volume = muted ? 0 : 1;
-    this.setCollectSoundVolumes(volume);
-    this.setDeathAndCombatSoundVolumes(volume);
-  }
-
-  /**
-   * Sets the volume for collection and game event sounds.
-   * @param {number} volume - The volume level to set.
-   */
-  setCollectSoundVolumes(volume) {
-    this.gameStartSound.volume = volume;
-    this.bottleCollectSound.volume = volume;
-    this.coinCollectSound.volume = volume;
-    this.endbossWarningSound.volume = volume;
-  }
-
-  /**
-   * Sets the volume for death and combat sounds.
-   * @param {number} volume - The volume level to set.
-   */
-  setDeathAndCombatSoundVolumes(volume) {
-    this.setWinLoseSoundVolumes(volume);
-    this.setCombatSoundVolumes(volume);
-  }
-
-  /**
-   * Sets the volume for win/lose sounds.
-   * @param {number} volume - The volume level to set.
-   */
-  setWinLoseSoundVolumes(volume) {
-    this.winnerSound.volume = volume;
-    this.gameOverSound1.volume = volume;
-    this.gameOverSound2.volume = volume;
-  }
-
-  /**
-   * Sets the volume for combat sounds.
-   * @param {number} volume - The volume level to set.
-   */
-  setCombatSoundVolumes(volume) {
-    this.jumpKillSound.volume = volume;
-    this.chickenKillSound.volume = volume;
-    this.smallChickenHitSound.volume = volume;
-    this.endbossHitSound.volume = volume;
-  }
-
-  /**
-   * Starts the game by initializing the game loop and spawning enemies.
+   * Starts the game, begins game loop and sound.
    */
   startGame() {
-    this.gameStarted = true;
-    this.stopIntroSound();
-    this.playStartSounds();
+    this.initializeGameState();
+    this.audio.stopIntroSound();
+    this.audio.playStartSounds();
     this.run();
     this.startChickenSpawning();
   }
 
   /**
-   * Stops the intro sound and resets its playback position.
+   * Initializes game state variables.
    */
-  stopIntroSound() {
-    this.introSound.pause();
-    this.introSound.currentTime = 0;
+  initializeGameState() {
+    this.gameStarted = true;
+    this.chickensCanMove = true;
   }
 
   /**
-   * Plays the game start sound and background music.
-   */
-  playStartSounds() {
-    this.gameStartSound.play().catch(() => {});
-    setTimeout(() => {
-      this.gameMusicLoop.play().catch(() => {});
-    }, 500);
-  }
-
-  /**
-   * Starts the main game loop that runs every 200ms.
+   * Starts the main game loop.
    */
   run() {
-    setInterval(() => {
+    this.gameLoopIntervalId = setInterval(() => {
       this.performGameLoop();
-    }, 200);
+    }, 100);
   }
 
   /**
-   * Executes the main game loop tasks including collision checks and game state updates.
+   * Performs one iteration of game loop.
    */
   performGameLoop() {
-    this.checkCollisions();
+    if (this.isPaused || this.gameIsOver) return;
+    this.collision.checkCollisions();
     this.checkThrowObjects();
-    this.removeOldBottles();
     this.checkGameStatus();
   }
 
   /**
-   * Starts the interval for spawning new chickens every 3 seconds.
+   * Starts spawning chickens at intervals.
    */
   startChickenSpawning() {
     this.chickenSpawnInterval = setInterval(() => {
-      if (this.canSpawnChicken()) {
-        this.spawnChicken();
-        this.removeDeadChickens();
-      }
+      this.spawnChicken();
     }, 3000);
   }
 
   /**
-   * Checks if conditions allow spawning a new chicken.
-   * @returns {boolean} True if chickens can be spawned.
+   * Spawns a random chicken in the level.
    */
-  canSpawnChicken() {
-    return !this.gameWon && !this.gameLost && this.gameStarted;
+  spawnChicken() {
+    if (this.shouldSpawnChicken()) {
+      const chicken = this.createRandomChicken();
+      this.addChickenToLevel(chicken);
+    }
   }
 
   /**
-   * Removes dead chickens from the enemies array, excluding endboss.
+   * Checks if chicken should spawn.
+   * @returns {boolean} True if should spawn.
    */
-  removeDeadChickens() {
-    this.level.enemies = this.level.enemies.filter(
-      (e) => !e.isDead || e instanceof Endboss,
+  shouldSpawnChicken() {
+    return (
+      !this.gameIsOver &&
+      this.gameStarted &&
+      this.level.enemies.length < this.totalEnemies
     );
   }
 
   /**
-   * Spawns a new chicken if the maximum count has not been reached.
+   * Creates a random chicken type.
+   * @returns {Chicken|ChickenSmall} The chicken.
    */
-  spawnChicken() {
-    let chickenCount = this.countActiveChickens();
-    if (chickenCount < 8) {
-      this.createAndAddChicken();
-    }
+  createRandomChicken() {
+    const isSmall = Math.random() < 0.5;
+    return isSmall ? new ChickenSmall() : new Chicken();
   }
 
   /**
-   * Counts the number of active (non-dead) chickens in the level.
-   * @returns {number} The count of active chickens.
-   */
-  countActiveChickens() {
-    return this.level.enemies.filter(
-      (e) => (e instanceof Chicken || e instanceof ChickenSmall) && !e.isDead,
-    ).length;
-  }
-
-  /**
-   * Creates a new random chicken, sets its position, and adds it to the level.
-   */
-  createAndAddChicken() {
-    let newChicken = this.createRandomChicken();
-    this.setChickenPosition(newChicken);
-    this.addChickenToLevel(newChicken);
-  }
-
-  /**
-   * Adds a chicken to the level's enemy array with world reference.
-   * @param {Chicken|ChickenSmall} chicken - The chicken to add.
+   * Adds chicken to the level enemies.
+   * @param {Chicken|ChickenSmall} chicken - The chicken.
    */
   addChickenToLevel(chicken) {
     chicken.world = this;
     this.level.enemies.push(chicken);
+    this.totalEnemies++;
   }
 
   /**
-   * Creates either a regular or small chicken randomly.
-   * @returns {Chicken|ChickenSmall} A new chicken instance.
-   */
-  createRandomChicken() {
-    return Math.random() > 0.5 ? new Chicken() : new ChickenSmall();
-  }
-
-  /**
-   * Sets the position of a newly spawned chicken relative to the character.
-   * @param {Chicken|ChickenSmall} chicken - The chicken to position.
-   */
-  setChickenPosition(chicken) {
-    chicken.x = this.character.x + 400 + Math.random() * 800;
-    if (chicken.x > 2000) {
-      chicken.x = Math.random() * 1500;
-    }
-  }
-
-  /**
-   * Checks if the player is throwing a bottle and creates a throwable object.
+   * Checks if character can throw bottle.
    */
   checkThrowObjects() {
     if (this.canThrowBottle()) {
@@ -359,581 +296,44 @@ class World {
   }
 
   /**
-   * Checks if player can throw a bottle.
-   * @returns {boolean} True if can throw
+   * Checks if character can throw bottle.
+   * @returns {boolean} True if can throw.
    */
   canThrowBottle() {
-    return this.keyboard.S && this.collectedBottles > 0;
+    const now = Date.now();
+    const cooldownPassed = now - this.lastThrowTime > 500;
+    return (
+      (this.keyboard.D || this.keyboard.S) &&
+      this.bottlesCollectedCount > 0 &&
+      cooldownPassed
+    );
   }
 
   /**
-   * Throws a bottle and updates inventory.
+   * Creates and throws a bottle.
    */
   throwBottle() {
-    this.createThrowableBottle();
-    this.decreaseBottleCount();
-    this.keyboard.S = false;
-  }
-
-  /**
-   * Creates and adds throwable bottle.
-   */
-  createThrowableBottle() {
     const bottle = new ThrowableObject(
       this.character.x + 100,
       this.character.y + 100,
-      this.character.otherDirection,
     );
     this.throwableObjects.push(bottle);
-  }
-
-  /**
-   * Decreases bottle count and updates UI.
-   */
-  decreaseBottleCount() {
-    this.collectedBottles--;
-    const percentage = (this.collectedBottles / this.totalBottles) * 100;
-    this.bottleBar.setPercentage(percentage);
-  }
-
-  /**
-   * Checks all types of collisions in the game.
-   */
-  checkCollisions() {
-    this.checkAllCollisionTypes();
-  }
-
-  /**
-   * Performs collision detection for all game objects.
-   */
-  checkAllCollisionTypes() {
-    this.checkEnemyCollisions();
-    this.checkCoinCollisions();
-    this.checkBottleCollisions();
-    this.checkThrowableObjectCollisions();
-  }
-
-  /**
-   * Checks for collisions between the character and enemies.
-   */
-  checkEnemyCollisions() {
-    this.level.enemies.forEach((enemy) => {
-      if (this.isEnemyColliding(enemy)) {
-        this.handleEnemyCollision(enemy);
-      }
-    });
-  }
-
-  /**
-   * Checks if the character is colliding with an enemy.
-   * @param {MovableObject} enemy - The enemy to check collision with.
-   * @returns {boolean} True if colliding.
-   */
-  isEnemyColliding(enemy) {
-    return this.character.isColliding(enemy);
-  }
-
-  /**
-   * Handles collision between the character and an enemy.
-   * @param {MovableObject} enemy - The enemy involved in the collision.
-   */
-  handleEnemyCollision(enemy) {
-    if (this.isJumpKill(enemy)) {
-      this.handleJumpKill(enemy);
-    } else {
-      this.handleNonJumpCollision(enemy);
-    }
-  }
-
-  /**
-   * Handles collision when character is not jump-killing an enemy.
-   * @param {MovableObject} enemy - The enemy involved in the collision.
-   */
-  handleNonJumpCollision(enemy) {
-    if (!this.isDeadChicken(enemy)) {
-      this.handleNormalCollision(enemy);
-    }
-  }
-
-  /**
-   * Checks if the collision is a jump kill (character falling from above).
-   * @param {MovableObject} enemy - The enemy to check.
-   * @returns {boolean} True if it's a jump kill.
-   */
-  isJumpKill(enemy) {
-    return (
-      this.isChickenType(enemy) &&
-      !enemy.isDead &&
-      this.isCharacterFallingFromAbove()
-    );
-  }
-
-  /**
-   * Checks if the enemy is a chicken type.
-   * @param {MovableObject} enemy - The enemy to check.
-   * @returns {boolean} True if enemy is a chicken.
-   */
-  isChickenType(enemy) {
-    return enemy instanceof Chicken || enemy instanceof ChickenSmall;
-  }
-
-  /**
-   * Checks if the character is falling from above ground.
-   * @returns {boolean} True if character is falling.
-   */
-  isCharacterFallingFromAbove() {
-    return this.character.isAboveGround() && this.character.speedY < 0;
-  }
-
-  /**
-   * Checks if the enemy is a dead chicken.
-   * @param {MovableObject} enemy - The enemy to check.
-   * @returns {boolean} True if enemy is a dead chicken.
-   */
-  isDeadChicken(enemy) {
-    return (
-      (enemy instanceof Chicken || enemy instanceof ChickenSmall) &&
-      enemy.isDead
-    );
-  }
-
-  /**
-   * Handles the jump kill action on an enemy.
-   * @param {Chicken|ChickenSmall} enemy - The enemy being jump-killed.
-   */
-  handleJumpKill(enemy) {
-    if (!enemy.isDead) {
-      this.executeJumpKill(enemy);
-    }
-  }
-
-  /**
-   * Executes jump kill and plays sound.
-   * @param {Chicken|ChickenSmall} enemy - The enemy being killed.
-   */
-  executeJumpKill(enemy) {
-    enemy.kill();
-    this.character.speedY = 18;
-    this.playJumpKillSound(enemy);
-  }
-
-  /**
-   * Plays the appropriate sound for jump killing an enemy.
-   * @param {Chicken|ChickenSmall} enemy - The enemy that was killed.
-   */
-  playJumpKillSound(enemy) {
-    if (enemy instanceof ChickenSmall) {
-      this.playSmallChickenKillSound();
-    } else {
-      this.playNormalChickenKillSound();
-    }
-  }
-
-  /**
-   * Plays small chicken kill sound.
-   */
-  playSmallChickenKillSound() {
-    this.jumpKillSound.currentTime = 0;
-    this.jumpKillSound.play().catch(() => {});
-  }
-
-  /**
-   * Plays normal chicken kill sound.
-   */
-  playNormalChickenKillSound() {
-    this.chickenKillSound.currentTime = 0;
-    this.chickenKillSound.play().catch(() => {});
-  }
-
-  /**
-   * Handles normal collision damage to the character.
-   * @param {MovableObject} enemy - The enemy that hit the character.
-   */
-  handleNormalCollision(enemy) {
-    this.damageCharacter();
-    this.playEnemyHitSound(enemy);
-  }
-
-  /**
-   * Damages character and updates health bar.
-   */
-  damageCharacter() {
-    this.character.hit();
-    this.healthBar.setPercentage(this.character.energy);
-  }
-
-  /**
-   * Plays sound when enemy hits character.
-   * @param {MovableObject} enemy - The enemy
-   */
-  playEnemyHitSound(enemy) {
-    if (enemy instanceof ChickenSmall) {
-      this.smallChickenHitSound.currentTime = 0;
-      this.smallChickenHitSound.play().catch(() => {});
-    }
-  }
-
-  /**
-   * Checks for collisions between the character and coins.
-   */
-  checkCoinCollisions() {
-    this.level.coins.forEach((coin, index) => {
-      if (this.character.isColliding(coin)) {
-        this.collectCoin(index);
-      }
-    });
-  }
-
-  /**
-   * Collects a coin and updates the coin bar.
-   * @param {number} index - The index of the coin to collect.
-   */
-  collectCoin(index) {
-    this.level.coins.splice(index, 1);
-    this.collectedCoins++;
-    this.updateCoinBar();
-    this.playCoinSound();
-  }
-
-  /**
-   * Updates the coin status bar with the current coin percentage.
-   */
-  updateCoinBar() {
-    let percentage = (this.collectedCoins / this.totalCoins) * 100;
-    this.coinBar.setPercentage(percentage);
-  }
-
-  /**
-   * Plays the coin collection sound effect.
-   */
-  playCoinSound() {
-    this.coinCollectSound.currentTime = 0;
-    this.coinCollectSound.play().catch(() => {});
-  }
-
-  /**
-   * Checks for collisions between the character and bottles.
-   */
-  checkBottleCollisions() {
-    this.level.bottles.forEach((bottle, index) => {
-      if (this.character.isColliding(bottle)) {
-        this.collectBottle(index);
-      }
-    });
-  }
-
-  /**
-   * Collects a bottle and updates the bottle bar.
-   * @param {number} index - The index of the bottle to collect.
-   */
-  collectBottle(index) {
-    this.level.bottles.splice(index, 1);
-    this.collectedBottles++;
+    this.bottlesCollectedCount--;
+    this.lastThrowTime = Date.now();
     this.updateBottleBar();
-    this.playBottleSound();
   }
 
   /**
-   * Updates the bottle status bar with the current bottle percentage.
+   * Updates bottle bar percentage.
    */
   updateBottleBar() {
-    let percentage = (this.collectedBottles / this.totalBottles) * 100;
-    this.bottleBar.setPercentage(percentage);
-  }
-
-  /**
-   * Plays the bottle collection sound effect.
-   */
-  playBottleSound() {
-    this.bottleCollectSound.currentTime = 0;
-    this.bottleCollectSound.play().catch(() => {});
-  }
-
-  /**
-   * Checks for collisions between thrown bottles and enemies.
-   */
-  checkThrowableObjectCollisions() {
-    this.throwableObjects.forEach((bottle, bottleIndex) => {
-      this.checkBottleHitEndboss(bottle, bottleIndex);
-    });
-  }
-
-  /**
-   * Checks if a thrown bottle hits the endboss.
-   * @param {ThrowableObject} bottle - The bottle to check.
-   * @param {number} bottleIndex - The index of the bottle in the array.
-   */
-  checkBottleHitEndboss(bottle, bottleIndex) {
-    this.level.enemies.forEach((enemy) => {
-      if (enemy instanceof Endboss && bottle.isColliding(enemy)) {
-        this.hitEndboss(bottleIndex, enemy);
-      }
-    });
-  }
-
-  /**
-   * Handles hitting the endboss with a bottle.
-   * @param {number} bottleIndex - The index of the bottle that hit.
-   * @param {Endboss} enemy - The endboss that was hit.
-   */
-  hitEndboss(bottleIndex, enemy) {
-    this.splashBottle(bottleIndex);
-    this.damageEndboss(enemy);
-  }
-
-  /**
-   * Splashes bottle and removes it after delay.
-   * @param {number} bottleIndex - The index of the bottle
-   */
-  splashBottle(bottleIndex) {
-    const bottle = this.throwableObjects[bottleIndex];
-    bottle.splash();
-    setTimeout(() => {
-      this.throwableObjects.splice(bottleIndex, 1);
-    }, 200);
-  }
-
-  /**
-   * Applies damage to the endboss and plays hit sound.
-   * @param {Endboss} endboss - The endboss to damage.
-   */
-  damageEndboss(endboss) {
-    endboss.hit();
-    this.updateEndbossBar(endboss);
-    this.playEndbossHitSound();
-  }
-
-  /**
-   * Updates endboss health bar.
-   * @param {Endboss} endboss - The endboss
-   */
-  updateEndbossBar(endboss) {
-    this.endbossBar.setPercentage(endboss.energy);
-  }
-
-  /**
-   * Plays endboss hit sound.
-   */
-  playEndbossHitSound() {
-    this.endbossHitSound.currentTime = 0;
-    this.endbossHitSound.play().catch(() => {});
-  }
-
-  /**
-   * Main draw loop that renders the game on every animation frame.
-   */
-  draw() {
-    this.renderCurrentScreen();
-    requestAnimationFrame(() => this.draw());
-  }
-
-  /**
-   * Renders the appropriate screen based on game state.
-   */
-  renderCurrentScreen() {
-    if (!this.gameStarted) {
-      this.drawStartScreen();
-    } else if (this.isPaused) {
-      this.drawPauseScreen();
-    } else {
-      this.renderGameWorld();
-    }
-  }
-
-  /**
-   * Renders the main game world including all objects and UI elements.
-   */
-  renderGameWorld() {
-    this.clearCanvas();
-    this.renderBackground();
-    this.renderStatusBars();
-    this.renderMainGameContent();
-    this.renderEndScreens();
-  }
-
-  /**
-   * Clears the canvas for new frame.
-   */
-  clearCanvas() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-  }
-
-  /**
-   * Renders the background objects with camera translation.
-   */
-  renderBackground() {
-    this.ctx.translate(this.camera_x, 0);
-    this.addObjectsToMap(this.level.backgroundObjects);
-    this.ctx.translate(-this.camera_x, 0);
-  }
-
-  /**
-   * Renders the main game content with camera translation.
-   */
-  renderMainGameContent() {
-    this.ctx.translate(this.camera_x, 0);
-    this.renderGameObjects();
-    this.ctx.translate(-this.camera_x, 0);
-  }
-
-  /**
-   * Renders all status bars (health, coins, bottles, endboss).
-   */
-  renderStatusBars() {
-    this.addToMap(this.healthBar);
-    this.addToMap(this.coinBar);
-    this.addToMap(this.bottleBar);
-    this.renderEndbossBar();
-  }
-
-  /**
-   * Renders the endboss health bar if the endboss is visible.
-   */
-  renderEndbossBar() {
-    if (this.isEndbossVisible()) {
-      this.showEndbossBar();
-    }
-  }
-
-  /**
-   * Shows endboss bar and plays warning sound.
-   */
-  showEndbossBar() {
-    this.addToMap(this.endbossBar);
-    this.playEndbossWarningSound();
-  }
-
-  /**
-   * Plays the endboss warning sound once when first visible.
-   */
-  playEndbossWarningSound() {
-    if (!this.endbossSoundPlayed) {
-      this.endbossWarningSound.play().catch(() => {});
-      this.endbossSoundPlayed = true;
-    }
-  }
-
-  /**
-   * Renders all game objects (character, clouds, enemies, items).
-   */
-  renderGameObjects() {
-    this.addToMap(this.character);
-    this.renderEnvironmentObjects();
-    this.renderCollectibles();
-  }
-
-  /**
-   * Renders environment objects.
-   */
-  renderEnvironmentObjects() {
-    this.addObjectsToMap(this.level.clouds);
-    this.addObjectsToMap(this.level.enemies);
-  }
-
-  /**
-   * Renders collectible items.
-   */
-  renderCollectibles() {
-    this.addObjectsToMap(this.level.coins);
-    this.addObjectsToMap(this.level.bottles);
-    this.addObjectsToMap(this.throwableObjects);
-  }
-
-  /**
-   * Renders the win or lose end screen if game is over.
-   */
-  renderEndScreens() {
-    if (this.gameWon) {
-      this.drawEndScreen(this.youWonImage);
-    } else if (this.gameLost) {
-      this.drawEndScreen(this.youLostImage);
-    }
-  }
-
-  /**
-   * Adds multiple objects to the map for rendering.
-   * @param {DrawableObject[]} objects - Array of objects to render.
-   */
-  addObjectsToMap(objects) {
-    objects.forEach((o) => {
-      this.addToMap(o);
-    });
-  }
-
-  /**
-   * Adds a single object to the map and handles image flipping if needed.
-   * @param {DrawableObject} mo - The movable object to render.
-   */
-  addToMap(mo) {
-    this.handleImageFlipping(mo);
-    this.drawObject(mo);
-  }
-
-  /**
-   * Handles image flipping for object.
-   * @param {DrawableObject} mo - The object
-   */
-  handleImageFlipping(mo) {
-    if (mo.otherDirection) {
-      this.flipImage(mo);
-      mo.draw(this.ctx);
-      mo.drawFrame(this.ctx);
-      this.flipImageBack(mo);
-    }
-  }
-
-  /**
-   * Draws object if not flipped.
-   * @param {DrawableObject} mo - The object
-   */
-  drawObject(mo) {
-    if (!mo.otherDirection) {
-      mo.draw(this.ctx);
-      mo.drawFrame(this.ctx);
-    }
-  }
-
-  /**
-   * Flips an image horizontally for rendering in the opposite direction.
-   * @param {DrawableObject} mo - The object to flip.
-   */
-  flipImage(mo) {
-    this.ctx.save();
-    this.ctx.translate(mo.width, 0);
-    this.ctx.scale(-1, 1);
-    mo.x = mo.x * -1;
-  }
-
-  /**
-   * Restores the canvas state after flipping an image.
-   * @param {DrawableObject} mo - The object to restore.
-   */
-  flipImageBack(mo) {
-    mo.x = mo.x * -1;
-    this.ctx.restore();
-  }
-
-  /**
-   * Removes bottles that are too old or out of bounds.
-   */
-  removeOldBottles() {
-    this.throwableObjects = this.throwableObjects.filter(
-      (bottle) => !this.shouldRemoveBottle(bottle),
+    this.bottleBar.setPercentage(
+      (this.bottlesCollectedCount / this.totalBottles) * 100,
     );
   }
 
   /**
-   * Determines if a bottle should be removed based on age or position.
-   * @param {ThrowableObject} bottle - The bottle to check.
-   * @returns {boolean} True if bottle should be removed.
-   */
-  shouldRemoveBottle(bottle) {
-    let age = Date.now() - bottle.creationTime;
-    return bottle.y >= 380 || age > 3000 || bottle.x > 3000;
-  }
-
-  /**
-   * Checks the overall game status for win or loss conditions.
+   * Checks game status for win/lose conditions.
    */
   checkGameStatus() {
     this.checkEndbossDefeat();
@@ -942,348 +342,155 @@ class World {
   }
 
   /**
-   * Checks if the endboss has been defeated and triggers win condition.
+   * Checks if endboss is defeated (win condition).
    */
   checkEndbossDefeat() {
     const endboss = this.findEndboss();
-    if (this.isEndbossDefeated(endboss)) {
-      this.triggerWinCondition();
+    if (this.isEndbossDefeated(endboss) && !this.endbossDefeated) {
+      this.endbossDefeated = true;
+      endboss.die();
+      setTimeout(() => {
+        this.triggerWinCondition();
+      }, 2000);
     }
   }
 
   /**
-   * Finds the endboss enemy.
-   * @returns {Endboss|undefined} The endboss or undefined
+   * Finds the endboss in the level.
+   * @returns {Endboss|undefined} The endboss.
    */
   findEndboss() {
-    return this.level.enemies.find((e) => e instanceof Endboss);
+    return this.level.enemies.find((enemy) => enemy instanceof Endboss);
   }
 
   /**
    * Checks if endboss is defeated.
-   * @param {Endboss} endboss - The endboss
-   * @returns {boolean} True if defeated
+   * @param {Endboss|undefined} endboss - The endboss.
+   * @returns {boolean} True if defeated.
    */
   isEndbossDefeated(endboss) {
-    return endboss && endboss.isDead && !this.gameWon;
+    return endboss && endboss.energy <= 0;
   }
 
   /**
-   * Triggers win condition.
+   * Triggers win condition and ends game.
    */
   triggerWinCondition() {
     this.gameWon = true;
-    this.stopGameMusic();
     this.winnerSound.play().catch(() => {});
+    this.showEndScreen(this.youWonImage);
   }
 
   /**
-   * Stops all game music and warning sounds.
-   */
-  stopGameMusic() {
-    this.gameMusicLoop.pause();
-    this.endbossWarningSound.pause();
-  }
-
-  /**
-   * Checks if the player has died and triggers game over.
+   * Checks if character is dead (lose condition).
    */
   checkPlayerDeath() {
-    if (this.isPlayerDead()) {
+    if (this.character.isDead()) {
       this.triggerGameOver();
     }
   }
 
   /**
-   * Checks if player is dead.
-   * @returns {boolean} True if dead
+   * Checks if character runs out of bottles before endboss dies.
    */
-  isPlayerDead() {
-    return this.character.energy <= 0 && !this.gameLost;
+  checkBottleDepletion() {
+    if (this.isBottleDepleted()) {
+      this.triggerGameOver();
+    }
   }
 
   /**
-   * Triggers game over.
+   * Checks if bottles are depleted and endboss alive.
+   * @returns {boolean} True if depleted.
+   */
+  isBottleDepleted() {
+    const endboss = this.findEndboss();
+    return (
+      this.bottlesCollectedCount === 0 &&
+      this.level.bottles.length === 0 &&
+      endboss &&
+      endboss.energy > 0 &&
+      this.renderer.isEndbossVisible()
+    );
+  }
+
+  /**
+   * Triggers game over and ends game.
    */
   triggerGameOver() {
     this.gameLost = true;
-    this.gameMusicLoop.pause();
-    this.playGameOverSounds();
+    this.audio.playGameOverSounds();
+    this.showEndScreen(this.youLostImage);
   }
 
   /**
-   * Plays the game over sound effects.
+   * Ends the game and stops all intervals.
    */
-  playGameOverSounds() {
-    this.gameOverSound1.play().catch(() => {});
-    this.gameOverSound2.play().catch(() => {});
+  endGame() {
+    this.gameIsOver = true;
+    this.chickensCanMove = false;
+    clearInterval(this.gameLoopIntervalId);
+    clearInterval(this.chickenSpawnInterval);
+    if (this.animationFrameId) {
+      cancelAnimationFrame(this.animationFrameId);
+    }
+    this.audio.stopGameMusic();
   }
 
   /**
-   * Checks if the player has run out of bottles and triggers game over.
+   * Shows the end screen (win or lose).
+   * @param {HTMLImageElement} image - The end screen image.
    */
-  checkBottleDepletion() {
-    if (this.hasNoBottlesLeft()) {
-      this.triggerGameOver();
+  showEndScreen(image) {
+    setTimeout(() => {
+      this.renderer.drawEndScreen(image);
+      this.endGame();
+    }, 1000);
+  }
+
+  /**
+   * Main draw method, renders the game world.
+   */
+  draw() {
+    this.renderer.draw();
+    if (this.isPaused && this.gameStarted) {
+      this.renderer.drawPauseScreen();
+    }
+    if (!this.gameIsOver) {
+      this.animationFrameId = requestAnimationFrame(() => this.draw());
     }
   }
 
   /**
-   * Checks if player has no bottles left.
-   * @returns {boolean} True if no bottles
-   */
-  hasNoBottlesLeft() {
-    return this.noBottlesAvailable() && !this.gameLost && !this.gameWon;
-  }
-
-  /**
-   * Checks if there are no bottles available to throw.
-   * @returns {boolean} True if no bottles are available.
-   */
-  noBottlesAvailable() {
-    return this.collectedBottles === 0 && this.level.bottles.length === 0;
-  }
-
-  /**
-   * Draws the end screen with the given image and buttons.
-   * @param {Image} image - The end screen image to display.
-   */
-  drawEndScreen(image) {
-    this.drawCenteredImage(image);
-    this.drawRestartButton();
-    this.drawMainMenuButton();
-  }
-
-  /**
-   * Draws a centered image on the canvas.
-   * @param {Image} image - The image to draw.
-   */
-  drawCenteredImage(image) {
-    let x = (this.canvas.width - 720) / 2;
-    let y = (this.canvas.height - 480) / 2;
-    this.ctx.drawImage(image, x, y, 720, 480);
-  }
-
-  /**
-   * Draws the restart button on the end screen.
-   */
-  drawRestartButton() {
-    this.drawRestartButtonRect();
-    this.drawRestartButtonText();
-  }
-
-  /**
-   * Draws rectangular background for restart button.
-   */
-  drawRestartButtonRect() {
-    this.ctx.fillStyle = "rgba(255, 165, 0, 0.9)";
-    this.ctx.fillRect(
-      this.canvas.width / 2 - 100,
-      this.canvas.height - 100,
-      200,
-      50,
-    );
-  }
-
-  /**
-   * Draws text for restart button.
-   */
-  drawRestartButtonText() {
-    this.ctx.fillStyle = "white";
-    this.ctx.font = "bold 24px Arial";
-    this.ctx.textAlign = "center";
-    this.ctx.fillText(
-      "NEUSTART",
-      this.canvas.width / 2,
-      this.canvas.height - 70,
-    );
-  }
-
-  /**
-   * Draws the main menu button on the end screen.
-   */
-  drawMainMenuButton() {
-    this.drawMainMenuRect();
-    this.drawMainMenuText();
-  }
-
-  /**
-   * Draws the rectangular background for the main menu button.
-   */
-  drawMainMenuRect() {
-    this.ctx.fillStyle = "rgba(50, 150, 255, 0.9)";
-    this.ctx.fillRect(
-      this.canvas.width / 2 - 100,
-      this.canvas.height - 170,
-      200,
-      50,
-    );
-  }
-
-  /**
-   * Draws the text for the main menu button.
-   */
-  drawMainMenuText() {
-    this.ctx.fillStyle = "white";
-    this.ctx.font = "bold 24px Arial";
-    this.ctx.textAlign = "center";
-    this.ctx.fillText(
-      "HAUPTMENÜ",
-      this.canvas.width / 2,
-      this.canvas.height - 140,
-    );
-  }
-
-  /**
-   * Draws the start screen with instructions.
-   */
-  drawStartScreen() {
-    this.drawFullScreenImage(this.startScreenImage);
-    this.drawStartText();
-  }
-
-  /**
-   * Draws an image that fills the entire canvas.
-   * @param {Image} image - The image to draw.
-   */
-  drawFullScreenImage(image) {
-    this.ctx.drawImage(image, 0, 0, this.canvas.width, this.canvas.height);
-  }
-
-  /**
-   * Draws the start text on the start screen if not on touch device.
-   */
-  drawStartText() {
-    if (!this.isTouchDevice()) {
-      this.renderStartInstructions();
-    }
-  }
-
-  /**
-   * Renders start instructions text.
-   */
-  renderStartInstructions() {
-    this.ctx.fillStyle = "white";
-    this.ctx.font = "30px Arial";
-    this.ctx.textAlign = "center";
-    this.ctx.fillText(
-      "Drücke ENTER zum Starten",
-      this.canvas.width / 2,
-      this.canvas.height - 50,
-    );
-  }
-
-  /**
-   * Checks if the current device supports touch input.
-   * @returns {boolean} True if device has touch capability.
-   */
-  isTouchDevice() {
-    return "ontouchstart" in window || navigator.maxTouchPoints > 0;
-  }
-
-  /**
-   * Draws the pause screen overlay with pause text.
-   */
-  drawPauseScreen() {
-    this.drawDarkOverlay();
-    this.drawPauseText();
-    this.drawContinueText();
-  }
-
-  /**
-   * Draws a dark semi-transparent overlay on the canvas.
-   */
-  drawDarkOverlay() {
-    this.ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-  }
-
-  /**
-   * Draws the "PAUSED" text on the pause screen.
-   */
-  drawPauseText() {
-    this.setupPauseTextStyle();
-    this.renderPauseText();
-  }
-
-  /**
-   * Sets up text style for pause screen.
-   */
-  setupPauseTextStyle() {
-    this.ctx.fillStyle = "white";
-    this.ctx.font = "bold 60px Arial";
-    this.ctx.textAlign = "center";
-  }
-
-  /**
-   * Renders pause text.
-   */
-  renderPauseText() {
-    this.ctx.fillText(
-      "PAUSIERT",
-      this.canvas.width / 2,
-      this.canvas.height / 2 - 20,
-    );
-  }
-
-  /**
-   * Draws the continue instruction text on the pause screen.
-   */
-  drawContinueText() {
-    this.ctx.font = "24px Arial";
-    this.ctx.fillText(
-      "Drücke ESC oder P zum Fortfahren",
-      this.canvas.width / 2,
-      this.canvas.height / 2 + 40,
-    );
-  }
-
-  /**
-   * Toggles the pause state of the game.
+   * Toggles game pause state.
    */
   togglePause() {
-    if (!this.gameStarted || this.gameWon || this.gameLost) return;
     this.isPaused = !this.isPaused;
-    this.handlePauseMusic();
-  }
-
-  /**
-   * Handles pausing or resuming the game music.
-   */
-  handlePauseMusic() {
+    this.audio.handlePauseMusic();
     if (this.isPaused) {
-      this.gameMusicLoop.pause();
+      this.pauseCharacterAndEnemies();
     } else {
-      if (!this.soundMuted) {
-        this.gameMusicLoop.play().catch(() => {});
-      }
+      this.resumeCharacterAndEnemies();
     }
   }
 
   /**
-   * Checks if the endboss is currently visible in the camera view.
-   * @returns {boolean} True if endboss is visible.
+   * Pauses character and enemy animations.
    */
-  isEndbossVisible() {
-    let endboss = this.level.enemies.find((e) => e instanceof Endboss);
-    if (endboss) {
-      return this.isEnemyInCamera(endboss);
-    }
-    return false;
+  pauseCharacterAndEnemies() {
+    this.character.pauseAnimation();
+    this.level.enemies.forEach((enemy) => {
+      if (enemy.pauseAnimation) enemy.pauseAnimation();
+    });
   }
 
   /**
-   * Checks if an enemy is within the camera's visible area.
-   * @param {MovableObject} enemy - The enemy to check.
-   * @returns {boolean} True if enemy is in camera view.
+   * Resumes character and enemy animations.
    */
-  isEnemyInCamera(enemy) {
-    let endbossRightEdge = enemy.x + enemy.width;
-    let endbossLeftEdge = enemy.x;
-    let cameraLeftEdge = -this.camera_x;
-    let cameraRightEdge = -this.camera_x + this.canvas.width;
-    return (
-      endbossRightEdge > cameraLeftEdge && endbossLeftEdge < cameraRightEdge
-    );
+  resumeCharacterAndEnemies() {
+    this.character.resumeAnimation();
+    this.level.enemies.forEach((enemy) => {
+      if (enemy.resumeAnimation) enemy.resumeAnimation();
+    });
   }
 }

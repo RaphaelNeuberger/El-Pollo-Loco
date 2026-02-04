@@ -21,6 +21,7 @@ class ThrowableObject extends MovableObject {
   ];
 
   isSplashing = false;
+  hasHit = false;
 
   /**
    * Creates a throwable object at specified position.
@@ -84,6 +85,7 @@ class ThrowableObject extends MovableObject {
    */
   splash() {
     this.isSplashing = true;
+    this.hasHit = true;
     this.speedY = 0;
     this.speedX = 0;
   }
