@@ -143,7 +143,6 @@ class World {
     // Try to play sound (only if user has interacted)
     this.introSound.play().catch(() => {
       // Ignore error if browser blocks auto-play
-      console.log("Audio will only play after user interaction");
     });
   }
 
@@ -191,9 +190,25 @@ class World {
    * @param {number} volume - The volume level to set.
    */
   setDeathAndCombatSoundVolumes(volume) {
+    this.setWinLoseSoundVolumes(volume);
+    this.setCombatSoundVolumes(volume);
+  }
+
+  /**
+   * Sets the volume for win/lose sounds.
+   * @param {number} volume - The volume level to set.
+   */
+  setWinLoseSoundVolumes(volume) {
     this.winnerSound.volume = volume;
     this.gameOverSound1.volume = volume;
     this.gameOverSound2.volume = volume;
+  }
+
+  /**
+   * Sets the volume for combat sounds.
+   * @param {number} volume - The volume level to set.
+   */
+  setCombatSoundVolumes(volume) {
     this.jumpKillSound.volume = volume;
     this.chickenKillSound.volume = volume;
     this.smallChickenHitSound.volume = volume;
@@ -338,18 +353,47 @@ class World {
    * Checks if the player is throwing a bottle and creates a throwable object.
    */
   checkThrowObjects() {
-    if (this.keyboard.S && this.collectedBottles > 0) {
-      let bottle = new ThrowableObject(
-        this.character.x + 100,
-        this.character.y + 100,
-        this.character.otherDirection,
-      );
-      this.throwableObjects.push(bottle);
-      this.collectedBottles--;
-      let percentage = (this.collectedBottles / this.totalBottles) * 100;
-      this.bottleBar.setPercentage(percentage);
-      this.keyboard.S = false; // Prevent multiple throws
+    if (this.canThrowBottle()) {
+      this.throwBottle();
     }
+  }
+
+  /**
+   * Checks if player can throw a bottle.
+   * @returns {boolean} True if can throw
+   */
+  canThrowBottle() {
+    return this.keyboard.S && this.collectedBottles > 0;
+  }
+
+  /**
+   * Throws a bottle and updates inventory.
+   */
+  throwBottle() {
+    this.createThrowableBottle();
+    this.decreaseBottleCount();
+    this.keyboard.S = false;
+  }
+
+  /**
+   * Creates and adds throwable bottle.
+   */
+  createThrowableBottle() {
+    const bottle = new ThrowableObject(
+      this.character.x + 100,
+      this.character.y + 100,
+      this.character.otherDirection,
+    );
+    this.throwableObjects.push(bottle);
+  }
+
+  /**
+   * Decreases bottle count and updates UI.
+   */
+  decreaseBottleCount() {
+    this.collectedBottles--;
+    const percentage = (this.collectedBottles / this.totalBottles) * 100;
+    this.bottleBar.setPercentage(percentage);
   }
 
   /**
@@ -459,10 +503,18 @@ class World {
    */
   handleJumpKill(enemy) {
     if (!enemy.isDead) {
-      enemy.kill();
-      this.character.speedY = 18;
-      this.playJumpKillSound(enemy);
+      this.executeJumpKill(enemy);
     }
+  }
+
+  /**
+   * Executes jump kill and plays sound.
+   * @param {Chicken|ChickenSmall} enemy - The enemy being killed.
+   */
+  executeJumpKill(enemy) {
+    enemy.kill();
+    this.character.speedY = 18;
+    this.playJumpKillSound(enemy);
   }
 
   /**
@@ -471,12 +523,26 @@ class World {
    */
   playJumpKillSound(enemy) {
     if (enemy instanceof ChickenSmall) {
-      this.jumpKillSound.currentTime = 0;
-      this.jumpKillSound.play().catch(() => {});
+      this.playSmallChickenKillSound();
     } else {
-      this.chickenKillSound.currentTime = 0;
-      this.chickenKillSound.play().catch(() => {});
+      this.playNormalChickenKillSound();
     }
+  }
+
+  /**
+   * Plays small chicken kill sound.
+   */
+  playSmallChickenKillSound() {
+    this.jumpKillSound.currentTime = 0;
+    this.jumpKillSound.play().catch(() => {});
+  }
+
+  /**
+   * Plays normal chicken kill sound.
+   */
+  playNormalChickenKillSound() {
+    this.chickenKillSound.currentTime = 0;
+    this.chickenKillSound.play().catch(() => {});
   }
 
   /**
@@ -484,8 +550,23 @@ class World {
    * @param {MovableObject} enemy - The enemy that hit the character.
    */
   handleNormalCollision(enemy) {
+    this.damageCharacter();
+    this.playEnemyHitSound(enemy);
+  }
+
+  /**
+   * Damages character and updates health bar.
+   */
+  damageCharacter() {
     this.character.hit();
     this.healthBar.setPercentage(this.character.energy);
+  }
+
+  /**
+   * Plays sound when enemy hits character.
+   * @param {MovableObject} enemy - The enemy
+   */
+  playEnemyHitSound(enemy) {
     if (enemy instanceof ChickenSmall) {
       this.smallChickenHitSound.currentTime = 0;
       this.smallChickenHitSound.play().catch(() => {});
@@ -596,12 +677,20 @@ class World {
    * @param {Endboss} enemy - The endboss that was hit.
    */
   hitEndboss(bottleIndex, enemy) {
-    let bottle = this.throwableObjects[bottleIndex];
+    this.splashBottle(bottleIndex);
+    this.damageEndboss(enemy);
+  }
+
+  /**
+   * Splashes bottle and removes it after delay.
+   * @param {number} bottleIndex - The index of the bottle
+   */
+  splashBottle(bottleIndex) {
+    const bottle = this.throwableObjects[bottleIndex];
     bottle.splash();
     setTimeout(() => {
       this.throwableObjects.splice(bottleIndex, 1);
     }, 200);
-    this.damageEndboss(enemy);
   }
 
   /**
@@ -610,7 +699,22 @@ class World {
    */
   damageEndboss(endboss) {
     endboss.hit();
+    this.updateEndbossBar(endboss);
+    this.playEndbossHitSound();
+  }
+
+  /**
+   * Updates endboss health bar.
+   * @param {Endboss} endboss - The endboss
+   */
+  updateEndbossBar(endboss) {
     this.endbossBar.setPercentage(endboss.energy);
+  }
+
+  /**
+   * Plays endboss hit sound.
+   */
+  playEndbossHitSound() {
     this.endbossHitSound.currentTime = 0;
     this.endbossHitSound.play().catch(() => {});
   }
@@ -640,11 +744,18 @@ class World {
    * Renders the main game world including all objects and UI elements.
    */
   renderGameWorld() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.clearCanvas();
     this.renderBackground();
     this.renderStatusBars();
     this.renderMainGameContent();
     this.renderEndScreens();
+  }
+
+  /**
+   * Clears the canvas for new frame.
+   */
+  clearCanvas() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
   /**
@@ -680,9 +791,16 @@ class World {
    */
   renderEndbossBar() {
     if (this.isEndbossVisible()) {
-      this.addToMap(this.endbossBar);
-      this.playEndbossWarningSound();
+      this.showEndbossBar();
     }
+  }
+
+  /**
+   * Shows endboss bar and plays warning sound.
+   */
+  showEndbossBar() {
+    this.addToMap(this.endbossBar);
+    this.playEndbossWarningSound();
   }
 
   /**
@@ -700,8 +818,22 @@ class World {
    */
   renderGameObjects() {
     this.addToMap(this.character);
+    this.renderEnvironmentObjects();
+    this.renderCollectibles();
+  }
+
+  /**
+   * Renders environment objects.
+   */
+  renderEnvironmentObjects() {
     this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.level.enemies);
+  }
+
+  /**
+   * Renders collectible items.
+   */
+  renderCollectibles() {
     this.addObjectsToMap(this.level.coins);
     this.addObjectsToMap(this.level.bottles);
     this.addObjectsToMap(this.throwableObjects);
@@ -733,15 +865,31 @@ class World {
    * @param {DrawableObject} mo - The movable object to render.
    */
   addToMap(mo) {
+    this.handleImageFlipping(mo);
+    this.drawObject(mo);
+  }
+
+  /**
+   * Handles image flipping for object.
+   * @param {DrawableObject} mo - The object
+   */
+  handleImageFlipping(mo) {
     if (mo.otherDirection) {
       this.flipImage(mo);
-    }
-
-    mo.draw(this.ctx);
-    mo.drawFrame(this.ctx);
-
-    if (mo.otherDirection) {
+      mo.draw(this.ctx);
+      mo.drawFrame(this.ctx);
       this.flipImageBack(mo);
+    }
+  }
+
+  /**
+   * Draws object if not flipped.
+   * @param {DrawableObject} mo - The object
+   */
+  drawObject(mo) {
+    if (!mo.otherDirection) {
+      mo.draw(this.ctx);
+      mo.drawFrame(this.ctx);
     }
   }
 
@@ -797,12 +945,36 @@ class World {
    * Checks if the endboss has been defeated and triggers win condition.
    */
   checkEndbossDefeat() {
-    let endboss = this.level.enemies.find((e) => e instanceof Endboss);
-    if (endboss && endboss.isDead && !this.gameWon) {
-      this.gameWon = true;
-      this.stopGameMusic();
-      this.winnerSound.play().catch(() => {});
+    const endboss = this.findEndboss();
+    if (this.isEndbossDefeated(endboss)) {
+      this.triggerWinCondition();
     }
+  }
+
+  /**
+   * Finds the endboss enemy.
+   * @returns {Endboss|undefined} The endboss or undefined
+   */
+  findEndboss() {
+    return this.level.enemies.find((e) => e instanceof Endboss);
+  }
+
+  /**
+   * Checks if endboss is defeated.
+   * @param {Endboss} endboss - The endboss
+   * @returns {boolean} True if defeated
+   */
+  isEndbossDefeated(endboss) {
+    return endboss && endboss.isDead && !this.gameWon;
+  }
+
+  /**
+   * Triggers win condition.
+   */
+  triggerWinCondition() {
+    this.gameWon = true;
+    this.stopGameMusic();
+    this.winnerSound.play().catch(() => {});
   }
 
   /**
@@ -817,11 +989,26 @@ class World {
    * Checks if the player has died and triggers game over.
    */
   checkPlayerDeath() {
-    if (this.character.energy <= 0 && !this.gameLost) {
-      this.gameLost = true;
-      this.gameMusicLoop.pause();
-      this.playGameOverSounds();
+    if (this.isPlayerDead()) {
+      this.triggerGameOver();
     }
+  }
+
+  /**
+   * Checks if player is dead.
+   * @returns {boolean} True if dead
+   */
+  isPlayerDead() {
+    return this.character.energy <= 0 && !this.gameLost;
+  }
+
+  /**
+   * Triggers game over.
+   */
+  triggerGameOver() {
+    this.gameLost = true;
+    this.gameMusicLoop.pause();
+    this.playGameOverSounds();
   }
 
   /**
@@ -836,11 +1023,17 @@ class World {
    * Checks if the player has run out of bottles and triggers game over.
    */
   checkBottleDepletion() {
-    if (this.noBottlesAvailable() && !this.gameLost && !this.gameWon) {
-      this.gameLost = true;
-      this.gameMusicLoop.pause();
-      this.playGameOverSounds();
+    if (this.hasNoBottlesLeft()) {
+      this.triggerGameOver();
     }
+  }
+
+  /**
+   * Checks if player has no bottles left.
+   * @returns {boolean} True if no bottles
+   */
+  hasNoBottlesLeft() {
+    return this.noBottlesAvailable() && !this.gameLost && !this.gameWon;
   }
 
   /**
@@ -875,14 +1068,14 @@ class World {
    * Draws the restart button on the end screen.
    */
   drawRestartButton() {
-    this.drawButtonRect();
-    this.drawButtonText();
+    this.drawRestartButtonRect();
+    this.drawRestartButtonText();
   }
 
   /**
-   * Draws the rectangular background for the restart button.
+   * Draws rectangular background for restart button.
    */
-  drawButtonRect() {
+  drawRestartButtonRect() {
     this.ctx.fillStyle = "rgba(255, 165, 0, 0.9)";
     this.ctx.fillRect(
       this.canvas.width / 2 - 100,
@@ -893,9 +1086,9 @@ class World {
   }
 
   /**
-   * Draws the text for the restart button.
+   * Draws text for restart button.
    */
-  drawButtonText() {
+  drawRestartButtonText() {
     this.ctx.fillStyle = "white";
     this.ctx.font = "bold 24px Arial";
     this.ctx.textAlign = "center";
@@ -962,15 +1155,22 @@ class World {
    */
   drawStartText() {
     if (!this.isTouchDevice()) {
-      this.ctx.fillStyle = "white";
-      this.ctx.font = "30px Arial";
-      this.ctx.textAlign = "center";
-      this.ctx.fillText(
-        "Drücke ENTER zum Starten",
-        this.canvas.width / 2,
-        this.canvas.height - 50,
-      );
+      this.renderStartInstructions();
     }
+  }
+
+  /**
+   * Renders start instructions text.
+   */
+  renderStartInstructions() {
+    this.ctx.fillStyle = "white";
+    this.ctx.font = "30px Arial";
+    this.ctx.textAlign = "center";
+    this.ctx.fillText(
+      "Drücke ENTER zum Starten",
+      this.canvas.width / 2,
+      this.canvas.height - 50,
+    );
   }
 
   /**
@@ -1002,9 +1202,23 @@ class World {
    * Draws the "PAUSED" text on the pause screen.
    */
   drawPauseText() {
+    this.setupPauseTextStyle();
+    this.renderPauseText();
+  }
+
+  /**
+   * Sets up text style for pause screen.
+   */
+  setupPauseTextStyle() {
     this.ctx.fillStyle = "white";
     this.ctx.font = "bold 60px Arial";
     this.ctx.textAlign = "center";
+  }
+
+  /**
+   * Renders pause text.
+   */
+  renderPauseText() {
     this.ctx.fillText(
       "PAUSIERT",
       this.canvas.width / 2,

@@ -7,12 +7,12 @@ class Endboss extends MovableObject {
   height = 400;
   width = 250;
   y = 55;
-  energy = 100;
+  energy = 200;
   isHurt = false;
   isDead = false;
   isAttacking = false;
   world;
-  speed = 2;
+  speed = 3;
 
   IMAGES_WALKING = [
     "img/4_enemie_boss_chicken/2_alert/G5.png",
@@ -73,8 +73,22 @@ class Endboss extends MovableObject {
    * Loads all image sets for the endboss animations.
    */
   loadAllImages() {
+    this.loadMovementImages();
+    this.loadCombatImages();
+  }
+
+  /**
+   * Loads movement animation images.
+   */
+  loadMovementImages() {
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_ALERT);
+  }
+
+  /**
+   * Loads combat animation images.
+   */
+  loadCombatImages() {
     this.loadImages(this.IMAGES_ATTACK);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
@@ -153,7 +167,7 @@ class Endboss extends MovableObject {
    * @returns {boolean} True if character is nearby.
    */
   isCharacterNearby(distance) {
-    return Math.abs(distance) < 500 && distance > 0;
+    return Math.abs(distance) < 600 && distance > 0;
   }
 
   /**
@@ -163,7 +177,7 @@ class Endboss extends MovableObject {
   moveAndCheckAttack(distance) {
     this.x -= this.speed;
     this.otherDirection = false;
-    if (distance < 150) {
+    if (distance < 200) {
       this.startAttack();
     }
   }
@@ -176,15 +190,16 @@ class Endboss extends MovableObject {
       this.isAttacking = true;
       setTimeout(() => {
         this.isAttacking = false;
-      }, 1000);
+      }, 800);
     }
   }
 
   /**
    * Reduces endboss energy when hit and triggers death or hurt state.
+   * Takes 25 damage per hit (requires 8 out of 10 bottles to defeat).
    */
   hit() {
-    this.energy -= 20;
+    this.energy -= 25;
     if (this.energy <= 0) {
       this.die();
     } else {

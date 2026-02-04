@@ -35,6 +35,28 @@
   </head>
   <body onload="init()">
     <h1>El pollo loco</h1>
+
+    <!-- Start Screen -->
+    <div id="start-screen">
+      <div class="start-content">
+        <h2>El Pollo Loco</h2>
+        <p>Hilf Pepe, den verrückten Hühnern zu entkommen!</p>
+        <button id="start-game-btn" class="btn-primary">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+          Spiel starten
+        </button>
+        <button id="show-controls-btn" class="btn-secondary">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+            <path
+              d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+          </svg>
+          Steuerung anzeigen
+        </button>
+      </div>
+    </div>
+
     <!-- Rotate Device Warning -->
     <div id="rotate-warning">
       <svg width="100" height="100" viewBox="0 0 24 24" fill="white">
@@ -43,8 +65,21 @@
       </svg>
       <p>Bitte drehen Sie Ihr Gerät ins Querformat</p>
     </div>
+
     <div id="canvas-container">
       <canvas id="canvas" width="720" height="480"></canvas>
+
+      <!-- Help Button (in game) -->
+      <button
+        id="help-btn"
+        onclick="toggleControlsOverlay()"
+        title="Steuerung anzeigen (H)">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+          <path
+            d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
+        </svg>
+      </button>
+
       <button id="sound-btn" onclick="toggleSound()" title="Sound An/Aus (M)">
         <svg
           id="sound-icon"
@@ -66,14 +101,6 @@
         </svg>
       </button>
     </div>
-
-    <!-- Mobile Start Button -->
-    <button id="mobile-start-btn" onclick="startGameMobile()">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="white">
-        <path d="M8 5v14l11-7z" />
-      </svg>
-      <span>SPIEL STARTEN</span>
-    </button>
 
     <!-- Mobile Touch Controls -->
     <div id="mobile-controls">
@@ -100,6 +127,65 @@
             <circle cx="12" cy="12" r="8" />
           </svg>
         </button>
+      </div>
+    </div>
+
+    <!-- Controls Overlay -->
+    <div id="controls-overlay" class="overlay">
+      <div class="overlay-content">
+        <button class="overlay-close" onclick="toggleControlsOverlay()">
+          &times;
+        </button>
+        <h2>Steuerung</h2>
+        <div class="controls-section desktop-only">
+          <h3>Desktop:</h3>
+          <div class="controls-grid">
+            <div class="control-item">
+              <span class="key">←</span>
+              <span class="description">Nach links bewegen</span>
+            </div>
+            <div class="control-item">
+              <span class="key">→</span>
+              <span class="description">Nach rechts bewegen</span>
+            </div>
+            <div class="control-item">
+              <span class="key">LEERTASTE</span>
+              <span class="description">Springen</span>
+            </div>
+            <div class="control-item">
+              <span class="key">S</span>
+              <span class="description">Flasche werfen</span>
+            </div>
+            <div class="control-item">
+              <span class="key">F</span>
+              <span class="description">Vollbild</span>
+            </div>
+            <div class="control-item">
+              <span class="key">M</span>
+              <span class="description">Sound An/Aus</span>
+            </div>
+            <div class="control-item">
+              <span class="key">H</span>
+              <span class="description">Hilfe anzeigen</span>
+            </div>
+          </div>
+        </div>
+        <div class="controls-section mobile-only">
+          <h3>Mobile:</h3>
+          <p>Nutze die Buttons am Bildschirmrand:</p>
+          <div class="mobile-controls-preview">
+            <div class="preview-buttons">
+              <span class="preview-btn">◄</span>
+              <span class="preview-btn">►</span>
+              <span>Bewegung</span>
+            </div>
+            <div class="preview-buttons">
+              <span class="preview-btn">▲</span>
+              <span class="preview-btn">●</span>
+              <span>Springen & Werfen</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 

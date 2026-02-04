@@ -95,8 +95,22 @@ class Character extends MovableObject {
    * Loads idle, walking, jumping, hurt, and death animations.
    */
   loadAllImages() {
+    this.loadIdleImages();
+    this.loadActionImages();
+  }
+
+  /**
+   * Loads idle animation images.
+   */
+  loadIdleImages() {
     this.loadImages(this.IMAGES_IDLE);
     this.loadImages(this.IMAGES_LONG_IDLE);
+  }
+
+  /**
+   * Loads action animation images.
+   */
+  loadActionImages() {
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_JUMPING);
     this.loadImages(this.IMAGES_HURT);

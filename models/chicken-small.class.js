@@ -22,6 +22,13 @@ class ChickenSmall extends MovableObject {
   constructor() {
     super().loadImage("img/3_enemies_chicken/chicken_small/1_walk/1_w.png");
     this.loadAllImages();
+    this.initializeSmallChicken();
+  }
+
+  /**
+   * Initializes small chicken position and animation.
+   */
+  initializeSmallChicken() {
     this.setRandomPosition();
     this.animate();
   }
@@ -64,12 +71,15 @@ class ChickenSmall extends MovableObject {
    * @returns {boolean} True if small chicken can move.
    */
   canMove() {
-    return (
-      !this.isDead &&
-      this.world &&
-      this.world.gameStarted &&
-      this.world.chickensCanMove
-    );
+    return !this.isDead && this.isGameActive();
+  }
+
+  /**
+   * Checks if game is active and chickens can move.
+   * @returns {boolean} True if game allows movement
+   */
+  isGameActive() {
+    return this.world && this.world.gameStarted && this.world.chickensCanMove;
   }
 
   /**
@@ -96,10 +106,17 @@ class ChickenSmall extends MovableObject {
    */
   removeFromLevel() {
     if (this.world) {
-      let index = this.world.level.enemies.indexOf(this);
-      if (index > -1) {
-        this.world.level.enemies.splice(index, 1);
-      }
+      this.removeFromEnemyArray();
+    }
+  }
+
+  /**
+   * Removes small chicken from enemy array.
+   */
+  removeFromEnemyArray() {
+    const index = this.world.level.enemies.indexOf(this);
+    if (index > -1) {
+      this.world.level.enemies.splice(index, 1);
     }
   }
 }

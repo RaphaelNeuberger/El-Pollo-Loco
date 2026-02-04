@@ -19,7 +19,7 @@ class EndbossBar extends StatusBar {
   constructor() {
     super();
     this.x = 500; // Positioned at top right
-    this.y = 10;
+    this.y = 70;
     this.loadImages(this.IMAGES);
     this.setPercentage(100);
   }

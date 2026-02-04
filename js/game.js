@@ -12,9 +12,106 @@ function init() {
   canvas = document.getElementById("canvas");
   initLevel();
   createNewWorld();
-  console.log("My Character is", world.character);
   applySavedSoundSettings();
   world.playIntroSound();
+  setupStartScreen();
+  setupControlsOverlay();
+}
+
+/**
+ * Sets up the start screen and its event listeners.
+ */
+function setupStartScreen() {
+  attachStartGameButton();
+  attachShowControlsButton();
+}
+
+/**
+ * Attaches click event to start game button.
+ */
+function attachStartGameButton() {
+  const startGameBtn = document.getElementById("start-game-btn");
+  if (startGameBtn) {
+    startGameBtn.addEventListener("click", () => {
+      hideStartScreen();
+      startGameDesktop();
+    });
+  }
+}
+
+/**
+ * Attaches click event to show controls button.
+ */
+function attachShowControlsButton() {
+  const showControlsBtn = document.getElementById("show-controls-btn");
+  if (showControlsBtn) {
+    showControlsBtn.addEventListener("click", toggleControlsOverlay);
+  }
+}
+
+/**
+ * Hides the start screen with a fade-out animation.
+ */
+function hideStartScreen() {
+  const startScreen = document.getElementById("start-screen");
+  if (startScreen) {
+    startScreen.classList.add("hidden");
+  }
+}
+
+/**
+ * Starts the game on desktop devices.
+ */
+function startGameDesktop() {
+  if (!world || world.gameStarted) {
+    return;
+  }
+  world.startGame();
+  showHelpButton();
+}
+
+/**
+ * Shows the help button during gameplay.
+ */
+function showHelpButton() {
+  const helpBtn = document.getElementById("help-btn");
+  if (helpBtn) {
+    helpBtn.classList.add("visible");
+  }
+}
+
+/**
+ * Sets up the controls overlay and keyboard shortcuts.
+ */
+function setupControlsOverlay() {
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "h" || e.key === "H") {
+      toggleControlsOverlay();
+    }
+    if (e.key === "Escape") {
+      closeControlsOverlay();
+    }
+  });
+}
+
+/**
+ * Toggles the controls overlay visibility.
+ */
+function toggleControlsOverlay() {
+  const overlay = document.getElementById("controls-overlay");
+  if (overlay) {
+    overlay.classList.toggle("active");
+  }
+}
+
+/**
+ * Closes the controls overlay.
+ */
+function closeControlsOverlay() {
+  const overlay = document.getElementById("controls-overlay");
+  if (overlay) {
+    overlay.classList.remove("active");
+  }
 }
 
 /**
@@ -84,8 +181,8 @@ function toggleFullscreen() {
  * @param {HTMLElement} container - The container element to make fullscreen
  */
 function enterFullscreen(container) {
-  container.requestFullscreen().catch((err) => {
-    console.log("Fullscreen error:", err);
+  container.requestFullscreen().catch(() => {
+    // Ignore fullscreen errors
   });
 }
 
@@ -130,18 +227,24 @@ function getSoundIcon() {
  * Starts the game on mobile devices and shows mobile controls.
  */
 function startGameMobile() {
-  if (world && !world.gameStarted) {
-    world.startGame();
-    toggleMobileUI();
+  if (!world) {
+    return;
   }
+  if (world.gameStarted) {
+    return;
+  }
+  world.startGame();
+  toggleMobileUI();
 }
 
 /**
- * Toggles mobile UI elements, hiding start button and showing controls.
+ * Toggles mobile UI elements, showing controls.
  */
 function toggleMobileUI() {
-  document.getElementById("mobile-start-btn").classList.add("hidden");
-  document.getElementById("mobile-controls").classList.add("visible");
+  const controls = document.getElementById("mobile-controls");
+  if (controls) {
+    controls.classList.add("visible");
+  }
 }
 
 document.addEventListener("keydown", (event) => {
@@ -167,8 +270,9 @@ const KEY_MAPPING = {
  * @param {boolean} isPressed - Whether the key is pressed or released
  */
 function handleMovementKeys(event, isPressed) {
-  if (KEY_MAPPING[event.keyCode]) {
-    keyboard[KEY_MAPPING[event.keyCode]] = isPressed;
+  const key = KEY_MAPPING[event.keyCode];
+  if (key) {
+    keyboard[key] = isPressed;
   }
 }
 
@@ -177,10 +281,11 @@ function handleMovementKeys(event, isPressed) {
  * @param {KeyboardEvent} event - The keyboard event
  */
 function handleActionKeys(event) {
-  if (event.keyCode == 70) toggleFullscreen();
-  if (event.keyCode == 77) toggleSound();
-  if (event.keyCode == 13 && world && !world.gameStarted) {
-    startGameFromKeyboard();
+  if (event.keyCode == 70) {
+    toggleFullscreen();
+  }
+  if (event.keyCode == 77) {
+    toggleSound();
   }
 }
 
@@ -208,7 +313,7 @@ function togglePauseIfPossible(event) {
  */
 function startGameFromKeyboard() {
   world.startGame();
-  hideMobileStartButton();
+  toggleMobileUI();
 }
 
 document.addEventListener("keyup", (event) => {
@@ -264,6 +369,7 @@ if (document.readyState === "loading") {
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("canvas");
   canvas.addEventListener("click", handleCanvasClick);
+  canvas.addEventListener("touchstart", handleCanvasTouchStart);
 });
 
 /**
@@ -271,9 +377,51 @@ document.addEventListener("DOMContentLoaded", () => {
  * @param {MouseEvent} e - The mouse event
  */
 function handleCanvasClick(e) {
-  if (world && (world.gameWon || world.gameLost)) {
+  if (isGameOver()) {
     checkRestartButtonClick(e);
   }
+}
+
+/**
+ * Checks if game is over (won or lost).
+ * @returns {boolean} True if game is over
+ */
+function isGameOver() {
+  return world && (world.gameWon || world.gameLost);
+}
+
+/**
+ * Handles touch events on the canvas, checking for button clicks in end screen.
+ * @param {TouchEvent} e - The touch event
+ */
+function handleCanvasTouchStart(e) {
+  if (isGameOver()) {
+    e.preventDefault();
+    processTouchEvent(e);
+  }
+}
+
+/**
+ * Processes touch event and converts to mock click event.
+ * @param {TouchEvent} e - The touch event
+ */
+function processTouchEvent(e) {
+  if (e.touches.length > 0) {
+    const mockEvent = createMockEvent(e.touches[0]);
+    checkRestartButtonClick(mockEvent);
+  }
+}
+
+/**
+ * Creates a mock click event from touch.
+ * @param {Touch} touch - The touch object
+ * @returns {Object} Mock event with clientX and clientY
+ */
+function createMockEvent(touch) {
+  return {
+    clientX: touch.clientX,
+    clientY: touch.clientY,
+  };
 }
 
 /**
@@ -283,7 +431,7 @@ function handleCanvasClick(e) {
 function checkRestartButtonClick(e) {
   const canvas = document.getElementById("canvas");
   const coords = getCanvasCoordinates(e, canvas);
-  handleButtonClick(canvas, coords);
+  processButtonClick(canvas, coords);
 }
 
 /**
@@ -294,18 +442,41 @@ function checkRestartButtonClick(e) {
  */
 function getCanvasCoordinates(e, canvas) {
   const rect = canvas.getBoundingClientRect();
-  return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  const x = (e.clientX - rect.left) * scaleX;
+  const y = (e.clientY - rect.top) * scaleY;
+  return { x, y };
 }
 
 /**
- * Handles button clicks based on canvas coordinates.
+ * Processes button clicks based on canvas coordinates.
  * @param {HTMLCanvasElement} canvas - The canvas element
  * @param {Object} coords - Object with x and y coordinates
  */
-function handleButtonClick(canvas, coords) {
+function processButtonClick(canvas, coords) {
+  checkRestartClick(canvas, coords);
+  checkMainMenuClick(canvas, coords);
+}
+
+/**
+ * Checks and handles restart button click.
+ * @param {HTMLCanvasElement} canvas - The canvas element
+ * @param {Object} coords - Object with x and y coordinates
+ */
+function checkRestartClick(canvas, coords) {
   if (isInsideRestartButton(canvas, coords.x, coords.y)) {
     restartGame();
-  } else if (isInsideMainMenuButton(canvas, coords.x, coords.y)) {
+  }
+}
+
+/**
+ * Checks and handles main menu button click.
+ * @param {HTMLCanvasElement} canvas - The canvas element
+ * @param {Object} coords - Object with x and y coordinates
+ */
+function checkMainMenuClick(canvas, coords) {
+  if (isInsideMainMenuButton(canvas, coords.x, coords.y)) {
     returnToMainMenu();
   }
 }
@@ -316,7 +487,17 @@ function handleButtonClick(canvas, coords) {
 function restartGame() {
   initLevel();
   createNewWorld();
-  hideMobileStartButton();
+  startNewGame();
+}
+
+/**
+ * Starts new game and shows UI elements.
+ */
+function startNewGame() {
+  world.startGame();
+  toggleMobileUI();
+  showHelpButton();
+  hideStartScreen();
 }
 
 /**
@@ -325,17 +506,6 @@ function restartGame() {
 function createNewWorld() {
   world = new World(canvas, keyboard);
   world.setSoundMuted(soundMuted);
-  world.startGame();
-}
-
-/**
- * Hides the mobile start button by adding the hidden class.
- */
-function hideMobileStartButton() {
-  const mobileStartBtn = document.getElementById("mobile-start-btn");
-  if (mobileStartBtn) {
-    mobileStartBtn.classList.add("hidden");
-  }
 }
 
 /**
@@ -368,5 +538,13 @@ function isInsideMainMenuButton(canvas, x, y) {
  * Returns to the main menu by reloading the page.
  */
 function returnToMainMenu() {
+  const startScreen = document.getElementById("start-screen");
+  if (startScreen) {
+    startScreen.classList.remove("hidden");
+  }
+  const helpBtn = document.getElementById("help-btn");
+  if (helpBtn) {
+    helpBtn.classList.remove("visible");
+  }
   location.reload();
 }
