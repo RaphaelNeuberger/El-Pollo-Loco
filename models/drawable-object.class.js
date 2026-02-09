@@ -43,7 +43,17 @@ class DrawableObject {
    * @param {CanvasRenderingContext2D} ctx - Canvas rendering context
    */
   drawFrame(ctx) {
-    if (
+    if (!this.isDebugTarget()) return;
+    this.drawBoundingBox(ctx);
+    this.drawCollisionBox(ctx);
+  }
+
+  /**
+   * Checks if this object should show debug frames.
+   * @returns {boolean} True if debug target
+   */
+  isDebugTarget() {
+    return (
       this instanceof Character ||
       this instanceof Chicken ||
       this instanceof ChickenSmall ||
@@ -51,25 +61,36 @@ class DrawableObject {
       this instanceof ThrowableObject ||
       this instanceof Coin ||
       this instanceof Bottle
-    ) {
-      ctx.beginPath();
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "blue";
-      ctx.rect(this.x, this.y, this.width, this.height);
-      ctx.stroke();
+    );
+  }
 
-      // Draw actual collision box with offset
-      ctx.beginPath();
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "red";
-      ctx.rect(
-        this.x + this.offset.left,
-        this.y + this.offset.top,
-        this.width - this.offset.left - this.offset.right,
-        this.height - this.offset.top - this.offset.bottom,
-      );
-      ctx.stroke();
-    }
+  /**
+   * Draws the outer bounding box.
+   * @param {CanvasRenderingContext2D} ctx - Canvas context
+   */
+  drawBoundingBox(ctx) {
+    ctx.beginPath();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "blue";
+    ctx.rect(this.x, this.y, this.width, this.height);
+    ctx.stroke();
+  }
+
+  /**
+   * Draws the collision box with offsets.
+   * @param {CanvasRenderingContext2D} ctx - Canvas context
+   */
+  drawCollisionBox(ctx) {
+    ctx.beginPath();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "red";
+    ctx.rect(
+      this.x + this.offset.left,
+      this.y + this.offset.top,
+      this.width - this.offset.left - this.offset.right,
+      this.height - this.offset.top - this.offset.bottom,
+    );
+    ctx.stroke();
   }
 
   /**

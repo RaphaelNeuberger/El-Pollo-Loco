@@ -188,19 +188,10 @@ class WorldRenderer {
    * @param {HTMLImageElement} image - The end screen image.
    */
   drawEndScreen(image) {
-    this.world.ctx.clearRect(
-      0,
-      0,
-      this.world.canvas.width,
-      this.world.canvas.height,
-    );
-    this.world.ctx.drawImage(
-      image,
-      0,
-      0,
-      this.world.canvas.width,
-      this.world.canvas.height,
-    );
+    const w = this.world.canvas.width;
+    const h = this.world.canvas.height;
+    this.world.ctx.clearRect(0, 0, w, h);
+    this.world.ctx.drawImage(image, 0, 0, w, h);
     this.drawRestartButton();
     this.drawMainMenuButton();
   }
@@ -209,50 +200,67 @@ class WorldRenderer {
    * Draws the restart button on end screen.
    */
   drawRestartButton() {
-    const ctx = this.world.ctx;
     const x = this.world.restartButtonX;
     const y = this.world.restartButtonY;
-    const width = 150;
-    const height = 60;
-
-    // Draw button background
-    ctx.fillStyle = "#FFD700";
-    ctx.fillRect(x, y, width, height);
-    ctx.strokeStyle = "#000";
-    ctx.lineWidth = 3;
-    ctx.strokeRect(x, y, width, height);
-
-    // Draw text
-    ctx.fillStyle = "#000";
-    ctx.font = "bold 24px Arial";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("NEUSTART", x + width / 2, y + height / 2);
+    this.drawButton(x, y, 150, 60, "NEUSTART", "bold 24px Arial");
   }
 
   /**
    * Draws the main menu button on end screen.
    */
   drawMainMenuButton() {
-    const ctx = this.world.ctx;
     const x = this.world.mainMenuButtonX;
     const y = this.world.mainMenuButtonY;
-    const width = 150;
-    const height = 60;
+    this.drawButton(x, y, 150, 60, "HAUPTMENÜ", "bold 20px Arial");
+  }
 
-    // Draw button background
+  /**
+   * Draws a styled button on the canvas.
+   * @param {number} x - X position
+   * @param {number} y - Y position
+   * @param {number} w - Width
+   * @param {number} h - Height
+   * @param {string} text - Button label
+   * @param {string} font - Font style
+   */
+  drawButton(x, y, w, h, text, font) {
+    const ctx = this.world.ctx;
+    this.drawButtonBackground(ctx, x, y, w, h);
+    this.drawButtonText(ctx, x, y, w, h, text, font);
+  }
+
+  /**
+   * Draws button background and border.
+   * @param {CanvasRenderingContext2D} ctx - Canvas context
+   * @param {number} x - X position
+   * @param {number} y - Y position
+   * @param {number} w - Width
+   * @param {number} h - Height
+   */
+  drawButtonBackground(ctx, x, y, w, h) {
     ctx.fillStyle = "#FFD700";
-    ctx.fillRect(x, y, width, height);
+    ctx.fillRect(x, y, w, h);
     ctx.strokeStyle = "#000";
     ctx.lineWidth = 3;
-    ctx.strokeRect(x, y, width, height);
+    ctx.strokeRect(x, y, w, h);
+  }
 
-    // Draw text
+  /**
+   * Draws centered text on a button.
+   * @param {CanvasRenderingContext2D} ctx - Canvas context
+   * @param {number} x - X position
+   * @param {number} y - Y position
+   * @param {number} w - Width
+   * @param {number} h - Height
+   * @param {string} text - Button label
+   * @param {string} font - Font style
+   */
+  drawButtonText(ctx, x, y, w, h, text, font) {
     ctx.fillStyle = "#000";
-    ctx.font = "bold 20px Arial";
+    ctx.font = font;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText("HAUPTMENÜ", x + width / 2, y + height / 2);
+    ctx.fillText(text, x + w / 2, y + h / 2);
   }
 
   /**

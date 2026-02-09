@@ -4,7 +4,7 @@
  * @extends MovableObject
  */
 class Chicken extends MovableObject {
-  y = 365;
+  y = 360;
   height = 55;
   width = 70;
   _isDead = false;

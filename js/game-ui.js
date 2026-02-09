@@ -73,7 +73,7 @@ function setupControlsOverlay() {
 function toggleControlsOverlay() {
   const overlay = document.getElementById("controls-overlay");
   if (overlay) {
-    overlay.classList.toggle("show");
+    overlay.classList.toggle("active");
   }
 }
 
@@ -83,7 +83,7 @@ function toggleControlsOverlay() {
 function closeControlsOverlay() {
   const overlay = document.getElementById("controls-overlay");
   if (overlay) {
-    overlay.classList.remove("show");
+    overlay.classList.remove("active");
   }
 }
 
@@ -129,6 +129,7 @@ function enterFullscreen(container) {
 function applySavedSoundSettings() {
   if (world) {
     world.soundMuted = soundMuted;
+    world.audio.setSoundMuted(soundMuted);
     updateSoundButton(soundMuted);
   }
 }
@@ -169,6 +170,7 @@ function toggleSound() {
   localStorage.setItem("soundMuted", soundMuted);
   if (world) {
     world.soundMuted = soundMuted;
+    world.audio.setSoundMuted(soundMuted);
   }
   updateSoundIcons();
 }
@@ -216,7 +218,7 @@ function startGameMobile() {
 function toggleMobileUI() {
   const controls = document.getElementById("mobile-controls");
   if (controls) {
-    controls.style.display = "flex";
+    controls.classList.add("visible");
   }
 }
 

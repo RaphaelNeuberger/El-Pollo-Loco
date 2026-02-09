@@ -102,20 +102,24 @@ function attachMobileButtonHandlers() {
  */
 function attachButtonEvents(buttonId, keyName) {
   const button = document.getElementById(buttonId);
-  if (button) {
-    button.addEventListener("touchstart", (e) => {
-      e.preventDefault();
-      keyboard[keyName] = true;
-    });
-    button.addEventListener("touchend", (e) => {
-      e.preventDefault();
-      keyboard[keyName] = false;
-    });
-    button.addEventListener("touchcancel", (e) => {
-      e.preventDefault();
-      keyboard[keyName] = false;
-    });
-  }
+  if (!button) return;
+  addTouchEvent(button, "touchstart", keyName, true);
+  addTouchEvent(button, "touchend", keyName, false);
+  addTouchEvent(button, "touchcancel", keyName, false);
+}
+
+/**
+ * Adds a touch event listener to a button.
+ * @param {HTMLElement} btn - The button element
+ * @param {string} event - The event type
+ * @param {string} keyName - The key to simulate
+ * @param {boolean} value - The key state value
+ */
+function addTouchEvent(btn, event, keyName, value) {
+  btn.addEventListener(event, (e) => {
+    e.preventDefault();
+    keyboard[keyName] = value;
+  });
 }
 
 /**

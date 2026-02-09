@@ -27,6 +27,7 @@ function startGameDesktop() {
   }
   world.startGame();
   showHelpButton();
+  toggleMobileUI();
 }
 
 /**

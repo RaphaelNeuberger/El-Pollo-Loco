@@ -5,33 +5,54 @@
  */
 class WorldAudio {
   /**
-   * Sets up audio properties for world instance.
+   * Sets up audio module with all sound objects.
    * @param {World} world - The world instance
    */
   constructor(world) {
     this.world = world;
+    this.introSound = new Audio("audio/game-intro-345507.mp3");
+    this.gameStartSound = new Audio("audio/game-start-6104.mp3");
+    this.bottleCollectSound = new Audio(
+      "audio/fantasy-game-sword-cut-sound-effect-get-more-on-my-patreon-339824.mp3",
+    );
+    this.coinCollectSound = new Audio("audio/game-bonus-02-294436.mp3");
+    this.gameMusicLoop = new Audio("audio/game-music-loop-6-144641.mp3");
+    this.endbossWarningSound = new Audio("audio/wrong-place-129242.mp3");
+    this.winnerSound = new Audio("audio/winner-game-sound-404167.mp3");
+    this.gameOverSound1 = new Audio("audio/game-over-160612.mp3");
+    this.gameOverSound2 = new Audio("audio/game-over-38511.mp3");
+    this.jumpKillSound = new Audio("audio/retro-game-shot-152052.mp3");
+    this.chickenKillSound = new Audio(
+      "audio/muffled-sound-of-falling-game-character-131797.mp3",
+    );
+    this.smallChickenHitSound = new Audio(
+      "audio/game-character-scream-131144.mp3",
+    );
+    this.endbossHitSound = new Audio(
+      "audio/rpg-sword-attack-combo-34-388950.mp3",
+    );
   }
 
   /**
-   * Configures audio settings like loop and volume for game sounds.
+   * Configures audio settings like loop and volume.
    */
   setupAudioSettings() {
-    this.world.introSound.loop = true;
-    this.world.introSound.volume = 0.3;
-    this.world.gameMusicLoop.loop = true;
-    this.world.gameMusicLoop.volume = 0.4;
+    this.introSound.loop = true;
+    this.introSound.volume = 0.3;
+    this.gameMusicLoop.loop = true;
+    this.gameMusicLoop.volume = 0.4;
   }
 
   /**
-   * Plays the intro sound if browser allows auto-play.
+   * Plays the intro sound.
    */
   playIntroSound() {
-    this.world.introSound.play().catch(() => {});
+    this.introSound.play().catch(() => {});
   }
 
   /**
    * Mutes or unmutes all game sounds.
-   * @param {boolean} muted - Whether to mute the sounds.
+   * @param {boolean} muted - Whether to mute.
    */
   setSoundMuted(muted) {
     this.setMainSoundVolumes(muted);
@@ -39,17 +60,17 @@ class WorldAudio {
   }
 
   /**
-   * Sets the volume for main background music.
-   * @param {boolean} muted - Whether to mute the sounds.
+   * Sets volumes for background music.
+   * @param {boolean} muted - Whether to mute.
    */
   setMainSoundVolumes(muted) {
-    this.world.introSound.volume = muted ? 0 : 0.3;
-    this.world.gameMusicLoop.volume = muted ? 0 : 0.4;
+    this.introSound.volume = muted ? 0 : 0.3;
+    this.gameMusicLoop.volume = muted ? 0 : 0.4;
   }
 
   /**
-   * Sets the volume for sound effects.
-   * @param {boolean} muted - Whether to mute the sounds.
+   * Sets volumes for sound effects.
+   * @param {boolean} muted - Whether to mute.
    */
   setEffectSoundVolumes(muted) {
     const volume = muted ? 0 : 1;
@@ -58,19 +79,19 @@ class WorldAudio {
   }
 
   /**
-   * Sets the volume for collection and game event sounds.
-   * @param {number} volume - The volume level to set.
+   * Sets volumes for collection sounds.
+   * @param {number} volume - The volume level.
    */
   setCollectSoundVolumes(volume) {
-    this.world.gameStartSound.volume = volume;
-    this.world.bottleCollectSound.volume = volume;
-    this.world.coinCollectSound.volume = volume;
-    this.world.endbossWarningSound.volume = volume;
+    this.gameStartSound.volume = volume;
+    this.bottleCollectSound.volume = volume;
+    this.coinCollectSound.volume = volume;
+    this.endbossWarningSound.volume = volume;
   }
 
   /**
-   * Sets the volume for death and combat sounds.
-   * @param {number} volume - The volume level to set.
+   * Sets volumes for combat sounds.
+   * @param {number} volume - The volume level.
    */
   setDeathAndCombatSoundVolumes(volume) {
     this.setWinLoseSoundVolumes(volume);
@@ -78,41 +99,41 @@ class WorldAudio {
   }
 
   /**
-   * Sets the volume for win/lose sounds.
-   * @param {number} volume - The volume level to set.
+   * Sets volumes for win/lose sounds.
+   * @param {number} volume - The volume level.
    */
   setWinLoseSoundVolumes(volume) {
-    this.world.winnerSound.volume = volume;
-    this.world.gameOverSound1.volume = volume;
-    this.world.gameOverSound2.volume = volume;
+    this.winnerSound.volume = volume;
+    this.gameOverSound1.volume = volume;
+    this.gameOverSound2.volume = volume;
   }
 
   /**
-   * Sets the volume for combat sounds.
-   * @param {number} volume - The volume level to set.
+   * Sets volumes for combat sounds.
+   * @param {number} volume - The volume level.
    */
   setCombatSoundVolumes(volume) {
-    this.world.jumpKillSound.volume = volume;
-    this.world.chickenKillSound.volume = volume;
-    this.world.smallChickenHitSound.volume = volume;
-    this.world.endbossHitSound.volume = volume;
+    this.jumpKillSound.volume = volume;
+    this.chickenKillSound.volume = volume;
+    this.smallChickenHitSound.volume = volume;
+    this.endbossHitSound.volume = volume;
   }
 
   /**
-   * Stops the intro sound and resets its playback position.
+   * Stops intro sound and resets playback.
    */
   stopIntroSound() {
-    this.world.introSound.pause();
-    this.world.introSound.currentTime = 0;
+    this.introSound.pause();
+    this.introSound.currentTime = 0;
   }
 
   /**
-   * Plays the game start sound and background music.
+   * Plays game start sound and background music.
    */
   playStartSounds() {
-    this.world.gameStartSound.play().catch(() => {});
+    this.gameStartSound.play().catch(() => {});
     setTimeout(() => {
-      this.world.gameMusicLoop.play().catch(() => {});
+      this.gameMusicLoop.play().catch(() => {});
     }, 500);
   }
 
@@ -120,16 +141,16 @@ class WorldAudio {
    * Plays small chicken kill sound.
    */
   playSmallChickenKillSound() {
-    this.world.jumpKillSound.currentTime = 0;
-    this.world.jumpKillSound.play().catch(() => {});
+    this.jumpKillSound.currentTime = 0;
+    this.jumpKillSound.play().catch(() => {});
   }
 
   /**
    * Plays normal chicken kill sound.
    */
   playNormalChickenKillSound() {
-    this.world.chickenKillSound.currentTime = 0;
-    this.world.chickenKillSound.play().catch(() => {});
+    this.chickenKillSound.currentTime = 0;
+    this.chickenKillSound.play().catch(() => {});
   }
 
   /**
@@ -137,77 +158,70 @@ class WorldAudio {
    * @param {MovableObject} enemy - The enemy
    */
   playEnemyHitSound(enemy) {
-    if (enemy instanceof ChickenSmall) {
-      this.world.smallChickenHitSound.currentTime = 0;
-      this.world.smallChickenHitSound.play().catch(() => {});
-    } else if (enemy instanceof Chicken) {
-      this.world.smallChickenHitSound.currentTime = 0;
-      this.world.smallChickenHitSound.play().catch(() => {});
-    } else if (enemy instanceof Endboss) {
-      this.world.smallChickenHitSound.currentTime = 0;
-      this.world.smallChickenHitSound.play().catch(() => {});
-    }
+    this.smallChickenHitSound.currentTime = 0;
+    this.smallChickenHitSound.play().catch(() => {});
   }
 
   /**
-   * Plays the coin collection sound effect.
+   * Plays coin collection sound.
    */
   playCoinSound() {
-    this.world.coinCollectSound.currentTime = 0;
-    this.world.coinCollectSound.play().catch(() => {});
+    this.coinCollectSound.currentTime = 0;
+    this.coinCollectSound.play().catch(() => {});
   }
 
   /**
-   * Plays the bottle collection sound effect.
+   * Plays bottle collection sound.
    */
   playBottleSound() {
-    this.world.bottleCollectSound.currentTime = 0;
-    this.world.bottleCollectSound.play().catch(() => {});
+    this.bottleCollectSound.currentTime = 0;
+    this.bottleCollectSound.play().catch(() => {});
   }
 
   /**
    * Plays endboss hit sound.
    */
   playEndbossHitSound() {
-    this.world.endbossHitSound.currentTime = 0;
-    this.world.endbossHitSound.play().catch(() => {});
+    this.endbossHitSound.currentTime = 0;
+    this.endbossHitSound.play().catch(() => {});
   }
 
   /**
-   * Plays the endboss warning sound once when first visible.
+   * Plays endboss warning sound once.
    */
   playEndbossWarningSound() {
     if (!this.world.endbossSoundPlayed) {
-      this.world.endbossWarningSound.play().catch(() => {});
+      this.endbossWarningSound.volume = 0.2;
+      this.endbossWarningSound.play().catch(() => {});
       this.world.endbossSoundPlayed = true;
     }
   }
 
   /**
-   * Stops all game music and warning sounds.
+   * Stops game music and warning sounds.
    */
   stopGameMusic() {
-    this.world.gameMusicLoop.pause();
-    this.world.endbossWarningSound.pause();
+    this.gameMusicLoop.pause();
+    this.endbossWarningSound.pause();
   }
 
   /**
-   * Plays the game over sound effects.
+   * Plays game over sound effects.
    */
   playGameOverSounds() {
-    this.world.gameOverSound1.play().catch(() => {});
-    this.world.gameOverSound2.play().catch(() => {});
+    this.gameOverSound1.play().catch(() => {});
+    this.gameOverSound2.play().catch(() => {});
   }
 
   /**
-   * Handles pausing or resuming the game music.
+   * Handles pausing or resuming game music.
    */
   handlePauseMusic() {
     if (this.world.isPaused) {
-      this.world.gameMusicLoop.pause();
+      this.gameMusicLoop.pause();
     } else {
       if (!this.world.soundMuted) {
-        this.world.gameMusicLoop.play().catch(() => {});
+        this.gameMusicLoop.play().catch(() => {});
       }
     }
   }

@@ -1,0 +1,141 @@
+/* Smartphone */
+@media only screen and (max-width: 760px) {
+  canvas {
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 2.5em;
+    letter-spacing: 3px;
+  }
+
+  .controls-info {
+    padding: 20px;
+    min-height: auto;
+    margin: 20px 10px;
+  }
+
+  .controls-info h3 {
+    font-size: 28px;
+    margin: 0 0 20px 0;
+  }
+
+  .controls-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .control-item {
+    padding: 15px;
+  }
+
+  .key {
+    min-width: 100px;
+    padding: 12px 15px;
+    font-size: 16px;
+  }
+
+  .description {
+    font-size: 16px;
+  }
+}
+
+/* Mobile touch controls - only on touch devices (smartphones/tablets) in landscape */
+@media only screen and (max-width: 915px) and (orientation: landscape) and (hover: none) and (pointer: coarse) {
+  body {
+    background-image: none;
+    background-color: black;
+  }
+
+  #mobile-controls {
+    display: none !important;
+  }
+
+  #mobile-controls.visible {
+    display: flex !important;
+  }
+
+  #mobile-start-btn:not(.hidden) {
+    display: flex !important;
+  }
+
+  #mobile-start-btn.hidden {
+    display: none !important;
+  }
+
+  h1 {
+    font-size: 2em;
+    display: none;
+  }
+
+  .controls-info {
+    display: none !important;
+  }
+
+  .impressum {
+    display: none;
+  }
+}
+
+/* Tablet touch controls - larger tablets with touch */
+@media only screen and (min-width: 916px) and (hover: none) and (pointer: coarse) {
+  body {
+    background-image: none;
+    background-color: black;
+  }
+
+  #mobile-controls {
+    display: none !important;
+  }
+
+  #mobile-controls.visible {
+    display: flex !important;
+  }
+
+  h1 {
+    display: none;
+  }
+
+  .controls-info {
+    display: none !important;
+  }
+
+  .impressum {
+    display: none;
+  }
+}
+
+/* Smartphones */
+@media only screen and (max-height: 480px) {
+  canvas {
+    height: 100vh;
+  }
+}
+
+/* Rotate Device Warning - nur im Portrait Mode */
+@media only screen and (max-width: 915px) and (orientation: portrait) {
+  #rotate-warning {
+    display: flex;
+  }
+
+  #canvas-container,
+  #mobile-controls,
+  .controls-info,
+  h1 {
+    display: none !important;
+  }
+}
+
+/* Mobile: Hide fullscreen button on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  #fullscreen-btn {
+    display: none !important;
+  }
+}
+
+/* Alternative: Hide on small screens */
+@media (max-width: 768px) {
+  #fullscreen-btn {
+    display: none !important;
+  }
+}

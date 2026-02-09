@@ -64,15 +64,6 @@ class World {
   youWonImage = new Image();
   /** @type {Image} */
   youLostImage = new Image();
-  /** @type {Image} */
-  startScreenImage = new Image();
-  /** @type {Image} */
-  restartButtonImg = new Image();
-  /** @type {Image} */
-  mainMenuButtonImg = new Image();
-  youWonImg = new Image();
-  youLostImg = new Image();
-  /** @type {number} */
   restartButtonX = 150;
   restartButtonY = 320;
   restartButtonWidth = 150;
@@ -81,43 +72,8 @@ class World {
   mainMenuButtonY = 320;
   mainMenuButtonWidth = 150;
   mainMenuButtonHeight = 60;
-  /** @type {number} */
   lastThrowTime = 0;
-  /** @type {Audio} */
-  introSound = new Audio("audio/game-intro-345507.mp3");
-  /** @type {Audio} */
-  gameStartSound = new Audio("audio/game-start-6104.mp3");
-  /** @type {Audio} */
-  bottleCollectSound = new Audio(
-    "audio/fantasy-game-sword-cut-sound-effect-get-more-on-my-patreon-339824.mp3",
-  );
-  /** @type {Audio} */
-  coinCollectSound = new Audio("audio/game-bonus-02-294436.mp3");
-  /** @type {Audio} */
-  gameMusicLoop = new Audio("audio/game-music-loop-6-144641.mp3");
-  /** @type {Audio} */
-  endbossWarningSound = new Audio("audio/wrong-place-129242.mp3");
-  /** @type {Audio} */
-  winnerSound = new Audio("audio/winner-game-sound-404167.mp3");
-  /** @type {Audio} */
-  gameOverSound1 = new Audio("audio/game-over-160612.mp3");
-  /** @type {Audio} */
-  gameOverSound2 = new Audio("audio/game-over-38511.mp3");
-  /** @type {Audio} */
-  jumpKillSound = new Audio("audio/retro-game-shot-152052.mp3");
-  /** @type {Audio} */
-  chickenKillSound = new Audio(
-    "audio/muffled-sound-of-falling-game-character-131797.mp3",
-  );
-  /** @type {Audio} */
-  smallChickenHitSound = new Audio("audio/game-character-scream-131144.mp3");
-  /** @type {Audio} */
-  endbossHitSound = new Audio("audio/rpg-sword-attack-combo-34-388950.mp3");
-  /** @type {number} */
-  chickenSpawnInterval;
-  /** @type {number} */
   animationFrameId;
-  /** @type {number} */
   gameLoopIntervalId;
   /** @type {WorldAudio} */
   audio;
@@ -125,6 +81,8 @@ class World {
   collision;
   /** @type {WorldRenderer} */
   renderer;
+  /** @type {WorldSpawner} */
+  spawner;
 
   /**
    * Creates a new World instance and initializes the game.
@@ -138,6 +96,7 @@ class World {
     this.audio = new WorldAudio(this);
     this.collision = new WorldCollision(this);
     this.renderer = new WorldRenderer(this);
+    this.spawner = new WorldSpawner(this);
     this.initializeCounts();
     this.loadEndScreenImages();
     this.audio.setupAudioSettings();
@@ -168,10 +127,6 @@ class World {
   loadEndScreenImages() {
     this.youWonImage.src = "img/You%20won,%20you%20lost/You%20won%20A.png";
     this.youLostImage.src = "img/You%20won,%20you%20lost/You%20lost.png";
-    this.restartButtonImg.src =
-      "img/9_intro_outro_screens/start/startscreen_2.png";
-    this.mainMenuButtonImg.src =
-      "img/9_intro_outro_screens/start/startscreen_1.png";
   }
 
   /**
@@ -206,7 +161,7 @@ class World {
     this.audio.stopIntroSound();
     this.audio.playStartSounds();
     this.run();
-    this.startChickenSpawning();
+    this.spawner.startChickenSpawning();
   }
 
   /**
@@ -223,7 +178,7 @@ class World {
   run() {
     this.gameLoopIntervalId = setInterval(() => {
       this.performGameLoop();
-    }, 100);
+    }, 1000 / 25);
   }
 
   /**
@@ -234,56 +189,6 @@ class World {
     this.collision.checkCollisions();
     this.checkThrowObjects();
     this.checkGameStatus();
-  }
-
-  /**
-   * Starts spawning chickens at intervals.
-   */
-  startChickenSpawning() {
-    this.chickenSpawnInterval = setInterval(() => {
-      this.spawnChicken();
-    }, 3000);
-  }
-
-  /**
-   * Spawns a random chicken in the level.
-   */
-  spawnChicken() {
-    if (this.shouldSpawnChicken()) {
-      const chicken = this.createRandomChicken();
-      this.addChickenToLevel(chicken);
-    }
-  }
-
-  /**
-   * Checks if chicken should spawn.
-   * @returns {boolean} True if should spawn.
-   */
-  shouldSpawnChicken() {
-    return (
-      !this.gameIsOver &&
-      this.gameStarted &&
-      this.level.enemies.length < this.totalEnemies
-    );
-  }
-
-  /**
-   * Creates a random chicken type.
-   * @returns {Chicken|ChickenSmall} The chicken.
-   */
-  createRandomChicken() {
-    const isSmall = Math.random() < 0.5;
-    return isSmall ? new ChickenSmall() : new Chicken();
-  }
-
-  /**
-   * Adds chicken to the level enemies.
-   * @param {Chicken|ChickenSmall} chicken - The chicken.
-   */
-  addChickenToLevel(chicken) {
-    chicken.world = this;
-    this.level.enemies.push(chicken);
-    this.totalEnemies++;
   }
 
   /**
@@ -313,9 +218,12 @@ class World {
    * Creates and throws a bottle.
    */
   throwBottle() {
+    const direction = this.character.otherDirection;
+    const offsetX = direction ? -50 : 100;
     const bottle = new ThrowableObject(
-      this.character.x + 100,
+      this.character.x + offsetX,
       this.character.y + 100,
+      direction,
     );
     this.throwableObjects.push(bottle);
     this.bottlesCollectedCount--;
@@ -377,7 +285,7 @@ class World {
    */
   triggerWinCondition() {
     this.gameWon = true;
-    this.winnerSound.play().catch(() => {});
+    this.audio.winnerSound.play().catch(() => {});
     this.showEndScreen(this.youWonImage);
   }
 
@@ -430,7 +338,7 @@ class World {
     this.gameIsOver = true;
     this.chickensCanMove = false;
     clearInterval(this.gameLoopIntervalId);
-    clearInterval(this.chickenSpawnInterval);
+    this.spawner.stopChickenSpawning();
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
     }

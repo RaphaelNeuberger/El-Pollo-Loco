@@ -35,8 +35,11 @@ class WorldCollision {
    */
   checkEnemyCollisions() {
     this.world.level.enemies.forEach((enemy) => {
+      if (enemy.isDead() || this.world.character.isHurt()) return;
       if (this.isEnemyColliding(enemy)) {
         this.handleEnemyCollision(enemy);
+      } else if (this.canJumpKillWithPrediction(enemy)) {
+        this.handleJumpKill(enemy);
       }
     });
   }
@@ -47,11 +50,7 @@ class WorldCollision {
    * @returns {boolean} - True if colliding.
    */
   isEnemyColliding(enemy) {
-    return (
-      this.world.character.isColliding(enemy) &&
-      !enemy.isDead() &&
-      !this.world.character.isHurt()
-    );
+    return this.world.character.isColliding(enemy);
   }
 
   /**
@@ -59,23 +58,16 @@ class WorldCollision {
    * @param {MovableObject} enemy - The colliding enemy.
    */
   handleEnemyCollision(enemy) {
-    if (this.handleNonJumpCollision(enemy)) return;
     if (this.isJumpKill(enemy)) {
       this.handleJumpKill(enemy);
-    }
-  }
-
-  /**
-   * Handles normal collision (not jump kill).
-   * @param {MovableObject} enemy - The enemy.
-   * @returns {boolean} True if handled.
-   */
-  handleNonJumpCollision(enemy) {
-    if (!this.isJumpKill(enemy)) {
+    } else if (
+      this.isChickenType(enemy) &&
+      this.world.character.isAboveGround()
+    ) {
+      return;
+    } else {
       this.handleNormalCollision(enemy);
-      return true;
     }
-    return false;
   }
 
   /**
@@ -86,9 +78,53 @@ class WorldCollision {
   isJumpKill(enemy) {
     return (
       this.isChickenType(enemy) &&
-      this.isCharacterFallingFromAbove() &&
+      this.isCharacterFallingOnEnemy(enemy) &&
       !this.isDeadChicken(enemy)
     );
+  }
+
+  /**
+   * Predictive jump kill check for fast-falling character.
+   * Detects if character will land on enemy within the next gravity frame.
+   * Solves the issue where the character falls too fast to collide with small enemies.
+   * @param {MovableObject} enemy - The enemy to check.
+   * @returns {boolean} - True if predicted jump kill.
+   */
+  canJumpKillWithPrediction(enemy) {
+    if (!this.isChickenType(enemy) || enemy.isDead()) return false;
+    const char = this.world.character;
+    if (char.speedY >= 0 || !char.isAboveGround()) return false;
+    return (
+      this.isHorizontalOverlap(char, enemy) && this.willLandOnEnemy(char, enemy)
+    );
+  }
+
+  /**
+   * Checks horizontal overlap between character and enemy using collision offsets.
+   * @param {Character} char - The character.
+   * @param {MovableObject} enemy - The enemy.
+   * @returns {boolean} - True if horizontally overlapping.
+   */
+  isHorizontalOverlap(char, enemy) {
+    const charLeft = char.x + char.offset.left;
+    const charRight = char.x + char.width - char.offset.right;
+    const enemyLeft = enemy.x + enemy.offset.left;
+    const enemyRight = enemy.x + enemy.width - enemy.offset.right;
+    return charRight > enemyLeft && charLeft < enemyRight;
+  }
+
+  /**
+   * Checks if character bottom will pass through enemy top in the next gravity frame.
+   * @param {Character} char - The character.
+   * @param {MovableObject} enemy - The enemy.
+   * @returns {boolean} - True if character will land on enemy.
+   */
+  willLandOnEnemy(char, enemy) {
+    const charBottom = char.y + char.height - char.offset.bottom;
+    const enemyTop = enemy.y + enemy.offset.top;
+    const enemyBottom = enemy.y + enemy.height - enemy.offset.bottom;
+    const nextCharBottom = charBottom + Math.abs(char.speedY);
+    return charBottom <= enemyBottom && nextCharBottom >= enemyTop;
   }
 
   /**
@@ -101,11 +137,18 @@ class WorldCollision {
   }
 
   /**
-   * Checks if character is falling from above.
-   * @returns {boolean} - True if falling.
+   * Checks if character is falling from above onto an enemy.
+   * @param {MovableObject} enemy - The enemy to check.
+   * @returns {boolean} - True if falling onto enemy.
    */
-  isCharacterFallingFromAbove() {
-    return this.world.character.speedY < 0 && this.world.character.y < 180;
+  isCharacterFallingOnEnemy(enemy) {
+    const char = this.world.character;
+    const charBottom = char.y + char.height - char.offset.bottom;
+    const enemyBottom = enemy.y + enemy.height - enemy.offset.bottom;
+    const isLandingOnTop = charBottom < enemyBottom;
+    const isFalling = char.speedY < 0;
+    const isInAir = char.isAboveGround();
+    return isFalling && isLandingOnTop && isInAir;
   }
 
   /**
@@ -124,8 +167,7 @@ class WorldCollision {
   handleJumpKill(enemy) {
     this.executeJumpKill(enemy);
     this.playJumpKillSound(enemy);
-    this.world.character.speedY = 10;
-    this.world.character.jump();
+    this.world.character.speedY = 15;
   }
 
   /**

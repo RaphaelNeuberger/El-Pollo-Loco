@@ -168,10 +168,12 @@ class Character extends MovableObject {
 
   /**
    * Checks if character can move right.
-   * @returns {boolean} True if RIGHT key pressed and not at level end
+   * @returns {boolean} True if RIGHT key pressed and not at level end or endboss
    */
   canMoveRight() {
-    return this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x;
+    const endboss = this.world.level.enemies.find((e) => e instanceof Endboss);
+    const maxX = endboss ? endboss.x - 50 : this.world.level.level_end_x;
+    return this.world.keyboard.RIGHT && this.x < maxX;
   }
 
   /**
@@ -246,10 +248,26 @@ class Character extends MovableObject {
     } else if (this.isHurt()) {
       this.playAnimation(this.IMAGES_HURT);
     } else if (this.isAboveGround()) {
-      this.playAnimation(this.IMAGES_JUMPING);
+      this.playJumpAnimation();
     } else {
       this.playIdleOrWalkAnimation();
     }
+  }
+
+  /**
+   * Plays jump animation frame based on current velocity.
+   * Maps speedY to the correct frame so ascending and descending phases
+   * each show the appropriate part of the animation.
+   */
+  playJumpAnimation() {
+    const maxSpeed = 30;
+    const totalFrames = this.IMAGES_JUMPING.length;
+    const progress = 1 - (this.speedY + maxSpeed) / (2 * maxSpeed);
+    const frameIndex = Math.min(
+      Math.max(Math.floor(progress * totalFrames), 0),
+      totalFrames - 1,
+    );
+    this.img = this.imageCache[this.IMAGES_JUMPING[frameIndex]];
   }
 
   /**
