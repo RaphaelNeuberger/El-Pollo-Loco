@@ -35,47 +35,58 @@ class WorldCollision {
    */
   checkEnemyCollisions() {
     this.world.level.enemies.forEach((enemy) => {
-      if (this.isEnemyColliding(enemy)) {
+      if (this.isBasicEnemyCollision(enemy)) {
         this.handleEnemyCollision(enemy);
       }
     });
   }
 
   /**
-   * Checks if character is colliding with an enemy.
+   * Checks basic collision (ignoring hurt state to allow jump kills).
    * @param {MovableObject} enemy - The enemy to check.
-   * @returns {boolean} - True if colliding.
+   * @returns {boolean} - True if colliding with a living enemy.
    */
-  isEnemyColliding(enemy) {
-    return (
-      this.world.character.isColliding(enemy) &&
-      !enemy.isDead() &&
-      !this.world.character.isHurt()
-    );
+  isBasicEnemyCollision(enemy) {
+    return this.world.character.isColliding(enemy) && !enemy.isDead();
   }
 
   /**
    * Handles collision between character and enemy.
+   * Jump kills work even during hurt invincibility, damage only when not hurt.
    * @param {MovableObject} enemy - The colliding enemy.
    */
   handleEnemyCollision(enemy) {
-    if (this.handleNonJumpCollision(enemy)) return;
     if (this.isJumpKill(enemy)) {
       this.handleJumpKill(enemy);
+    } else if (this.isEndbossJumpCollision(enemy)) {
+      this.handleEndbossJump(enemy);
+    } else if (!this.world.character.isHurt()) {
+      this.handleNormalCollision(enemy);
     }
   }
 
   /**
-   * Handles normal collision (not jump kill).
-   * @param {MovableObject} enemy - The enemy.
-   * @returns {boolean} True if handled.
+   * Checks if character is jumping on the endboss.
+   * @param {MovableObject} enemy - The enemy to check.
+   * @returns {boolean} True if jumping on endboss.
    */
-  handleNonJumpCollision(enemy) {
-    if (!this.isJumpKill(enemy)) {
-      this.handleNormalCollision(enemy);
-      return true;
+  isEndbossJumpCollision(enemy) {
+    return enemy instanceof Endboss && this.isCharacterFallingFromAbove();
+  }
+
+  /**
+   * Handles character jumping on endboss - bounces character back and endboss counterattacks.
+   * @param {Endboss} endboss - The endboss.
+   */
+  handleEndbossJump(endboss) {
+    const char = this.world.character;
+    char.speedY = 20;
+    const knockbackDirection = char.x < endboss.x ? -15 : 15;
+    char.x += knockbackDirection;
+    if (!char.isHurt()) {
+      this.handleNormalCollision(endboss);
     }
-    return false;
+    endboss.startAttack();
   }
 
   /**

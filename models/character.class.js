@@ -125,7 +125,7 @@ class Character extends MovableObject {
    */
   animate() {
     setInterval(() => this.handleMovement(), 1000 / 60);
-    setInterval(() => this.updateAnimation(), 200);
+    setInterval(() => this.updateAnimation(), 80);
   }
 
   /**
@@ -232,6 +232,7 @@ class Character extends MovableObject {
     if (this.world.keyboard.SPACE && !this.isAboveGround()) {
       this.jump();
       this.currentImage = 0;
+      this.img = this.imageCache[this.IMAGES_JUMPING[0]];
       this.lastInputTime = Date.now();
     }
   }

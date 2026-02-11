@@ -695,6 +695,8 @@ h1 {
   border-radius: 10px;
   width: 80%;
   max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
   position: relative;
   color: #333;
   font-family: "Boogaloo", cursive;

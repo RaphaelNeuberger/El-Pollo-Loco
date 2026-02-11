@@ -168,7 +168,7 @@ class Endboss extends MovableObject {
    * @returns {boolean} True if character is nearby.
    */
   isCharacterNearby(distance) {
-    return Math.abs(distance) < 600 && distance > 0;
+    return Math.abs(distance) < 600;
   }
 
   /**
@@ -176,9 +176,14 @@ class Endboss extends MovableObject {
    * @param {number} distance - The distance to the character.
    */
   moveAndCheckAttack(distance) {
-    this.x -= this.speed;
-    this.otherDirection = false;
-    if (distance < 200) {
+    if (distance > 0) {
+      this.x -= this.speed;
+      this.otherDirection = false;
+    } else {
+      this.x += this.speed;
+      this.otherDirection = true;
+    }
+    if (Math.abs(distance) < 200) {
       this.startAttack();
     }
   }
