@@ -206,7 +206,6 @@ class World {
     this.audio.stopIntroSound();
     this.audio.playStartSounds();
     this.run();
-    this.startChickenSpawning();
   }
 
   /**
@@ -313,9 +312,12 @@ class World {
    * Creates and throws a bottle.
    */
   throwBottle() {
+    const direction = this.character.otherDirection;
+    const offsetX = direction ? -10 : 100;
     const bottle = new ThrowableObject(
-      this.character.x + 100,
+      this.character.x + offsetX,
       this.character.y + 100,
+      direction,
     );
     this.throwableObjects.push(bottle);
     this.bottlesCollectedCount--;
@@ -377,7 +379,9 @@ class World {
    */
   triggerWinCondition() {
     this.gameWon = true;
-    this.winnerSound.play().catch(() => {});
+    if (!this.soundMuted) {
+      this.winnerSound.play().catch(() => {});
+    }
     this.showEndScreen(this.youWonImage);
   }
 

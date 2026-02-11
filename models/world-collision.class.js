@@ -102,10 +102,14 @@ class WorldCollision {
 
   /**
    * Checks if character is falling from above.
-   * @returns {boolean} - True if falling.
+   * Uses a 150ms grace period after landing to handle timing between gravity (40ms) and collision checks (100ms).
+   * @returns {boolean} - True if falling or just landed from a fall.
    */
   isCharacterFallingFromAbove() {
-    return this.world.character.speedY < 0 && this.world.character.y < 180;
+    const char = this.world.character;
+    const isFalling = char.speedY < 0 && char.isAboveGround();
+    const justLanded = char.landedAt > 0 && Date.now() - char.landedAt < 150;
+    return isFalling || justLanded;
   }
 
   /**
@@ -124,8 +128,8 @@ class WorldCollision {
   handleJumpKill(enemy) {
     this.executeJumpKill(enemy);
     this.playJumpKillSound(enemy);
-    this.world.character.speedY = 10;
-    this.world.character.jump();
+    this.world.character.landedAt = 0;
+    this.world.character.speedY = 15;
   }
 
   /**
@@ -270,7 +274,8 @@ class WorldCollision {
    */
   damageEndboss(endboss) {
     endboss.hit();
-    this.world.endbossBar.setPercentage(endboss.energy);
+    let percentage = (endboss.energy / 200) * 100;
+    this.world.endbossBar.setPercentage(percentage);
   }
 
   /**

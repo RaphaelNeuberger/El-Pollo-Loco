@@ -4,7 +4,7 @@
  * @extends MovableObject
  */
 class ChickenSmall extends MovableObject {
-  y = 365;
+  y = 370;
   height = 40;
   width = 50;
   _isDead = false;
@@ -20,18 +20,13 @@ class ChickenSmall extends MovableObject {
 
   /**
    * Creates an instance of ChickenSmall and initializes its position and animations.
+   * @param {number} x - The starting x position of the small chicken.
    */
-  constructor() {
+  constructor(x) {
     super().loadImage("img/3_enemies_chicken/chicken_small/1_walk/1_w.png");
     this.loadAllImages();
-    this.initializeSmallChicken();
-  }
-
-  /**
-   * Initializes small chicken position and animation.
-   */
-  initializeSmallChicken() {
-    this.setRandomPosition();
+    this.x = x;
+    this.speed = 0.2 + Math.random() * 0.35;
     this.animate();
   }
 
@@ -44,10 +39,9 @@ class ChickenSmall extends MovableObject {
   }
 
   /**
-   * Sets a random starting position and speed for the small chicken.
+   * Sets a random speed for the small chicken.
    */
   setRandomPosition() {
-    this.x = 300 + Math.random() * 1500;
     this.speed = 0.2 + Math.random() * 0.35;
   }
 

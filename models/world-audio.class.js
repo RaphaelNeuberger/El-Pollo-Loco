@@ -17,15 +17,16 @@ class WorldAudio {
    */
   setupAudioSettings() {
     this.world.introSound.loop = true;
-    this.world.introSound.volume = 0.3;
+    this.world.introSound.volume = 0.05;
     this.world.gameMusicLoop.loop = true;
-    this.world.gameMusicLoop.volume = 0.4;
+    this.world.gameMusicLoop.volume = 0.07;
   }
 
   /**
    * Plays the intro sound if browser allows auto-play.
    */
   playIntroSound() {
+    if (this.world.soundMuted) return;
     this.world.introSound.play().catch(() => {});
   }
 
@@ -43,8 +44,8 @@ class WorldAudio {
    * @param {boolean} muted - Whether to mute the sounds.
    */
   setMainSoundVolumes(muted) {
-    this.world.introSound.volume = muted ? 0 : 0.3;
-    this.world.gameMusicLoop.volume = muted ? 0 : 0.4;
+    this.world.introSound.volume = muted ? 0 : 0.05;
+    this.world.gameMusicLoop.volume = muted ? 0 : 0.07;
   }
 
   /**
@@ -52,7 +53,7 @@ class WorldAudio {
    * @param {boolean} muted - Whether to mute the sounds.
    */
   setEffectSoundVolumes(muted) {
-    const volume = muted ? 0 : 1;
+    const volume = muted ? 0 : 0.1;
     this.setCollectSoundVolumes(volume);
     this.setDeathAndCombatSoundVolumes(volume);
   }
@@ -110,9 +111,12 @@ class WorldAudio {
    * Plays the game start sound and background music.
    */
   playStartSounds() {
+    if (this.world.soundMuted) return;
     this.world.gameStartSound.play().catch(() => {});
     setTimeout(() => {
-      this.world.gameMusicLoop.play().catch(() => {});
+      if (!this.world.soundMuted) {
+        this.world.gameMusicLoop.play().catch(() => {});
+      }
     }, 500);
   }
 
@@ -120,6 +124,7 @@ class WorldAudio {
    * Plays small chicken kill sound.
    */
   playSmallChickenKillSound() {
+    if (this.world.soundMuted) return;
     this.world.jumpKillSound.currentTime = 0;
     this.world.jumpKillSound.play().catch(() => {});
   }
@@ -128,6 +133,7 @@ class WorldAudio {
    * Plays normal chicken kill sound.
    */
   playNormalChickenKillSound() {
+    if (this.world.soundMuted) return;
     this.world.chickenKillSound.currentTime = 0;
     this.world.chickenKillSound.play().catch(() => {});
   }
@@ -137,6 +143,7 @@ class WorldAudio {
    * @param {MovableObject} enemy - The enemy
    */
   playEnemyHitSound(enemy) {
+    if (this.world.soundMuted) return;
     if (enemy instanceof ChickenSmall) {
       this.world.smallChickenHitSound.currentTime = 0;
       this.world.smallChickenHitSound.play().catch(() => {});
@@ -153,6 +160,7 @@ class WorldAudio {
    * Plays the coin collection sound effect.
    */
   playCoinSound() {
+    if (this.world.soundMuted) return;
     this.world.coinCollectSound.currentTime = 0;
     this.world.coinCollectSound.play().catch(() => {});
   }
@@ -161,6 +169,7 @@ class WorldAudio {
    * Plays the bottle collection sound effect.
    */
   playBottleSound() {
+    if (this.world.soundMuted) return;
     this.world.bottleCollectSound.currentTime = 0;
     this.world.bottleCollectSound.play().catch(() => {});
   }
@@ -169,6 +178,7 @@ class WorldAudio {
    * Plays endboss hit sound.
    */
   playEndbossHitSound() {
+    if (this.world.soundMuted) return;
     this.world.endbossHitSound.currentTime = 0;
     this.world.endbossHitSound.play().catch(() => {});
   }
@@ -177,6 +187,7 @@ class WorldAudio {
    * Plays the endboss warning sound once when first visible.
    */
   playEndbossWarningSound() {
+    if (this.world.soundMuted) return;
     if (!this.world.endbossSoundPlayed) {
       this.world.endbossWarningSound.play().catch(() => {});
       this.world.endbossSoundPlayed = true;
@@ -195,6 +206,7 @@ class WorldAudio {
    * Plays the game over sound effects.
    */
   playGameOverSounds() {
+    if (this.world.soundMuted) return;
     this.world.gameOverSound1.play().catch(() => {});
     this.world.gameOverSound2.play().catch(() => {});
   }

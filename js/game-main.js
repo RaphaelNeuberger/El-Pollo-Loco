@@ -27,6 +27,9 @@ function startGameDesktop() {
   }
   world.startGame();
   showHelpButton();
+  if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
+    toggleMobileUI();
+  }
 }
 
 /**

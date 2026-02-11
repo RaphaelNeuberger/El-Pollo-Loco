@@ -16,6 +16,8 @@ class MovableObject extends DrawableObject {
   energy = 100;
   /** @type {number} */
   lastHit = 0;
+  /** @type {number} Timestamp when character last landed from a fall */
+  landedAt = 0;
 
   /**
    * Applies gravity physics to the object.
@@ -26,6 +28,17 @@ class MovableObject extends DrawableObject {
       if (this.isAboveGround() || this.speedY > 0) {
         this.y -= this.speedY;
         this.speedY -= this.acceleration;
+      }
+      if (
+        !(this instanceof ThrowableObject) &&
+        this.y >= 170 &&
+        this.speedY <= 0
+      ) {
+        if (this.speedY < 0) {
+          this.landedAt = Date.now();
+        }
+        this.y = 170;
+        this.speedY = 0;
       }
     }, 1000 / 25);
   }

@@ -77,6 +77,7 @@
       <!-- Help Button (in game) -->
       <button
         id="help-btn"
+        tabindex="-1"
         onclick="toggleControlsOverlay()"
         title="Steuerung anzeigen (H)">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
@@ -85,7 +86,11 @@
         </svg>
       </button>
 
-      <button id="sound-btn" onclick="toggleSound()" title="Sound An/Aus (M)">
+      <button
+        id="sound-btn"
+        tabindex="-1"
+        onclick="toggleSound()"
+        title="Sound An/Aus (M)">
         <svg
           id="sound-icon"
           width="24"
@@ -98,6 +103,7 @@
       </button>
       <button
         id="fullscreen-btn"
+        tabindex="-1"
         onclick="toggleFullscreen()"
         title="Fullscreen (F)">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
@@ -243,7 +249,7 @@
         <h2>Impressum</h2>
         <p><strong>Angaben gemäß § 5 TMG:</strong></p>
         <p>
-          Rapaael Neuberger<br />
+          Raphael Neuberger<br />
           Oberndorferstr. 22<br />
           84032 Landshut
         </p>

@@ -41,6 +41,10 @@ function hideStartScreen() {
   if (startScreen) {
     startScreen.classList.add("hidden");
   }
+  const impressum = document.querySelector(".impressum");
+  if (impressum) {
+    impressum.classList.add("hidden");
+  }
 }
 
 /**
@@ -74,6 +78,7 @@ function toggleControlsOverlay() {
   const overlay = document.getElementById("controls-overlay");
   if (overlay) {
     overlay.classList.toggle("show");
+    toggleGameButtons(overlay.classList.contains("show"));
   }
 }
 
@@ -84,7 +89,19 @@ function closeControlsOverlay() {
   const overlay = document.getElementById("controls-overlay");
   if (overlay) {
     overlay.classList.remove("show");
+    toggleGameButtons(false);
   }
+}
+
+/**
+ * Shows or hides sound and fullscreen buttons based on overlay visibility.
+ * @param {boolean} hidden - Whether the buttons should be hidden
+ */
+function toggleGameButtons(hidden) {
+  const soundBtn = document.getElementById("sound-btn");
+  const fullscreenBtn = document.getElementById("fullscreen-btn");
+  if (soundBtn) soundBtn.style.display = hidden ? "none" : "";
+  if (fullscreenBtn) fullscreenBtn.style.display = hidden ? "none" : "";
 }
 
 /**
@@ -128,7 +145,7 @@ function enterFullscreen(container) {
  */
 function applySavedSoundSettings() {
   if (world) {
-    world.soundMuted = soundMuted;
+    world.setSoundMuted(soundMuted);
     updateSoundButton(soundMuted);
   }
 }
@@ -168,9 +185,10 @@ function toggleSound() {
   soundMuted = !soundMuted;
   localStorage.setItem("soundMuted", soundMuted);
   if (world) {
-    world.soundMuted = soundMuted;
+    world.setSoundMuted(soundMuted);
   }
   updateSoundIcons();
+  document.getElementById("sound-btn").blur();
 }
 
 /**
@@ -216,7 +234,7 @@ function startGameMobile() {
 function toggleMobileUI() {
   const controls = document.getElementById("mobile-controls");
   if (controls) {
-    controls.style.display = "flex";
+    controls.classList.add("visible");
   }
 }
 
@@ -234,6 +252,7 @@ function startNewGame() {
   world = null;
   initLevel();
   createNewWorld();
+  applySavedSoundSettings();
   world.startGame();
 }
 
@@ -245,9 +264,17 @@ function returnToMainMenu() {
   if (startScreen) {
     startScreen.classList.remove("hidden");
   }
+  const impressum = document.querySelector(".impressum");
+  if (impressum) {
+    impressum.classList.remove("hidden");
+  }
   const helpBtn = document.getElementById("help-btn");
   if (helpBtn) {
     helpBtn.classList.remove("visible");
+  }
+  const controls = document.getElementById("mobile-controls");
+  if (controls) {
+    controls.classList.remove("visible");
   }
   world = null;
   initLevel();

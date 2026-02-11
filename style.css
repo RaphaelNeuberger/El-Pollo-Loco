@@ -6,11 +6,19 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Boogaloo";
+  src: url("fonts/boogaloo/Boogaloo-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: "Zabars", Arial, sans-serif;
+  font-family: "Boogaloo", cursive;
   background-image: url(img/background/desert-5385998_1920.png);
   background-position: center;
   background-repeat: no-repeat;
@@ -34,13 +42,13 @@ body {
   height: 100%;
   background: linear-gradient(
     135deg,
-    rgba(255, 140, 0, 0.95) 0%,
-    rgba(255, 69, 0, 0.95) 100%
+    rgba(255, 140, 0, 1) 0%,
+    rgba(255, 69, 0, 1) 100%
   );
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10000;
+  z-index: 10;
   animation: fadeIn 0.5s ease-in;
 }
 
@@ -75,8 +83,8 @@ body {
   padding: 15px 40px;
   margin: 10px;
   font-size: 1.2em;
-  font-family: "Zabars", Arial, sans-serif;
-  font-weight: bold;
+  font-family: "Boogaloo", cursive;
+  font-weight: normal;
   border: 3px solid white;
   border-radius: 12px;
   cursor: pointer;
@@ -137,11 +145,11 @@ body {
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 10001;
+  z-index: 11;
   animation: fadeIn 0.3s ease-in;
 }
 
-.overlay.active {
+.overlay.show {
   display: flex;
 }
 
@@ -358,7 +366,7 @@ canvas {
 }
 
 #mobile-controls {
-  display: none !important;
+  display: none;
   position: fixed;
   bottom: 20px;
   left: 0;
@@ -370,7 +378,7 @@ canvas {
 }
 
 #mobile-controls.visible {
-  display: none !important;
+  display: flex;
 }
 
 #mobile-controls .left-controls,
@@ -556,10 +564,6 @@ h1 {
   .controls-info {
     display: none !important;
   }
-
-  .impressum {
-    display: none;
-  }
 }
 
 /* Tablet touch controls - larger tablets with touch */
@@ -583,10 +587,6 @@ h1 {
 
   .controls-info {
     display: none !important;
-  }
-
-  .impressum {
-    display: none;
   }
 }
 
@@ -655,10 +655,16 @@ h1 {
   z-index: 100;
 }
 
+.impressum.hidden {
+  display: none;
+}
+
 .impressum a {
   color: white;
   text-decoration: none;
-  font-size: 14px;
+  font-family: "Boogaloo", cursive;
+  font-weight: 400;
+  font-size: 16px;
   padding: 5px 10px;
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 5px;
@@ -691,6 +697,10 @@ h1 {
   max-width: 500px;
   position: relative;
   color: #333;
+  font-family: "Boogaloo", cursive;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.8;
 }
 
 .close {

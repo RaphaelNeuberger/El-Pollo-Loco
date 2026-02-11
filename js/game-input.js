@@ -8,17 +8,10 @@
  * @param {boolean} isPressed - Whether key is pressed or released
  */
 function handleMovementKeys(event, isPressed) {
-  if (event.key === "ArrowRight" || event.key === "d")
-    keyboard.RIGHT = isPressed;
-  if (event.key === "ArrowLeft" || event.key === "a") keyboard.LEFT = isPressed;
+  if (event.key === "ArrowRight") keyboard.RIGHT = isPressed;
+  if (event.key === "ArrowLeft") keyboard.LEFT = isPressed;
   if (event.key === " ") keyboard.SPACE = isPressed;
-  if (
-    event.key === "d" ||
-    event.key === "D" ||
-    event.key === "s" ||
-    event.key === "S"
-  )
-    keyboard.D = isPressed;
+  if (event.key === "s" || event.key === "S") keyboard.D = isPressed;
 }
 
 /**
@@ -28,6 +21,9 @@ function handleMovementKeys(event, isPressed) {
 function handleActionKeys(event) {
   if (event.key === "f" || event.key === "F") {
     toggleFullscreen();
+  }
+  if (event.key === "m" || event.key === "M") {
+    toggleSound();
   }
 }
 
