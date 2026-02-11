@@ -144,10 +144,7 @@ class WorldAudio {
    */
   playEnemyHitSound(enemy) {
     if (this.world.soundMuted) return;
-    if (enemy instanceof ChickenSmall) {
-      this.world.smallChickenHitSound.currentTime = 0;
-      this.world.smallChickenHitSound.play().catch(() => {});
-    } else if (enemy instanceof Chicken) {
+    if (enemy instanceof Chicken) {
       this.world.smallChickenHitSound.currentTime = 0;
       this.world.smallChickenHitSound.play().catch(() => {});
     } else if (enemy instanceof Endboss) {

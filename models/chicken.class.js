@@ -1,33 +1,72 @@
 /**
- * Represents a normal chicken enemy in the game.
+ * Represents a chicken enemy in the game. Supports normal and small variants via type parameter.
  * @class
  * @extends MovableObject
  */
 class Chicken extends MovableObject {
-  y = 356;
-  height = 55;
-  width = 70;
   _isDead = false;
-  /** @type {Object} */
-  offset = { top: 5, bottom: 5, left: 10, right: 10 };
-  IMAGES_WALKING = [
-    "img/3_enemies_chicken/chicken_normal/1_walk/1_w.png",
-    "img/3_enemies_chicken/chicken_normal/1_walk/2_w.png",
-    "img/3_enemies_chicken/chicken_normal/1_walk/3_w.png",
-  ];
+  /** @type {string} */
+  type;
 
-  IMAGES_DEAD = ["img/3_enemies_chicken/chicken_normal/2_dead/dead.png"];
+  /** @type {Object} Configuration for each chicken type */
+  static CONFIG = {
+    normal: {
+      y: 356,
+      height: 55,
+      width: 70,
+      offset: { top: 5, bottom: 5, left: 10, right: 10 },
+      speedBase: 0.15,
+      speedRange: 0.5,
+      imagesWalking: [
+        "img/3_enemies_chicken/chicken_normal/1_walk/1_w.png",
+        "img/3_enemies_chicken/chicken_normal/1_walk/2_w.png",
+        "img/3_enemies_chicken/chicken_normal/1_walk/3_w.png",
+      ],
+      imagesDead: ["img/3_enemies_chicken/chicken_normal/2_dead/dead.png"],
+    },
+    small: {
+      y: 370,
+      height: 40,
+      width: 50,
+      offset: { top: 5, bottom: 5, left: 5, right: 5 },
+      speedBase: 0.2,
+      speedRange: 0.35,
+      imagesWalking: [
+        "img/3_enemies_chicken/chicken_small/1_walk/1_w.png",
+        "img/3_enemies_chicken/chicken_small/1_walk/2_w.png",
+        "img/3_enemies_chicken/chicken_small/1_walk/3_w.png",
+      ],
+      imagesDead: ["img/3_enemies_chicken/chicken_small/2_dead/dead.png"],
+    },
+  };
 
   /**
-   * Creates an instance of Chicken and initializes its position and animations.
+   * Creates an instance of Chicken.
    * @param {number} x - The starting x position of the chicken.
+   * @param {string} [type="normal"] - The chicken type: "normal" or "small".
    */
-  constructor(x) {
-    super().loadImage("img/3_enemies_chicken/chicken_normal/1_walk/1_w.png");
+  constructor(x, type = "normal") {
+    const config = Chicken.CONFIG[type];
+    super().loadImage(config.imagesWalking[0]);
+    this.type = type;
+    this.y = config.y;
+    this.height = config.height;
+    this.width = config.width;
+    this.offset = config.offset;
+    this.IMAGES_WALKING = config.imagesWalking;
+    this.IMAGES_DEAD = config.imagesDead;
     this.loadAllImages();
     this.x = x;
-    this.speed = 0.15 + Math.random() * 0.5;
+    this.speed = config.speedBase + Math.random() * config.speedRange;
     this.animate();
+  }
+
+  /**
+   * Checks if this chicken is the small variant.
+   * @returns {boolean} True if small chicken.
+   */
+  isSmall() {
+    return this.type === "small";
   }
 
   /**
@@ -36,13 +75,6 @@ class Chicken extends MovableObject {
   loadAllImages() {
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_DEAD);
-  }
-
-  /**
-   * Sets a random speed for the chicken.
-   */
-  setRandomPosition() {
-    this.speed = 0.15 + Math.random() * 0.5;
   }
 
   /**
@@ -72,7 +104,7 @@ class Chicken extends MovableObject {
 
   /**
    * Checks if game is active and chickens can move.
-   * @returns {boolean} True if game allows movement
+   * @returns {boolean} True if game allows movement.
    */
   isGameActive() {
     return this.world && this.world.gameStarted && this.world.chickensCanMove;

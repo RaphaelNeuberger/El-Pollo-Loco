@@ -1,22 +1,83 @@
 /**
  * Represents a status bar UI element that displays percentage-based values.
+ * Supports different types via constructor parameters (health, coin, bottle, endboss).
  * @class
  * @extends DrawableObject
  */
 class StatusBar extends DrawableObject {
   percentage = 100;
 
+  /** @type {Object} Configuration for each status bar type */
+  static CONFIG = {
+    health: {
+      x: 40,
+      y: 0,
+      startPercentage: 100,
+      images: [
+        "img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png",
+        "img/7_statusbars/1_statusbar/2_statusbar_health/blue/20.png",
+        "img/7_statusbars/1_statusbar/2_statusbar_health/blue/40.png",
+        "img/7_statusbars/1_statusbar/2_statusbar_health/blue/60.png",
+        "img/7_statusbars/1_statusbar/2_statusbar_health/blue/80.png",
+        "img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png",
+      ],
+    },
+    coin: {
+      x: 40,
+      y: 45,
+      startPercentage: 0,
+      images: [
+        "img/7_statusbars/1_statusbar/1_statusbar_coin/blue/0.png",
+        "img/7_statusbars/1_statusbar/1_statusbar_coin/blue/20.png",
+        "img/7_statusbars/1_statusbar/1_statusbar_coin/blue/40.png",
+        "img/7_statusbars/1_statusbar/1_statusbar_coin/blue/60.png",
+        "img/7_statusbars/1_statusbar/1_statusbar_coin/blue/80.png",
+        "img/7_statusbars/1_statusbar/1_statusbar_coin/blue/100.png",
+      ],
+    },
+    bottle: {
+      x: 40,
+      y: 95,
+      startPercentage: 0,
+      images: [
+        "img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/0.png",
+        "img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/20.png",
+        "img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/40.png",
+        "img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/60.png",
+        "img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/80.png",
+        "img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/100.png",
+      ],
+    },
+    endboss: {
+      x: 500,
+      y: 70,
+      startPercentage: 100,
+      images: [
+        "img/7_statusbars/2_statusbar_endboss/green/green0.png",
+        "img/7_statusbars/2_statusbar_endboss/green/green20.png",
+        "img/7_statusbars/2_statusbar_endboss/green/green40.png",
+        "img/7_statusbars/2_statusbar_endboss/green/green60.png",
+        "img/7_statusbars/2_statusbar_endboss/green/green80.png",
+        "img/7_statusbars/2_statusbar_endboss/green/green100.png",
+      ],
+    },
+  };
+
   /**
    * Creates a status bar instance.
+   * @param {string} type - The bar type: "health", "coin", "bottle", or "endboss".
    */
-  constructor() {
+  constructor(type) {
     super();
-    this.x = 40;
-    this.y = 0;
+    const config = StatusBar.CONFIG[type];
+    this.x = config.x;
+    this.y = config.y;
     this.width = 200;
     this.height = 60;
-    // Initialize with an empty image to avoid errors
-    this.loadImage("img/7_statusbars/1_statusbar/1_statusbar_coin/blue/0.png");
+    this.IMAGES = config.images;
+    this.loadImage(config.images[0]);
+    this.loadImages(this.IMAGES);
+    this.setPercentage(config.startPercentage);
   }
 
   /**

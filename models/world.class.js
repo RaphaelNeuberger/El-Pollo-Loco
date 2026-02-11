@@ -16,14 +16,14 @@ class World {
   keyboard;
   /** @type {number} */
   camera_x = 0;
-  /** @type {HealthBar} */
-  healthBar = new HealthBar();
-  /** @type {CoinBar} */
-  coinBar = new CoinBar();
-  /** @type {BottleBar} */
-  bottleBar = new BottleBar();
-  /** @type {EndbossBar} */
-  endbossBar = new EndbossBar();
+  /** @type {StatusBar} */
+  healthBar = new StatusBar("health");
+  /** @type {StatusBar} */
+  coinBar = new StatusBar("coin");
+  /** @type {StatusBar} */
+  bottleBar = new StatusBar("bottle");
+  /** @type {StatusBar} */
+  endbossBar = new StatusBar("endboss");
   /** @type {ThrowableObject[]} */
   throwableObjects = [];
   /** @type {number} */
@@ -268,16 +268,16 @@ class World {
 
   /**
    * Creates a random chicken type.
-   * @returns {Chicken|ChickenSmall} The chicken.
+   * @returns {Chicken} The chicken.
    */
   createRandomChicken() {
     const isSmall = Math.random() < 0.5;
-    return isSmall ? new ChickenSmall() : new Chicken();
+    return isSmall ? new Chicken(0, "small") : new Chicken(0);
   }
 
   /**
    * Adds chicken to the level enemies.
-   * @param {Chicken|ChickenSmall} chicken - The chicken.
+   * @param {Chicken} chicken - The chicken.
    */
   addChickenToLevel(chicken) {
     chicken.world = this;

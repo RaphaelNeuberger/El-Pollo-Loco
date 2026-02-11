@@ -25,12 +25,12 @@ function createEnemies() {
     new Chicken(1400),
     new Chicken(1800),
     new Chicken(2100),
-    new ChickenSmall(500),
-    new ChickenSmall(900),
-    new ChickenSmall(1200),
-    new ChickenSmall(1600),
-    new ChickenSmall(2000),
-    new ChickenSmall(2300),
+    new Chicken(500, "small"),
+    new Chicken(900, "small"),
+    new Chicken(1200, "small"),
+    new Chicken(1600, "small"),
+    new Chicken(2000, "small"),
+    new Chicken(2300, "small"),
     new Endboss(),
   ];
 }

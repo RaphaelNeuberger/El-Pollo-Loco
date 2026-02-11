@@ -108,7 +108,7 @@ class WorldCollision {
    * @returns {boolean} - True if chicken type.
    */
   isChickenType(enemy) {
-    return enemy instanceof Chicken || enemy instanceof ChickenSmall;
+    return enemy instanceof Chicken;
   }
 
   /**
@@ -159,7 +159,7 @@ class WorldCollision {
    * @param {MovableObject} enemy - The enemy killed.
    */
   playJumpKillSound(enemy) {
-    if (enemy instanceof ChickenSmall) {
+    if (enemy instanceof Chicken && enemy.isSmall()) {
       this.world.audio.playSmallChickenKillSound();
     } else {
       this.world.audio.playNormalChickenKillSound();
