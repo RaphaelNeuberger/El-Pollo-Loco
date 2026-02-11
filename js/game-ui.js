@@ -100,8 +100,10 @@ function closeControlsOverlay() {
 function toggleGameButtons(hidden) {
   const soundBtn = document.getElementById("sound-btn");
   const fullscreenBtn = document.getElementById("fullscreen-btn");
+  const helpBtn = document.getElementById("help-btn");
   if (soundBtn) soundBtn.style.display = hidden ? "none" : "";
   if (fullscreenBtn) fullscreenBtn.style.display = hidden ? "none" : "";
+  if (helpBtn) helpBtn.style.display = hidden ? "none" : "";
 }
 
 /**

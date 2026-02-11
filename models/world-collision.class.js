@@ -113,14 +113,16 @@ class WorldCollision {
 
   /**
    * Checks if character is falling from above.
-   * Uses a 150ms grace period after landing to handle timing between gravity (40ms) and collision checks (100ms).
-   * @returns {boolean} - True if falling or just landed from a fall.
+   * Uses a 150ms grace period after landing and after jump kills to handle stacked enemies.
+   * @returns {boolean} - True if falling or just landed from a fall or just killed an enemy.
    */
   isCharacterFallingFromAbove() {
     const char = this.world.character;
     const isFalling = char.speedY < 0 && char.isAboveGround();
     const justLanded = char.landedAt > 0 && Date.now() - char.landedAt < 150;
-    return isFalling || justLanded;
+    const justKilledEnemy =
+      char.lastJumpKill > 0 && Date.now() - char.lastJumpKill < 300;
+    return isFalling || justLanded || justKilledEnemy;
   }
 
   /**
@@ -140,6 +142,7 @@ class WorldCollision {
     this.executeJumpKill(enemy);
     this.playJumpKillSound(enemy);
     this.world.character.landedAt = 0;
+    this.world.character.lastJumpKill = Date.now();
     this.world.character.speedY = 15;
   }
 

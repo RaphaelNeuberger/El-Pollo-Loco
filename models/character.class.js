@@ -80,6 +80,7 @@ class Character extends MovableObject {
   world;
   // walking_sound = new Audio("audio/running.mp3"); // Audio file not available
   lastInputTime = 0;
+  lastJumpKill = 0;
 
   /**
    * Creates a new Character instance.
