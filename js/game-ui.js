@@ -67,8 +67,28 @@ function setupControlsOverlay() {
     }
     if (e.key === "Escape") {
       closeControlsOverlay();
+      closeImpressum();
     }
   });
+  setupDialogBackgroundClose();
+}
+
+/**
+ * Closes dialogs when clicking on the background (outside the content area).
+ */
+function setupDialogBackgroundClose() {
+  const controlsOverlay = document.getElementById("controls-overlay");
+  if (controlsOverlay) {
+    controlsOverlay.addEventListener("click", (e) => {
+      if (e.target === controlsOverlay) closeControlsOverlay();
+    });
+  }
+  const impressumModal = document.getElementById("impressum-modal");
+  if (impressumModal) {
+    impressumModal.addEventListener("click", (e) => {
+      if (e.target === impressumModal) closeImpressum();
+    });
+  }
 }
 
 /**

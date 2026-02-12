@@ -153,6 +153,10 @@ body {
   display: flex;
 }
 
+body:has(.overlay.show) #mobile-controls {
+  display: none !important;
+}
+
 .overlay-content {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 40px;
